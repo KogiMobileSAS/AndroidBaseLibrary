@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'com.neenbedankt.android-apt'
+apply from: 'maven.gradle'
+apply from: 'bintray.gradle'
+
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 24
+        multiDexEnabled true
+        versionCode 1
+        versionName "$mavenVersion"
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+}
+
+dependencies {
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:customtabs:24.2.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'joda-time:joda-time:2.9.4'
+    compile 'com.google.code.gson:gson:2.7'
+}
+
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (task.name.equals("bintrayUpload")) {
+        println '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+        println "${task.name} ends with state ${state.didWork ? "done" : "FAILED"} "
+        println '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'
+    }
+}
+

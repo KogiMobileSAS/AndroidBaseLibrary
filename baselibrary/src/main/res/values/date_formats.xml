@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="date_format_general">"yyyy-MM-dd'T'HH:mm:ss.SSSZ"</string>
+
+</resources>
