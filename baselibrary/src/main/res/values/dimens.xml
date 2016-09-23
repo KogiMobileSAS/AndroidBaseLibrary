@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Default -->
+    <dimen name="default_extra_small_size">2dp</dimen>
+    <dimen name="default_small_size">4dp</dimen>
+    <dimen name="default_medium_size">8dp</dimen>
+    <dimen name="default_large_size">16dp</dimen>
+    <dimen name="default_extra_large_size">32dp</dimen>
+
+</resources>

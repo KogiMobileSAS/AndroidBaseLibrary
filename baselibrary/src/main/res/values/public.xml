@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Network Errors-->
+    <public name="network_error_code_general" type="string"></public>
+    <public name="network_error_no_internet_connection" type="string"></public>
+
+    <!--Date Format-->
+    <public name="date_format_general" type="string"></public>
+
+    <!--Dimens-->
+    <public name="default_extra_small_size" type="dimen"></public>
+    <public name="default_small_size" type="dimen"></public>
+    <public name="default_medium_size" type="dimen"></public>
+    <public name="default_large_size" type="dimen"></public>
+    <public name="default_extra_large_size" type="dimen"></public>
+    <!--Colors-->
+    <public name="test_color_blue" type="color"></public>
+    <public name="test_color_red" type="color"></public>
+    <public name="test_color_green" type="color"></public>
+
+    <!--Styles-->
+    <public name="ButtonsStyle" type="style"></public>
+    <public name="EditTextStyle" type="style"></public>
+    <public name="CheckboxStyle" type="style"></public>
+    <public name="LargeTextStyle" type="style"></public>
+    <public name="MediumTextStyle" type="style"></public>
+    <public name="MediumTextStyle" type="style"></public>
+    
+</resources>

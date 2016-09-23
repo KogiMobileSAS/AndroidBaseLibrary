@@ -1,0 +1,29 @@
+<resources>
+
+    <style name="ButtonsStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_marginLeft">@dimen/default_medium_size</item>
+        <item name="android:layout_marginRight">@dimen/default_medium_size</item>
+    </style>
+
+    <style name="CheckboxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:layout_marginLeft">@dimen/default_medium_size</item>
+        <item name="android:layout_marginRight">@dimen/default_medium_size</item>
+    </style>
+
+    <style name="LargeTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Large">
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="MediumTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Medium">
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="SmallTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Small">
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+</resources>

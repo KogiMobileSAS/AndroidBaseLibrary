@@ -1,0 +1,34 @@
+apply plugin: 'com.jfrog.bintray'
+apply from: 'constants.gradle'
+
+group = mavenGroup
+version = mavenVersion
+
+bintray {
+    //load signing credentials from external properties file
+    def signingPropFile = rootProject.file('local.properties')
+    if (signingPropFile.canRead()) {
+        def Properties signingProps = new Properties()
+        signingProps.load(new FileInputStream(signingPropFile))
+        key = signingProps['BINTRAY_KEY']
+        user = signingProps['BINTRAY_USER']
+    }
+
+    configurations = ['archives']
+
+    pkg {
+        repo = projectName
+        name = mavenArtifactId
+        desc = packageDesc
+        userOrg = bintrayOrg
+        licenses = ['Apache-2.0']
+        vcsUrl = "${repoUrl}.git"
+
+        version {
+            name = mavenVersion
+            desc = versionDesc
+            released = new Date()
+            vcsTag = mavenVersion
+        }
+    }
+}

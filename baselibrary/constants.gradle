@@ -1,0 +1,15 @@
+ext {
+    projectName = 'Android'
+    projectDesc = 'Android Team internal base library'
+
+    packageDesc = 'Android Team internal base library'
+    versionDesc = 'New Version'
+
+    repoUrl = 'https://github.com/KogiMobileSAS/AndroidBaseLibrary/'
+
+    mavenGroup = 'com.kogimobile.android'
+    mavenArtifactId = 'baselibrary'
+    mavenVersion = '0.9.1'
+
+    bintrayOrg = 'kogimobile'
+}

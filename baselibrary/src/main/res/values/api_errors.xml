@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Network Error-->
+    <string name="network_error_code_general">Api General Error</string>
+    <string name="network_error_no_internet_connection">There is no internet connection</string>
+
+</resources>
