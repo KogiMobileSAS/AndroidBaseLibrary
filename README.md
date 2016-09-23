@@ -1,6 +1,32 @@
 # AndroidBaseLibrary
 Kogi Mobile Android Base Library
 
+Download
+--------
+
+Configure your project `build.gradle` to include the library:
+
+```groovy
+allprojects {
+    repositories {
+        maven {
+            url "http://dl.bintray.com/kogimobile/Android/"
+        }
+    }
+}
+```
+
+```groovy
+
+android {
+  ...
+}
+
+dependencies {
+  compile 'com.kogimobile.android:baselibrary:1.0.0'
+}
+```
+
 License
 -------
 
