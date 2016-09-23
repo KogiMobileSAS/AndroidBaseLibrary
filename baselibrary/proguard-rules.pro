@@ -13,17 +13,17 @@
 # and specify the fully qualified class name to the JavaScript interface
 # class:
 
-# Otto
+#General
+-keepattributes Signature
 -keepattributes *Annotation*
--keepclassmembers class ** {
-    @com.squareup.otto.Subscribe public *;
-    @com.squareup.otto.Produce public *;
-}
+-keepattributes EnclosingMethod
+
 
 # Butterknife
 -keep class butterknife.*
 -keepclasseswithmembernames class * { @butterknife.* <methods>; }
 -keepclasseswithmembernames class * { @butterknife.* <fields>; }
+-keep public class * implements butterknife.Unbinder { public <init>(...); }
 
 # Timber
 -dontwarn org.jetbrains.annotations.**
@@ -51,15 +51,11 @@
     long consumerNode;
 }
 
-# Joda Time 2.3
--dontwarn org.joda.convert.**
--dontwarn org.joda.time.**
--keep class org.joda.time.** { *; }
--keep interface org.joda.time.** { *; }
+# Joda Time
+-dontwarn org.joda.convert.FromString
+-dontwarn org.joda.convert.ToString
 
 # OkHttp3
--keepattributes Signature
--keepattributes *Annotation*
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
@@ -80,9 +76,19 @@
   public *;
 }
 
+#Event Bus
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+
 #BaseLibrary
--keepnames class com.kogimobile.androidbaselibrary.**
--keep class com.kogimobile.androidbaselibrary.**{
+-keepnames class com.kogimobile.android.baselibrary.**
+-keep class com.kogimobile.android.baselibrary.**{
     public <methods>;
     protected <methods>;
     public static <methods>;
