@@ -2,6 +2,7 @@ package com.kogimobile.android.baselibrary.app.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,24 +36,22 @@ public abstract class BaseFragment extends Fragment {
 
     abstract protected void initVars();
 
+    @CallSuper
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
         subscription = new CompositeSubscription();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         initVars();
     }
 
+    @CallSuper
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
+    @CallSuper
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -70,18 +69,21 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
+    @CallSuper
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
+    @CallSuper
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
+    @CallSuper
     @Override
     public void onDetach() {
         super.onDetach();
