@@ -14,9 +14,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.kogimobile.android.baselibrary.R;
 import com.kogimobile.android.baselibrary.app.busevents.EventAlertDialog;
 import com.kogimobile.android.baselibrary.app.busevents.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
@@ -58,10 +60,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         progress = new ProgressDialog(this);
         progress.setCancelable(false);
         initVars();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     abstract protected void initVars();
@@ -162,11 +169,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Subscribe
     public void onSnackbarMessageEvent(EventSnackbarMessage event) {
         clearKeyboardFromScreen();
-        int viewId = android.R.id.content;
+        View root;
         if (event.getViewId()!=EventSnackbarMessage.NONE_VIEW) {
-            viewId = event.getViewId();
+            root = getWindow().getDecorView().findViewById(event.getViewId());
+        }else if(getWindow().getDecorView().findViewById(R.id.coordinator)!=null){
+            root = getWindow().getDecorView().findViewById(R.id.coordinator);
+        }else{
+            root = getWindow().getDecorView().findViewById(android.R.id.content);
         }
-        Snackbar snackBar = Snackbar.make(getWindow().getDecorView().findViewById(viewId), event.getMessage(), Snackbar.LENGTH_LONG);
+
+        Snackbar snackBar = Snackbar.make(root, event.getMessage(), Snackbar.LENGTH_LONG);
         if(event.getActionListener()!=null) {
             snackBar.setAction(event.getAction(), event.getActionListener());
         }
