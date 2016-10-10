@@ -1,5 +1,6 @@
 package com.kogimobile.android.baselibrary.app.base.adapter;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import butterknife.ButterKnife;
 
 /**
  * @author pedroscott. scott7462@gmail.com
+ * @modified Julian Cardona. julian@kogimobile.com
  * @version 9/4/16.
  *          <p>
  *          Copyright (C) 2015 The Android Open Source Project
@@ -30,7 +32,7 @@ import butterknife.ButterKnife;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public abstract class BaseSimpleAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
+public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewHolder> extends RecyclerView.Adapter<H> {
 
     protected static final int EMPTY_VIEW = 2000;
     protected static final int HEADER_VIEW = 3000;
@@ -48,7 +50,7 @@ public abstract class BaseSimpleAdapter<T, H extends RecyclerView.ViewHolder> ex
 
     private boolean headerView;
     private boolean isLoadMore;
-    private boolean entryState;
+    private boolean entryState = true;
     private boolean loadingState;
 
     public List<T> getItems() {
@@ -280,18 +282,33 @@ public abstract class BaseSimpleAdapter<T, H extends RecyclerView.ViewHolder> ex
     /**
      * Set the entry state value
      *
-     * @param entryState Is true if you want user a entry state by default is false.
+     * @param entryState Is true if you want user a entry state by default is true.
      */
     public void showEmptyState(boolean entryState) {
         this.entryState = entryState;
     }
 
-    protected class EmptyViewHolder extends RecyclerView.ViewHolder {
+    protected class EmptyViewHolder extends BaseViewHolder<T> {
 
         public EmptyViewHolder(View itemView) {
             super(itemView);
+        }
+
+        @CallSuper
+        @Override
+        public void bindView(T item) {
+
+        }
+    }
+
+    public abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder{
+
+        public BaseViewHolder(View itemView) {
+            super(itemView);
             ButterKnife.bind(this, itemView);
         }
+
+        protected abstract void bindView(T item);
     }
 
     /**
@@ -475,6 +492,13 @@ public abstract class BaseSimpleAdapter<T, H extends RecyclerView.ViewHolder> ex
         return selectedItems;
     }
 
-    protected abstract boolean ifValidCondition(T t);
+    public boolean ifValidCondition(T t){
+        return true;
+    }
 
+    @CallSuper
+    @Override
+    public void onBindViewHolder(H holder, int position) {
+        holder.bindView(holder);
+    }
 }

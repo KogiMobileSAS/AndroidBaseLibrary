@@ -26,7 +26,7 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public abstract class BaseFilterSimpleAdapter<T, H extends RecyclerView.ViewHolder> extends BaseSimpleAdapter<T, H>
+public abstract class BaseFilterSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewHolder> extends BaseSimpleAdapter<T, H>
         implements Filterable {
 
     private int minNumberToCleanFilter = 0;
