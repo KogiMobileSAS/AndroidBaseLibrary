@@ -288,7 +288,7 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         this.entryState = entryState;
     }
 
-    protected class EmptyViewHolder extends BaseViewHolder<T> {
+    protected static class EmptyViewHolder<T> extends BaseViewHolder<T> {
 
         public EmptyViewHolder(View itemView) {
             super(itemView);
@@ -297,6 +297,11 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         @CallSuper
         @Override
         public void bindView(T item) {
+
+        }
+
+        @CallSuper
+        protected void bindView() {
 
         }
     }
@@ -499,6 +504,10 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
     @CallSuper
     @Override
     public void onBindViewHolder(H holder, int position) {
-        holder.bindView(holder);
+        if(holder instanceof EmptyViewHolder){
+            ((EmptyViewHolder) holder).bindView();
+        }else{
+            holder.bindView(items.get(getItemPosition(position)));
+        }
     }
 }
