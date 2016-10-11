@@ -23,8 +23,10 @@ import java.util.List;
 public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends BaseFragmentMVP<P> implements BasePresenterListListener<M> {
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 10;
+    private static final int DEFAULT_MIN_ITEMS_BELOW = 5;
 
     private int maxItemsPerPage = DEFAULT_ITEMS_PER_PAGE;
+    private int minItemsBelowToLoadMore = DEFAULT_MIN_ITEMS_BELOW;
     private int lastItemsCount = 0;
     private boolean isLoading = false;
     private boolean isLoadingMore = false;
@@ -62,8 +64,9 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         return loadMoreEnabled;
     }
 
-    public void setLoadMoreEnabled(boolean loadMoreEnabled) {
+    public void setLoadMoreEnabled(boolean loadMoreEnabled,int minItemsBelowToLoadMore) {
         this.loadMoreEnabled = loadMoreEnabled;
+        this.minItemsBelowToLoadMore = minItemsBelowToLoadMore;
     }
 
     @CallSuper
@@ -80,7 +83,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         }
 
         if (recyclerView != null && isLoadMoreEnabled()) {
-            recyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener((LinearLayoutManager) recyclerView.getLayoutManager()) {
+            recyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener((LinearLayoutManager) recyclerView.getLayoutManager(),minItemsBelowToLoadMore) {
                 @Override
                 public void onLoadMore(int previousTotal) {
                     if (!isLoading && !isLoadingMore && isAbleToLoadMore()) {

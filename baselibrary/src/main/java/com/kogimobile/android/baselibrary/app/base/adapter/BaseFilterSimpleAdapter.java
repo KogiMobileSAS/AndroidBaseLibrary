@@ -1,6 +1,5 @@
 package com.kogimobile.android.baselibrary.app.base.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.widget.Filter;
 import android.widget.Filterable;
 

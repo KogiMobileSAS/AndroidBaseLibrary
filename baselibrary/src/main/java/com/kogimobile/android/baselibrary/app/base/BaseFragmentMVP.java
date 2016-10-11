@@ -5,7 +5,6 @@ import android.support.annotation.CallSuper;
 
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenter;
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenterListener;
-import com.kogimobile.android.baselibrary.app.base.presenter.Presenter;
 
 /**
  * Created by Julian Cardona on 9/27/16.
