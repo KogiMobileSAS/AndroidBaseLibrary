@@ -15,7 +15,7 @@ public class CollectionTypedAdapter implements JsonSerializer<Collection<?>> {
 
     @Override
     public JsonElement serialize(Collection<?> src, Type typeOfSrc, JsonSerializationContext context) {
-        if (src == null || src.isEmpty()) // exclusion is made here
+        if (src == null) // exclusion is made here
             return null;
 
         JsonArray array = new JsonArray();
