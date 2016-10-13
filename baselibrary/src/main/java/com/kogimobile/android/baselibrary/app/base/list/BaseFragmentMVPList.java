@@ -16,6 +16,8 @@ import com.kogimobile.android.baselibrary.widgets.EndlessRecyclerViewOnScrollLis
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by Julian Cardona on 10/10/16.
  */
@@ -111,6 +113,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
             adapter.showLoadingState(true);
         }
         onDoLoadItems();
+        Timber.d("Loading items ...");
     }
 
     /**
@@ -124,6 +127,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
             adapter.showLoadMoreView(true);
         }
         onDoLoadMoreItems();
+        Timber.d("Loading More items ...");
     }
 
     @CallSuper
@@ -139,6 +143,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         }
         lastItemsCount = items.size();
         onItemsLoaded(items);
+        Timber.d("%d items loaded",items.size());
     }
 
     @CallSuper
@@ -152,6 +157,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         }
         lastItemsCount = newItems.size();
         onMoreItemsLoaded(newItems);
+        Timber.d("%d more items loaded",newItems.size());
     }
 
     @CallSuper
@@ -160,6 +166,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         isLoading = false;
         isLoadingMore = false;
         onItemsLoadFail();
+        Timber.d("Items load fail");
     }
 
     /**
