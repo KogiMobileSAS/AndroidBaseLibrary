@@ -6,7 +6,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by Julian Cardona on 7/22/16.
  */
-public class BasePresenter <T extends ViewListener> implements Presenter<T> {
+public class BasePresenter <T extends BasePresenterListener> implements Presenter<T> {
 
     private T viewListener;
     private CompositeSubscription subscription = new CompositeSubscription();
