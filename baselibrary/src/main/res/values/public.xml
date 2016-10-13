@@ -14,6 +14,10 @@
     <public name="default_medium_size" type="dimen"></public>
     <public name="default_large_size" type="dimen"></public>
     <public name="default_extra_large_size" type="dimen"></public>
+
+    <!--IDs-->
+    <public name="coordinator" type="id"></public>
+
     <!--Colors-->
     <public name="test_color_blue" type="color"></public>
     <public name="test_color_red" type="color"></public>
