@@ -10,14 +10,8 @@ import java.util.List;
 
 public interface BasePresenterListListener<T> extends BasePresenterListener {
 
-    void doLoadItems();
-
-    void doLoadMoreItems();
-
-    void moreItemsLoaded(List<T> newItems);
-
     void itemsLoaded(List<T> items);
 
-    void itemsLoadFail();
+    void moreItemsLoaded(List<T> newItems);
 
 }
