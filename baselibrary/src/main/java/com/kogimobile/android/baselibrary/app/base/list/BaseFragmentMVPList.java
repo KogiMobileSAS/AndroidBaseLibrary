@@ -165,6 +165,9 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     public void itemsLoadFail() {
         isLoading = false;
         isLoadingMore = false;
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
         onItemsLoadFail();
         Timber.d("Items load fail");
     }
