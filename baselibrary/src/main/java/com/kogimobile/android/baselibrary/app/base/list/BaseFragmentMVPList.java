@@ -27,7 +27,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     private static final int DEFAULT_ITEMS_PER_PAGE = 10;
     private static final int DEFAULT_MIN_ITEMS_BELOW = 5;
 
-    private int maxItemsPerPage = DEFAULT_ITEMS_PER_PAGE;
+    private int maxLoadMoreItemsPerPage = DEFAULT_ITEMS_PER_PAGE;
     private int minItemsBelowToLoadMore = DEFAULT_MIN_ITEMS_BELOW;
     private int lastItemsCount = 0;
     private boolean isLoading = false;
@@ -54,12 +54,12 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         this.swipeRefresh = swipeRefresh;
     }
 
-    public int getMaxItemsPerPage() {
-        return maxItemsPerPage;
+    public int getMaxLoadMoreItemsPerPage() {
+        return maxLoadMoreItemsPerPage;
     }
 
-    public void setMaxItemsPerPage(int maxItemsPerPage) {
-        this.maxItemsPerPage = maxItemsPerPage;
+    public void setMaxLoadMoreItemsPerPage(int maxLoadMoreItemsPerPage) {
+        this.maxLoadMoreItemsPerPage = maxLoadMoreItemsPerPage;
     }
 
     public boolean isLoadMoreEnabled() {
@@ -99,18 +99,17 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
     @CallSuper
     protected boolean isAbleToLoadMore() {
-        return lastItemsCount >= maxItemsPerPage && isLoadMoreEnabled();
+        return lastItemsCount >= maxLoadMoreItemsPerPage && isLoadMoreEnabled();
     }
 
     /**
      * This method is used to load the first batch of items.
      */
     @CallSuper
-    @Override
-    public void doLoadItems() {
+    protected void doLoadItems() {
         isLoading = true;
         if (adapter != null) {
-            adapter.showLoadingState(true);
+            adapter.showLoadingState(isLoading);
         }
         onDoLoadItems();
         Timber.d("Loading items ...");
@@ -120,11 +119,10 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
      * This method is used to load more items.
      */
     @CallSuper
-    @Override
-    public void doLoadMoreItems() {
+    protected void doLoadMoreItems() {
         isLoadingMore = true;
         if (adapter != null) {
-            adapter.showLoadMoreView(true);
+            adapter.showLoadMoreView(isLoadingMore);
         }
         onDoLoadMoreItems();
         Timber.d("Loading More items ...");
@@ -133,10 +131,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     @CallSuper
     @Override
     public void itemsLoaded(List<M> items) {
-        isLoading = false;
-        if (swipeRefresh != null) {
-            swipeRefresh.setRefreshing(false);
-        }
+        doStopLoading();
         if (adapter != null) {
             adapter.cleanItemsAndUpdate(items);
             adapter.notifyDataSetChanged();
@@ -149,9 +144,8 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     @CallSuper
     @Override
     public void moreItemsLoaded(List<M> newItems) {
-        isLoadingMore = false;
-        if (adapter != null) {
-            adapter.showLoadMoreView(false);
+        doStopLoading();
+        if (adapter != null) {;
             adapter.addItems(newItems);
             adapter.notifyDataSetChanged();
         }
@@ -161,12 +155,18 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     }
 
     @CallSuper
-    @Override
-    public void itemsLoadFail() {
+    protected void doStopLoading() {
         isLoading = false;
         isLoadingMore = false;
-        onItemsLoadFail();
-        Timber.d("Items load fail");
+        if (swipeRefresh != null) {
+            swipeRefresh.setRefreshing(isLoading);
+        }
+        if (adapter != null) {
+            adapter.showLoadingState(isLoading);
+            adapter.showLoadMoreView(isLoadingMore);
+            adapter.notifyDataSetChanged();
+        }
+        Timber.d("Items Stop loading");
     }
 
     /**
@@ -183,5 +183,4 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
     protected abstract void onMoreItemsLoaded(List<M> newItems);
 
-    protected abstract void onItemsLoadFail();
 }
