@@ -7,31 +7,34 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.schedulers.Schedulers;
+
 
 abstract public class DiskObject<T>{
 
     public Observable<T> saveToDisk(final String fileName) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
+
+        return Observable.create(new ObservableOnSubscribe<T>() {
             @Override
-            public void call(Subscriber<? super T> subscriber) {
+            public void subscribe(ObservableEmitter<T> emitter) throws Exception {
                 try {
                     FileUtils.saveObjectToDisk(fileName,DiskObject.this);
-                    subscriber.onCompleted();
+                    emitter.onComplete();
                 } catch (Throwable e) {
-                    subscriber.onError(e);
+                    emitter.onError(e);
                 }
-                subscriber.onCompleted();
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io());
     }
 
     public Observable<T> getFromDisk(final String fileName) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
+        return Observable.create(new ObservableOnSubscribe<T>() {
             @Override
-            public void call(Subscriber<? super T> subscriber) {
+            public void subscribe(ObservableEmitter<T> emitter) throws Exception {
                 FileInputStream fis = null;
                 T type = null;
                 try {
@@ -39,27 +42,27 @@ abstract public class DiskObject<T>{
                     ObjectInputStream is = new ObjectInputStream(fis);
                     type = (T) is.readObject();
                     is.close();
-                    subscriber.onNext(type);
-                    subscriber.onCompleted();
+                    emitter.onNext(type);
+                    emitter.onComplete();
                 } catch (IOException | ClassNotFoundException e) {
-                    subscriber.onError(e);
+                    emitter.onError(e);
                 }
             }
-        });
+        }).subscribeOn(Schedulers.io());
     }
 
     public Observable<Void> deleteFromDisk(final String fileName) {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
+        return Observable.create(new ObservableOnSubscribe<Void>() {
             @Override
-            public void call(Subscriber<? super Void > subscriber) {
+            public void subscribe(ObservableEmitter<Void> emitter) throws Exception {
                 try {
                     FileUtils.deleteObjectOnDisk(fileName);
-                    subscriber.onCompleted();
+                    emitter.onComplete();
                 } catch (IOException e) {
-                    subscriber.onError(e);
+                    emitter.onError(e);
                 }
             }
-        });
+        }).subscribeOn(Schedulers.io());
     }
 
 }

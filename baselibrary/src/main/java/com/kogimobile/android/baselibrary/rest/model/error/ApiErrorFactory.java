@@ -3,12 +3,12 @@ package com.kogimobile.android.baselibrary.rest.model.error;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.kogimobile.android.baselibrary.rest.utils.RestDelegate;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by Julian Cardona on 11/13/14.

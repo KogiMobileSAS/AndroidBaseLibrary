@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -35,8 +36,8 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Julian Cardona on 11/5/14.
@@ -45,15 +46,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     private static final int HOME_UP_INDICATOR_NONE = -1;
     private static final int HOME_UP_INDICATOR_ARROW = 0;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
-    private CompositeSubscription subscription = new CompositeSubscription();
     protected ArrayList<String> titleStack = new ArrayList<String>();
     private Unbinder unbinder;
     private ProgressDialog progress;
     private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
 
-    public void addSubscription(Subscription serviceSubscription) {
-        this.subscription.add(serviceSubscription);
+    public void addSubscription(@NonNull Disposable serviceSubscription) {
+        this.disposables.add(serviceSubscription);
     }
 
     @CallSuper
@@ -262,8 +263,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     @Override
     protected void onDestroy() {
-        if (subscription != null) {
-            subscription.unsubscribe();
+        if (this.disposables != null) {
+            this.disposables.clear();
         }
         if(this.unbinder!=null) {
             this.unbinder.unbind();
@@ -271,7 +272,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         super.onDestroy();
     }
 
-    @CallSuper
     @Override
     public void onBackPressed() {
         clearKeyboardFromScreen();

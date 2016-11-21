@@ -1,7 +1,9 @@
 package com.kogimobile.android.baselibrary.app.base.presenter;
 
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import android.support.annotation.NonNull;
+
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Julian Cardona on 7/22/16.
@@ -9,10 +11,10 @@ import rx.subscriptions.CompositeSubscription;
 public class BasePresenter <T extends BasePresenterListener> implements Presenter<T> {
 
     private T viewListener;
-    private CompositeSubscription subscription = new CompositeSubscription();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public void addSubscription(Subscription serviceSubscription) {
-        this.subscription.add(serviceSubscription);
+    public void addSubscription(@NonNull Disposable serviceSubscription) {
+        this.disposables.add(serviceSubscription);
     }
 
     @Override
@@ -23,7 +25,9 @@ public class BasePresenter <T extends BasePresenterListener> implements Presente
     @Override
     public void detachView() {
         viewListener = null;
-        subscription.unsubscribe();
+        if (this.disposables != null) {
+            this.disposables.clear();
+        }
     }
 
     public boolean isViewAttached() {

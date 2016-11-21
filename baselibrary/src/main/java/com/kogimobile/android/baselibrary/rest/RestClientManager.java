@@ -1,12 +1,12 @@
 package com.kogimobile.android.baselibrary.rest;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.kogimobile.android.baselibrary.rest.model.ServiceConfiguration;
 
 import java.util.Collection;
 import java.util.Hashtable;
 
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 
 /**
  * Created by kogiandroid on 1/14/16.
@@ -56,7 +56,7 @@ public class RestClientManager<T> {
                 .baseUrl(currentServiceConfiguration.getBaseURL())
                 .addConverterFactory(currentServiceConfiguration.getConverter())
                 .client(currentServiceConfiguration.getClient())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         Object apiServiceInterface = retrofit.create(currentServiceConfiguration.getInterfaceClass());
         try {

@@ -15,23 +15,19 @@ import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Julian Cardona on 11/14/14.
  */
 public abstract class BaseFragment extends Fragment {
 
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private Unbinder unbinder;
-    private CompositeSubscription subscription;
 
-    private CompositeSubscription getSubscription() {
-        return subscription;
-    }
-
-    public void addSubscription(@NonNull Subscription serviceSubscription) {
-        this.subscription.add(serviceSubscription);
+    public void addSubscription(@NonNull Disposable serviceSubscription) {
+        this.disposables.add(serviceSubscription);
     }
 
     abstract protected void initVars();
@@ -40,7 +36,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        subscription = new CompositeSubscription();
         initVars();
     }
 
@@ -87,8 +82,8 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if (subscription != null) {
-            subscription.unsubscribe();
+        if (this.disposables != null) {
+            this.disposables.clear();
         }
     }
 

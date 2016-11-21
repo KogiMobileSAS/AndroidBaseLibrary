@@ -57,6 +57,7 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         return items;
     }
 
+    @CallSuper
     @Override
     public int getItemCount() {
         validateItemsNullAndCreate();
@@ -67,6 +68,7 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         }
     }
 
+    @CallSuper
     @Override
     public int getItemViewType(int position) {
         validateItemsNullAndCreate();
@@ -224,7 +226,8 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         this.clickListener = clickListener;
     }
 
-    private int getPositionByRules() {
+    @CallSuper
+    protected int getPositionByRules() {
         return ((isEmptyState() && items.size() == 0) ? 1 : 0) + (haveAdapterHeaderView() ? 1 : 0);
     }
 
