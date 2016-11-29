@@ -13,7 +13,9 @@ public class ErrorFactory {
 
     public static String getErrorMessage(Context ctx, int code){
         try {
-            int id = ctx.getResources().getIdentifier("error_code_" + code, "string", ctx.getPackageName());
+            String errorCodeMapping = String.valueOf(code);
+            errorCodeMapping = errorCodeMapping.replace("-","_");
+            int id = ctx.getResources().getIdentifier("error_code_" + errorCodeMapping, "string", ctx.getPackageName());
             return ctx.getString(id);
         }catch (Exception e){
             return ctx.getString(R.string.network_error_code_general);
