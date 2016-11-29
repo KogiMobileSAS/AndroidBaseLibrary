@@ -52,6 +52,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     private ProgressDialog progress;
     private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
 
+    public CompositeSubscription getSubscription() {
+        return subscription;
+    }
+
     public void addSubscription(Subscription serviceSubscription) {
         this.subscription.add(serviceSubscription);
     }
@@ -188,7 +192,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         snackBar.show();
     }
 
-    protected void clearKeyboardFromScreen() {
+    public void clearKeyboardFromScreen() {
         if (getWindow().getCurrentFocus() != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
@@ -196,14 +200,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    protected void navigateToActivityLowLevel(Fragment frg,int layoutContainerId, String title) {
+    public void navigateToActivityLowLevel(Fragment frg,int layoutContainerId, String title) {
         titleStack.add(title);
         FragmentNavigator.navigateTo(getSupportFragmentManager(), frg,layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(true));
         updateActionBarTitle();
     }
 
     @CallSuper
-    protected void navigateToActivityRootLevel(Fragment frg,int layoutContainerId,String title){
+    public void navigateToActivityRootLevel(Fragment frg,int layoutContainerId,String title){
         FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
         FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(false));
         titleStack.clear();
@@ -212,7 +216,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    protected void updateActionBarTitle(){
+    public void updateActionBarTitle(){
         if(getSupportActionBar()!=null) {
             if(titleStack.size()>0) {
                 getSupportActionBar().setTitle(titleStack.get(titleStack.size() - 1));
@@ -239,13 +243,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    protected void setHomeAsUpIndicator(int resourceId){
+    public void setHomeAsUpIndicator(int resourceId){
         homeUpIndicator = resourceId;
         getSupportActionBar().setHomeAsUpIndicator(DrawableUtils.getDrawableFromResource(this,homeUpIndicator));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    protected void openUrlWebPage(String url,int colorId){
+    public void openUrlWebPage(String url,int colorId){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(this,colorId));
         CustomTabsIntent customTabsIntent = builder.build();
@@ -253,7 +257,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 	}
 
     @CallSuper
-    protected void enableHomeBackArrowIndicator(){
+    public void enableHomeBackArrowIndicator(){
         homeUpIndicator = HOME_UP_INDICATOR_ARROW;
         getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

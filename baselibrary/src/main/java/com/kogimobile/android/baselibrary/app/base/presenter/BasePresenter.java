@@ -11,6 +11,10 @@ public class BasePresenter <T extends BasePresenterListener> implements Presente
     private T viewListener;
     private CompositeSubscription subscription = new CompositeSubscription();
 
+    public CompositeSubscription getSubscription() {
+        return subscription;
+    }
+
     public void addSubscription(Subscription serviceSubscription) {
         this.subscription.add(serviceSubscription);
     }
