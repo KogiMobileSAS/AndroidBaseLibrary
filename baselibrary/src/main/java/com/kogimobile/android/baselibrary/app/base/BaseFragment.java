@@ -26,7 +26,7 @@ public abstract class BaseFragment extends Fragment {
     private Unbinder unbinder;
     private CompositeSubscription subscription;
 
-    private CompositeSubscription getSubscription() {
+    public CompositeSubscription getSubscription() {
         return subscription;
     }
 

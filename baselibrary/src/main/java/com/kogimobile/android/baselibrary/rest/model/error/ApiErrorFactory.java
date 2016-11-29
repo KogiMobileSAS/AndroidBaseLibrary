@@ -28,6 +28,9 @@ public class ApiErrorFactory {
                 listener.onNetworkError(ErrorFactory.getErrorMessage(ctx,ErrorFactory.GENERAL_DEFAULT_ERROR),NetworkErrorType.GENERAL);
             }
         }
+        else if(error instanceof ApiError){
+            listener.onApiError(ErrorFactory.getErrorMessage(ctx,((ApiError) error).getErrorCode()), (ApiError) error);
+        }
     }
 
     public static NetworkErrorType getNetworkErrorType(Throwable error) {
