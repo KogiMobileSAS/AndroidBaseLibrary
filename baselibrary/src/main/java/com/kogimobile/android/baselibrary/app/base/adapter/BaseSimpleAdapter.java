@@ -187,7 +187,7 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
     public void addItem(@NonNull T item) {
         validateItemsNullAndCreate();
         items.add(item);
-        notifyDataSetChanged();
+        notifyItemInserted(getItemPosition(getItemCount()));
     }
 
 
