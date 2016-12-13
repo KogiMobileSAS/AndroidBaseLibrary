@@ -9,7 +9,6 @@ import java.io.ObjectInputStream;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 abstract public class DiskObject<T>{
 
@@ -19,13 +18,13 @@ abstract public class DiskObject<T>{
             public void call(Subscriber<? super T> subscriber) {
                 try {
                     FileUtils.saveObjectToDisk(fileName,DiskObject.this);
+                    subscriber.onNext((T)DiskObject.this);
                     subscriber.onCompleted();
                 } catch (Throwable e) {
                     subscriber.onError(e);
                 }
-                subscriber.onCompleted();
             }
-        }).subscribeOn(Schedulers.io());
+        });
     }
 
     public Observable<T> getFromDisk(final String fileName) {
@@ -48,12 +47,13 @@ abstract public class DiskObject<T>{
         });
     }
 
-    public Observable<Void> deleteFromDisk(final String fileName) {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
+    public Observable<Boolean> deleteFromDisk(final String fileName) {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Void > subscriber) {
+            public void call(Subscriber<? super Boolean > subscriber) {
                 try {
                     FileUtils.deleteObjectOnDisk(fileName);
+                    subscriber.onNext(true);
                     subscriber.onCompleted();
                 } catch (IOException e) {
                     subscriber.onError(e);
