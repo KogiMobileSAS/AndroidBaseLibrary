@@ -20,8 +20,9 @@ import timber.log.Timber;
 
 /**
  * Created by Julian Cardona on 10/10/16.
+ * @modified Pedro Scott. predro@kogimobile.com
+ *
  */
-
 public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends BaseFragmentMVP<P> implements BasePresenterListListener<M> {
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 10;
@@ -34,9 +35,9 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     private boolean isLoadingMore = false;
     private boolean loadMoreEnabled = false;
 
-    protected RecyclerView recyclerView;
-    protected SwipeRefreshLayout swipeRefresh;
-    protected BaseSimpleAdapter<M, BaseSimpleAdapter.BaseViewHolder<M>> adapter;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefresh;
+    private BaseSimpleAdapter<M, BaseSimpleAdapter.BaseViewHolder<M>> adapter;
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
@@ -44,6 +45,14 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
     public void setRecyclerView(@NonNull RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
+    }
+
+    public void setAdapter(@NonNull BaseSimpleAdapter<M, BaseSimpleAdapter.BaseViewHolder<M>> adapter) {
+        this.adapter = adapter;
+    }
+
+    public BaseSimpleAdapter<M, BaseSimpleAdapter.BaseViewHolder<M>> getAdapter() {
+        return adapter;
     }
 
     public SwipeRefreshLayout getSwipeRefresh() {
@@ -58,6 +67,11 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         return maxLoadMoreItemsPerPage;
     }
 
+    /**
+     * Set the number of items that the load more function going to get.
+     *
+     * @param maxLoadMoreItemsPerPage number of items
+     */
     public void setMaxLoadMoreItemsPerPage(int maxLoadMoreItemsPerPage) {
         this.maxLoadMoreItemsPerPage = maxLoadMoreItemsPerPage;
     }
@@ -66,7 +80,13 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         return loadMoreEnabled;
     }
 
-    public void setLoadMoreEnabled(boolean loadMoreEnabled,int minItemsBelowToLoadMore) {
+    /**
+     * Active the load more functionality and set number of items to get for each search.
+     *
+     * @param loadMoreEnabled active load more mode.
+     * @param minItemsBelowToLoadMore number of items
+     */
+    public void setLoadMoreEnabled(boolean loadMoreEnabled, int minItemsBelowToLoadMore) {
         this.loadMoreEnabled = loadMoreEnabled;
         this.minItemsBelowToLoadMore = minItemsBelowToLoadMore;
     }
@@ -76,16 +96,22 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (swipeRefresh != null) {
+
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     doLoadItems();
                 }
             });
+        } else {
+            throw new RuntimeException(String.format("SwipeRefresh of the view %s MUST be setter on the initViews() method by the setSwipeRefresh()", this.getClass().getSimpleName()));
+        }
+        if (recyclerView == null) {
+            throw new RuntimeException(String.format("RecyclerView of the view %s MUST be setter on the initViews() method by the setRecyclerView()", this.getClass().getSimpleName()));
         }
 
-        if (recyclerView != null && isLoadMoreEnabled()) {
-            recyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener((LinearLayoutManager) recyclerView.getLayoutManager(),minItemsBelowToLoadMore) {
+        if (isLoadMoreEnabled()) {
+            recyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener((LinearLayoutManager) recyclerView.getLayoutManager(), minItemsBelowToLoadMore) {
                 @Override
                 public void onLoadMore(int previousTotal) {
                     if (!isLoading && !isLoadingMore && isAbleToLoadMore()) {
@@ -93,6 +119,11 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
                     }
                 }
             });
+        }
+        if (adapter != null) {
+            recyclerView.setAdapter(adapter);
+        } else {
+            throw new RuntimeException(String.format("Adapter of the RecyclerView %s MUST be initialized on the initVars() method by the setAdapter()", this.getClass().getSimpleName()));
         }
 
     }
@@ -138,20 +169,20 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         }
         lastItemsCount = items.size();
         onItemsLoaded(items);
-        Timber.d("%d items loaded",items.size());
+        Timber.d("%d items loaded", items.size());
     }
 
     @CallSuper
     @Override
     public void moreItemsLoaded(List<M> newItems) {
         doStopLoading();
-        if (adapter != null) {;
+        if (adapter != null) {
             adapter.addItems(newItems);
             adapter.notifyDataSetChanged();
         }
         lastItemsCount = newItems.size();
         onMoreItemsLoaded(newItems);
-        Timber.d("%d more items loaded",newItems.size());
+        Timber.d("%d more items loaded", newItems.size());
     }
 
     @CallSuper
