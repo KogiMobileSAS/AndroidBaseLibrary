@@ -39,9 +39,24 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by Julian Cardona on 11/5/14.
+ * @author Julian Cardona. julian@kogimobile.com
+ * @version 9/4/16. *
+ *          Copyright 2015 Kogi Mobile
+ *          <p>
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *          <p>
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *          <p>
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ * @modified Pedro Scott. scott7462@gmail.com
  */
-public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener{
+public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener {
 
     private static final int HOME_UP_INDICATOR_NONE = -1;
     private static final int HOME_UP_INDICATOR_ARROW = 0;
@@ -86,7 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if((titleStack.size() == 0 && homeUpIndicator != HOME_UP_INDICATOR_NONE) || titleStack.size()>0){
+                if ((titleStack.size() == 0 && homeUpIndicator != HOME_UP_INDICATOR_NONE) || titleStack.size() > 0) {
                     onBackPressed();
                 }
                 return true;
@@ -120,17 +135,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     @Override
     @Subscribe
-    public void onProgressDialogEvent(EventProgressDialog event){
-        if(event.isShown()){
+    public void onProgressDialogEvent(EventProgressDialog event) {
+        if (event.isShown()) {
             clearKeyboardFromScreen();
-            if(progress.isShowing()){
+            if (progress.isShowing()) {
                 progress.dismiss();
             }
             progress.setMessage(event.getProgressDialogMessage());
             progress.show();
-        }
-        else {
-            if(progress.isShowing()) {
+        } else {
+            if (progress.isShowing()) {
                 progress.dismiss();
             }
         }
@@ -139,23 +153,23 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     @Override
     @Subscribe
-    public void onAlertDialogEvent(EventAlertDialog alert){
+    public void onAlertDialogEvent(EventAlertDialog alert) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(alert.getTitle())
                 .setMessage(alert.getMessage())
                 .setCancelable(alert.isCancellable())
-                .setPositiveButton(StringUtils.isBlank(alert.getPositiveButtonText()) ? getString(android.R.string.ok) : alert.getPositiveButtonText(), alert.getPositiveListener()==null ? new DialogInterface.OnClickListener() {
+                .setPositiveButton(StringUtils.isBlank(alert.getPositiveButtonText()) ? getString(android.R.string.ok) : alert.getPositiveButtonText(), alert.getPositiveListener() == null ? new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                }:alert.getPositiveListener());
-        if(alert.getNegativeListener()!=null){
-            builder.setNegativeButton(StringUtils.isBlank(alert.getNegativeButtonText()) ? getString(android.R.string.cancel) : alert.getNegativeButtonText(), alert.getNegativeListener()==null ? new DialogInterface.OnClickListener() {
+                } : alert.getPositiveListener());
+        if (alert.getNegativeListener() != null) {
+            builder.setNegativeButton(StringUtils.isBlank(alert.getNegativeButtonText()) ? getString(android.R.string.cancel) : alert.getNegativeButtonText(), alert.getNegativeListener() == null ? new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
                 }
-            }:alert.getNegativeListener());
+            } : alert.getNegativeListener());
         }
 
         builder.show();
@@ -164,8 +178,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     @Override
     @Subscribe
-    public void onToastMessageEvent(EventToastMessage event){
-        Toast.makeText(this,event.getMessage(),Toast.LENGTH_LONG).show();
+    public void onToastMessageEvent(EventToastMessage event) {
+        Toast.makeText(this, event.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @CallSuper
@@ -174,19 +188,19 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     public void onSnackbarMessageEvent(EventSnackbarMessage event) {
         clearKeyboardFromScreen();
         View root;
-        if (event.getViewId()!=EventSnackbarMessage.NONE_VIEW) {
+        if (event.getViewId() != EventSnackbarMessage.NONE_VIEW) {
             root = getWindow().getDecorView().findViewById(event.getViewId());
-        }else if(getWindow().getDecorView().findViewById(R.id.coordinator)!=null){
+        } else if (getWindow().getDecorView().findViewById(R.id.coordinator) != null) {
             root = getWindow().getDecorView().findViewById(R.id.coordinator);
-        }else{
+        } else {
             root = getWindow().getDecorView().findViewById(android.R.id.content);
         }
 
         Snackbar snackBar = Snackbar.make(root, event.getMessage(), Snackbar.LENGTH_LONG);
-        if(event.getActionListener()!=null) {
+        if (event.getActionListener() != null) {
             snackBar.setAction(event.getAction(), event.getActionListener());
         }
-        if(event.getCallback()!=null){
+        if (event.getCallback() != null) {
             snackBar.setCallback(event.getCallback());
         }
         snackBar.show();
@@ -200,14 +214,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    public void navigateToActivityLowLevel(Fragment frg,int layoutContainerId, String title) {
+    public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
         titleStack.add(title);
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg,layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(true));
+        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(true));
         updateActionBarTitle();
     }
 
     @CallSuper
-    public void navigateToActivityRootLevel(Fragment frg,int layoutContainerId,String title){
+    public void navigateToActivityRootLevel(Fragment frg, int layoutContainerId, String title) {
         FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
         FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(false));
         titleStack.clear();
@@ -216,25 +230,23 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    public void updateActionBarTitle(){
-        if(getSupportActionBar()!=null) {
-            if(titleStack.size()>0) {
+    public void updateActionBarTitle() {
+        if (getSupportActionBar() != null) {
+            if (titleStack.size() > 0) {
                 getSupportActionBar().setTitle(titleStack.get(titleStack.size() - 1));
-                if (titleStack.size()>1){
+                if (titleStack.size() > 1) {
                     getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                }
-                else{
-                    if(homeUpIndicator!=HOME_UP_INDICATOR_NONE){
+                } else {
+                    if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
 
-                        if(homeUpIndicator!=HOME_UP_INDICATOR_ARROW) {
+                        if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
                             getSupportActionBar().setHomeAsUpIndicator(DrawableUtils.getDrawableFromResource(this, homeUpIndicator));
-                        }else{
+                        } else {
                             getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
                         }
                         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    }
-                    else{
+                    } else {
                         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                     }
                 }
@@ -243,21 +255,21 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    public void setHomeAsUpIndicator(int resourceId){
+    public void setHomeAsUpIndicator(int resourceId) {
         homeUpIndicator = resourceId;
-        getSupportActionBar().setHomeAsUpIndicator(DrawableUtils.getDrawableFromResource(this,homeUpIndicator));
+        getSupportActionBar().setHomeAsUpIndicator(DrawableUtils.getDrawableFromResource(this, homeUpIndicator));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void openUrlWebPage(String url,int colorId){
+    public void openUrlWebPage(String url, int colorId) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(ContextCompat.getColor(this,colorId));
+        builder.setToolbarColor(ContextCompat.getColor(this, colorId));
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(url));
-	}
+    }
 
     @CallSuper
-    public void enableHomeBackArrowIndicator(){
+    public void enableHomeBackArrowIndicator() {
         homeUpIndicator = HOME_UP_INDICATOR_ARROW;
         getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -269,7 +281,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         if (subscription != null) {
             subscription.unsubscribe();
         }
-        if(this.unbinder!=null) {
+        if (this.unbinder != null) {
             this.unbinder.unbind();
         }
         super.onDestroy();
@@ -279,9 +291,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     public void onBackPressed() {
         clearKeyboardFromScreen();
-        if((titleStack.size())>0){
-            titleStack.remove(titleStack.size()-1);
-            if((titleStack.size())>0) {
+        if ((titleStack.size()) > 0) {
+            titleStack.remove(titleStack.size() - 1);
+            if ((titleStack.size()) > 0) {
                 updateActionBarTitle();
             }
         }
