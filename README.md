@@ -26,6 +26,9 @@ dependencies {
   compile 'com.kogimobile.android:baselibrary:1.0.6'
 }
 ```
+#### Documentation
+
+* [Events](../master/docs/EVENTS.md)
 
 License
 -------
