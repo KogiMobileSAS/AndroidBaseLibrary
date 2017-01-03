@@ -28,7 +28,7 @@ dependencies {
 ```
 #### Documentation
 
-* [Events](../master/docs/EVENTS.md)
+* [Events](../Documentation/docs/EVENTS.md)
 
 License
 -------
