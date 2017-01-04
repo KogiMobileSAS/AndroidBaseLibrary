@@ -2,7 +2,6 @@ package com.kogimobile.android.baselibrary.app.base;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -26,7 +25,6 @@ import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
 import com.kogimobile.android.baselibrary.utils.DrawableUtils;
-import com.kogimobile.android.baselibrary.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -136,42 +134,20 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     @Subscribe
     public void onProgressDialogEvent(EventProgressDialog event) {
-        if (event.isShown()) {
-            clearKeyboardFromScreen();
-            if (progress.isShowing()) {
-                progress.dismiss();
-            }
-            progress.setMessage(event.getProgressDialogMessage());
-            progress.show();
-        } else {
-            if (progress.isShowing()) {
-                progress.dismiss();
-            }
-        }
+        clearKeyboardFromScreen();
+        event.manageProgress(progress);
     }
 
     @CallSuper
     @Override
     @Subscribe
     public void onAlertDialogEvent(EventAlertDialog alert) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(alert.getTitle())
-                .setMessage(alert.getMessage())
-                .setCancelable(alert.isCancellable())
-                .setPositiveButton(StringUtils.isBlank(alert.getPositiveButtonText()) ? getString(android.R.string.ok) : alert.getPositiveButtonText(), alert.getPositiveListener() == null ? new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                } : alert.getPositiveListener());
-        if (alert.getNegativeListener() != null) {
-            builder.setNegativeButton(StringUtils.isBlank(alert.getNegativeButtonText()) ? getString(android.R.string.cancel) : alert.getNegativeButtonText(), alert.getNegativeListener() == null ? new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            } : alert.getNegativeListener());
-        }
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alert.setAlertDialogTitle(builder);
+        alert.setAlertDialogMessage(builder);
+        builder.setCancelable(alert.isCancellable());
+        alert.setAlertDialogPositiveButton(builder);
+        alert.setAlertDialogNegativeButton(builder);
         builder.show();
     }
 
@@ -195,8 +171,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         } else {
             root = getWindow().getDecorView().findViewById(android.R.id.content);
         }
-
-        Snackbar snackBar = Snackbar.make(root, event.getMessage(), Snackbar.LENGTH_LONG);
+        Snackbar snackBar = event.managerSnackBar(root, Snackbar.LENGTH_LONG);
         if (event.getActionListener() != null) {
             snackBar.setAction(event.getAction(), event.getActionListener());
         }
