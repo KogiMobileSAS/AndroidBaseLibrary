@@ -70,7 +70,7 @@ public class EventAlertDialog {
     }
 
     /**
-     * @param title is the title to display on the dialog
+     * @param title is the title to display in the dialog
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withTitle(String title) {
@@ -79,7 +79,7 @@ public class EventAlertDialog {
     }
 
     /**
-     * @param title is the title to display on the dialog
+     * @param title is the title to display in the dialog
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withTitle(int title) {
@@ -88,7 +88,7 @@ public class EventAlertDialog {
     }
 
     /**
-     * @param title is the title to display on the dialog
+     * @param title is the title to display in the dialog
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withTitle(Spannable title) {
@@ -97,7 +97,7 @@ public class EventAlertDialog {
     }
 
     /**
-     * @param message is the message to display on the dialog
+     * @param message is the message to display in the dialog
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withMessage(int message) {
@@ -106,7 +106,7 @@ public class EventAlertDialog {
     }
 
     /**
-     * @param message is the message to display on the dialog
+     * @param message is the message to display in the dialog
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withMessage(String message) {
@@ -115,7 +115,7 @@ public class EventAlertDialog {
     }
 
     /**
-     * @param message is the message to display on the dialog
+     * @param message is the message to display in the dialog
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withMessage(Spannable message) {
@@ -162,7 +162,7 @@ public class EventAlertDialog {
 
     /**
      * @param title    is the text to set in the positive button
-     * @param listener the action to do is you do click on the positive button
+     * @param listener the action to do is you do click in the positive button
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withPositiveButton(int title, DialogInterface.OnClickListener listener) {
@@ -173,7 +173,7 @@ public class EventAlertDialog {
 
     /**
      * @param title    is the text to set in the positive button
-     * @param listener the action to do is you do click on the positive button
+     * @param listener the action to do is you do click in the positive button
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withPositiveButton(String title, DialogInterface.OnClickListener listener) {
@@ -184,7 +184,7 @@ public class EventAlertDialog {
 
     /**
      * @param title    is the text to set in the positive button
-     * @param listener the action to do is you do click on the positive button
+     * @param listener the action to do is you do click in the positive button
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withPositiveButton(Spannable title, DialogInterface.OnClickListener listener) {
@@ -207,7 +207,7 @@ public class EventAlertDialog {
 
     /**
      * @param title    is the text to set in the negative button
-     * @param listener the action to do is you do click on the negative button
+     * @param listener the action to do is you do click in the negative button
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withNegativeButton(int title, DialogInterface.OnClickListener listener) {
@@ -229,7 +229,7 @@ public class EventAlertDialog {
 
     /**
      * @param title    is the text to set in the negative button
-     * @param listener the action to do is you do click on the negative button
+     * @param listener the action to do is you do click in the negative button
      * @return the instance of the event to work like a builder
      */
     public EventAlertDialog withNegativeButton(Spannable title, DialogInterface.OnClickListener listener) {
@@ -253,7 +253,7 @@ public class EventAlertDialog {
     /**
      * This method is the delegate to manage the title text by difference source of text
      * like resource, strings or Spannable
-     * Note: this methods have priorities in the text 1) resource, 2) String, 3) Spannable.
+     * Note: this method have priorities in the text 1) resource, 2) String, 3) Spannable.
      *
      * @param builder is the builder dialog to manage the title to show
      * @return the builder dialog
@@ -274,7 +274,7 @@ public class EventAlertDialog {
     /**
      * This method is the delegate to manage the message text by difference source of text
      * like resource, strings or Spannable
-     * Note: this methods have priorities in the text 1) resource, 2) String, 3) Spannable.
+     * Note: this method have priorities in the text 1) resource, 2) String, 3) Spannable.
      *
      * @param builder is the builder dialog to manage the message to show
      * @return the builder dialog
@@ -295,7 +295,7 @@ public class EventAlertDialog {
     /**
      * This method is the delegate to manage the positive button text by difference source of text
      * like resource, strings or Spannable and set the listener to the button
-     * Note: this methods have priorities in the text 1) resource, 2) String, 3) Spannable.
+     * Note: this method have priorities in the text 1) resource, 2) String, 3) Spannable.
      *
      * @param builder is the builder dialog to manage the positive button
      * @return the builder dialog
@@ -320,7 +320,7 @@ public class EventAlertDialog {
     /**
      * This method is the delegate to manage the negative button text by difference source of text
      * like resource, strings or Spannable and set the listener to the button
-     * Note: this methods have priorities in the text 1) resource, 2) String, 3) Spannable.
+     * Note: this method have priorities in the text 1) resource, 2) String, 3) Spannable.
      *
      * @param builder is the builder dialog to manage the negative button
      * @return the builder dialog

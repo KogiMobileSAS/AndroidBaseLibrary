@@ -30,7 +30,7 @@ public class EventProgressDialog {
 
     /**
      * @param show    decide is the event show or hide the progress
-     * @param message text to show on the progress
+     * @param message text to show in the progress
      */
     public EventProgressDialog(boolean show, String message) {
         setShow(show);
@@ -39,7 +39,7 @@ public class EventProgressDialog {
 
     /**
      * @param show    decide is the event show or hide the progress
-     * @param message text to show on the progress
+     * @param message text to show in the progress
      */
     public EventProgressDialog(boolean show, int message) {
         setShow(show);
@@ -48,7 +48,7 @@ public class EventProgressDialog {
 
     /**
      * @param show    decide is the event show or hide the progress
-     * @param message text to show on the progress
+     * @param message text to show in the progress
      */
     public EventProgressDialog(boolean show, Spannable message) {
         setShow(show);
@@ -97,7 +97,7 @@ public class EventProgressDialog {
     }
 
     /**
-     * This method manage the resource of the text to show on the progress and decide is the progress
+     * This method manage the resource of the text to show in the progress and decide is the progress
      * need to show or hide.
      * Note: this methods have priorities in the text 1) resource, 2) String, 3) Spannable.
      *

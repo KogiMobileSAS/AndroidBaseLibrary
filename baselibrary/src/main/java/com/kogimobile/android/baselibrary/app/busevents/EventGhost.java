@@ -18,7 +18,7 @@ package com.kogimobile.android.baselibrary.app.busevents;
  *          limitations under the License.
  * @modified Pedro Scott. scott7462@gmail.com
  *
- * Note: this event is a requirement of the library EventBus to prevent a problem on the BaseFragment.java
+ * Note: this event is a requirement of the library EventBus to prevent a problem in the BaseFragment.java
  */
 public class EventGhost {
 }
