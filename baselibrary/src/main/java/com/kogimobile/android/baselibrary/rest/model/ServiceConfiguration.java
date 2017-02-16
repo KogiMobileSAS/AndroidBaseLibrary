@@ -23,7 +23,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by kogiandroid on 1/14/16.
+ * @author kogiandroid on 1/14/16.
  * Modified by Julian Cardona 04/19/16.
  * Use this class to put the custom configuration for the Services instances on your apps.
  * Feel free to subclass this for overwriting the getters on the app class in the way you prefer.

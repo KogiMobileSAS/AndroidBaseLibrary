@@ -1,6 +1,7 @@
 package com.kogimobile.android.baselibrary.app.base.list;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,26 +13,23 @@ import android.view.View;
 import com.kogimobile.android.baselibrary.app.base.BaseFragmentMVP;
 import com.kogimobile.android.baselibrary.app.base.adapter.BaseSimpleAdapter;
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenter;
-import com.kogimobile.android.baselibrary.widgets.EndlessRecyclerViewOnScrollListener;
 
 import java.util.List;
 
 import timber.log.Timber;
 
 /**
- * Created by Julian Cardona on 10/10/16.
- * @modified Pedro Scott. predro@kogimobile.com
+ * @author Julian Cardona on 10/10/16.
  *
+ * @modified Pedro Scott. predro@kogimobile.com
  */
 public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends BaseFragmentMVP<P> implements BasePresenterListListener<M> {
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 10;
-    private static final int DEFAULT_MIN_ITEMS_BELOW = 5;
 
     private int maxLoadMoreItemsPerPage = DEFAULT_ITEMS_PER_PAGE;
-    private int minItemsBelowToLoadMore = DEFAULT_MIN_ITEMS_BELOW;
-    private int lastItemsCount = 0;
-    private boolean isLoading = false;
+    private int lastPageItemsCount = 0;
+    private boolean isLoading = true;
     private boolean isLoadingMore = false;
     private boolean loadMoreEnabled = false;
 
@@ -84,20 +82,17 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
      * Active the load more functionality and set number of items to get for each search.
      *
      * @param loadMoreEnabled active load more mode.
-     * @param minItemsBelowToLoadMore number of items
      */
-    public void setLoadMoreEnabled(boolean loadMoreEnabled, int minItemsBelowToLoadMore) {
+    public void setLoadMoreEnabled(boolean loadMoreEnabled) {
         this.loadMoreEnabled = loadMoreEnabled;
-        this.minItemsBelowToLoadMore = minItemsBelowToLoadMore;
     }
 
     @CallSuper
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (swipeRefresh != null) {
-
-            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        if (getSwipeRefresh() != null) {
+            getSwipeRefresh().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     doLoadItems();
@@ -111,16 +106,28 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         }
 
         if (isLoadMoreEnabled()) {
-            recyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener((LinearLayoutManager) recyclerView.getLayoutManager(), minItemsBelowToLoadMore) {
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                public void onLoadMore(int previousTotal) {
-                    if (!isLoading && !isLoadingMore && isAbleToLoadMore()) {
-                        doLoadMoreItems();
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int totalItemCount = getAdapter().getItemCount();
+                    int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+
+                    if (!isLoadingElements() && isAbleToLoadMore() && lastVisibleItemPosition == totalItemCount - 1) {
+                        Handler handler = new Handler();
+                        final Runnable r = new Runnable() {
+                            public void run() {
+                                doLoadMoreItems();
+                            }
+                        };
+                        handler.post(r);
                     }
+
                 }
             });
         }
         if (adapter != null) {
+            adapter.setLoadMoreEnabled(true);
             recyclerView.setAdapter(adapter);
         } else {
             throw new RuntimeException(String.format("Adapter of the RecyclerView %s MUST be initialized on the initVars() method by the setAdapter()", this.getClass().getSimpleName()));
@@ -130,7 +137,11 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
     @CallSuper
     protected boolean isAbleToLoadMore() {
-        return lastItemsCount >= maxLoadMoreItemsPerPage && isLoadMoreEnabled();
+        boolean enable = lastPageItemsCount >= maxLoadMoreItemsPerPage && isLoadMoreEnabled();
+        if(adapter != null){
+            adapter.setLoadMoreEnabled(enable);
+        }
+        return enable;
     }
 
     /**
@@ -138,12 +149,14 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
      */
     @CallSuper
     protected void doLoadItems() {
-        isLoading = true;
+        this.isLoading = true;
         if (adapter != null) {
-            adapter.showLoadingState(isLoading);
+            if(getSwipeRefresh() != null && !getSwipeRefresh().isRefreshing()) {
+                adapter.showLoadingView(true);
+            }
+            onDoLoadItems();
+            Timber.d("Loading items ...");
         }
-        onDoLoadItems();
-        Timber.d("Loading items ...");
     }
 
     /**
@@ -151,53 +164,77 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
      */
     @CallSuper
     protected void doLoadMoreItems() {
-        isLoadingMore = true;
+        this.isLoadingMore = true;
         if (adapter != null) {
-            adapter.showLoadMoreView(isLoadingMore);
+            adapter.showLoadingMoreView(true);
+            getRecyclerView().smoothScrollToPosition(adapter.getItemCount() - 1);
+            onDoLoadMoreItems();
+            Timber.d("Loading More items ...");
         }
-        onDoLoadMoreItems();
-        Timber.d("Loading More items ...");
     }
 
     @CallSuper
     @Override
     public void itemsLoaded(List<M> items) {
-        doStopLoading();
+        this.isLoading = false;
+
         if (adapter != null) {
             adapter.cleanItemsAndUpdate(items);
-            adapter.notifyDataSetChanged();
+            if(getSwipeRefresh() != null && !getSwipeRefresh().isRefreshing()){
+                adapter.showLoadingView(false);
+            }
         }
-        lastItemsCount = items.size();
-        onItemsLoaded(items);
+
+        if (getSwipeRefresh() != null && getSwipeRefresh().isRefreshing()) {
+            getSwipeRefresh().setRefreshing(false);
+        }
+
+        if(items != null){
+            lastPageItemsCount = items.size();
+            isAbleToLoadMore();
+            onItemsLoaded(items);
+        }
         Timber.d("%d items loaded", items.size());
     }
 
     @CallSuper
     @Override
     public void moreItemsLoaded(List<M> newItems) {
-        doStopLoading();
-        if (adapter != null) {
+        this.isLoadingMore = false;
+        if (adapter != null && newItems != null && newItems.size() > 0){
+            adapter.showLoadingMoreView(false);
             adapter.addItems(newItems);
-            adapter.notifyDataSetChanged();
         }
-        lastItemsCount = newItems.size();
-        onMoreItemsLoaded(newItems);
+
+        if(newItems != null){
+            lastPageItemsCount = newItems.size();
+            isAbleToLoadMore();
+            onMoreItemsLoaded(newItems);
+        }
         Timber.d("%d more items loaded", newItems.size());
     }
 
     @CallSuper
-    protected void doStopLoading() {
-        isLoading = false;
-        isLoadingMore = false;
-        if (swipeRefresh != null) {
-            swipeRefresh.setRefreshing(isLoading);
+    protected void doCancelLoading() {
+        this.isLoading = false;
+        this.isLoadingMore = false;
+        if (getSwipeRefresh() != null && getSwipeRefresh().isRefreshing()) {
+            getSwipeRefresh().setRefreshing(false);
         }
         if (adapter != null) {
-            adapter.showLoadingState(isLoading);
-            adapter.showLoadMoreView(isLoadingMore);
-            adapter.notifyDataSetChanged();
+            if(isLoading != adapter.isLoading() && getSwipeRefresh() != null && !getSwipeRefresh().isRefreshing()) {
+                adapter.showLoadingView(false);
+            }
+
+            if(isLoadingMore != adapter.isLoadingMore()) {
+                adapter.showLoadingMoreView(false);
+            }
         }
         Timber.d("Items Stop loading");
+    }
+
+    public boolean isLoadingElements() {
+        return this.isLoading || this.isLoadingMore;
     }
 
     /**
@@ -215,3 +252,4 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     protected abstract void onMoreItemsLoaded(List<M> newItems);
 
 }
+

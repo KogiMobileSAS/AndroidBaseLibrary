@@ -1,7 +1,7 @@
 package com.kogimobile.android.baselibrary.app.busevents;
 
 /**
- * Created by Julian Cardona on 11/20/14.
+ * @author Julian Cardona on 11/20/14.
 
  */
 public class EventToastMessage {

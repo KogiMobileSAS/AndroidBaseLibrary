@@ -3,6 +3,7 @@ package com.kogimobile.android.baselibrary.app.base;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -298,6 +299,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
             }
         }
         super.onBackPressed();
+    }
+
+    public void sendSuccessResult(Intent data){
+        setResult(RESULT_OK,data);
+        finish();
     }
 
 }

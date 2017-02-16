@@ -1,7 +1,7 @@
 package com.kogimobile.android.baselibrary.rest;
 
 /**
- * Created by kogiandroid on 1/14/16.
+ * @author kogiandroid on 1/14/16.
  */
 public class BaseService<I> {
 

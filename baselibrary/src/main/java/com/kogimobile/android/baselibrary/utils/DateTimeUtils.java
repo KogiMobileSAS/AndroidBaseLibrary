@@ -5,7 +5,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Created by Julian Cardona on 4/14/15.
+ * @author Julian Cardona on 4/14/15.
  */
 public class DateTimeUtils {
 

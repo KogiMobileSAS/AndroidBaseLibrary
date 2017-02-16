@@ -3,7 +3,7 @@ package com.kogimobile.android.baselibrary.rest.utils;
 import com.kogimobile.android.baselibrary.R;
 
 /**
- * Created by kogiandroid on 12/24/15.
+ * @author kogiandroid on 12/24/15.
  */
 public class RestDelegate {
 

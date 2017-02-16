@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.URLConnection;
 
 /**
- * Created by Julian Cardona on 4/1/15.
+ * @author Julian Cardona on 4/1/15.
  */
 public class FileUtils {
 

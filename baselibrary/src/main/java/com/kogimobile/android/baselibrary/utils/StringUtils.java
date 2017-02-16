@@ -1,7 +1,7 @@
 package com.kogimobile.android.baselibrary.utils;
 
 /**
- * Created by Julian Cardona on 11/12/14.
+ * @author Julian Cardona on 11/12/14.
  */
 public class StringUtils {
 

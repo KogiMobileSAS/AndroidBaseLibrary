@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 /**
- * Created by Julian Cardona on 5/21/15.
+ * @author Julian Cardona on 5/21/15.
  */
 public class CollectionTypedAdapter implements JsonSerializer<Collection<?>> {
 

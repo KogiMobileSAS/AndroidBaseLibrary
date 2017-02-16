@@ -1,7 +1,7 @@
 package com.kogimobile.android.baselibrary.rest.model.error;
 
 /**
- * Created by Julian Cardona on 8/8/16.
+ * @author Julian Cardona on 8/8/16.
  */
 public enum NetworkErrorType {
     GENERAL,

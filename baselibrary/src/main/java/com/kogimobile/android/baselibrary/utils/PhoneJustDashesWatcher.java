@@ -5,7 +5,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 /**
- * Created by kogiandroid on 1/20/16.
+ * @author kogiandroid on 1/20/16.
  */
 public class PhoneJustDashesWatcher implements TextWatcher {
 
