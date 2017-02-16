@@ -201,7 +201,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     @Override
     public void moreItemsLoaded(List<M> newItems) {
         this.isLoadingMore = false;
-        if (adapter != null && newItems != null && newItems.size() > 0){
+        if (adapter != null && newItems != null){
             adapter.showLoadingMoreView(false);
             adapter.addItems(newItems);
         }
