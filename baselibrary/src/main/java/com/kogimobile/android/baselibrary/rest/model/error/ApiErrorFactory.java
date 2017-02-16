@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 import retrofit2.adapter.rxjava.HttpException;
 
 /**
- * Created by Julian Cardona on 11/13/14.
+ * @author Julian Cardona on 11/13/14.
  */
 public class ApiErrorFactory {
 

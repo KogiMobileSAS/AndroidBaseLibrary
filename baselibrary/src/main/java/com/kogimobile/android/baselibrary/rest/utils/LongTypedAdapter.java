@@ -8,7 +8,7 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 
 /**
- * Created by Julian Cardona on 5/21/15.
+ * @author Julian Cardona on 5/21/15.
  */
 public class LongTypedAdapter implements JsonSerializer<Long> {
 

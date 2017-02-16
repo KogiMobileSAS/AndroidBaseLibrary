@@ -13,7 +13,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Created by Julian Cardona on 9/22/16.
+ * @author Julian Cardona on 9/22/16.
  */
 
 public class CryptoCipher {

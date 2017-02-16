@@ -9,7 +9,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 
 /**
- * Created by kogiandroid on 1/14/16.
+ * @author kogiandroid on 1/14/16.
  * Modified by Julian Cardona 04/19/16.
  */
 public class RestClientManager<T> {

@@ -3,7 +3,7 @@ package com.kogimobile.android.baselibrary.app.busevents;
 import android.content.DialogInterface;
 
 /**
- * Created by Julian Cardona on 7/11/14.
+ * @author Julian Cardona on 7/11/14.
  */
 public class EventAlertDialog {
 

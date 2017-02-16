@@ -39,18 +39,18 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
     protected static final int LOAD_MORE_VIEW = 5000;
 
     private List<T> items = new ArrayList<>();
-    private onItemClickListener<T> clickListener;
-    private ItemTouchHelperAdapter<T> itemTouchHelperAdapter;
+    private BaseSimpleAdapter.onItemClickListener<T> clickListener;
+    private BaseSimpleAdapter.ItemTouchHelperAdapter<T> itemTouchHelperAdapter;
 
     private int whereItemStartToMove;
     private int whereItemEndToMove;
     private boolean callbackMoved;
     private boolean callbackSwiped;
-
-    private boolean headerView;
-    private boolean isLoadMore;
-    private boolean entryState = true;
-    private boolean loadingState;
+    private boolean isLoading = true;
+    private boolean isLoadingMore;
+    private boolean isHeaderEnabled;
+    private boolean isLoadEnabled = true;
+    private boolean isLoadMoreEnabled;
 
     public List<T> getItems() {
         return items;
@@ -60,9 +60,9 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
     public int getItemCount() {
         validateItemsNullAndCreate();
         if (items.size() == 0) {
-            return getPositionByRules();
+            return headerViewCount() + loadViewCount();
         } else {
-            return items.size() + getPositionByRules() + (haveLoadMoreView() ? 1 : 0);
+            return  headerViewCount() + items.size() + loadMoreViewCount();
         }
     }
 
@@ -70,37 +70,33 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
     public int getItemViewType(int position) {
         validateItemsNullAndCreate();
 
-        if (haveToShowMore(position)) {
-            return LOAD_MORE_VIEW;
-        }
-
-        if (haveAdapterHeaderView() && isEmptyState()) {
-            if (items.size() == 0 && position == 1) {
-                return isLoadingStateEnabled() ? LOADING_VIEW : EMPTY_VIEW;
+        if(position == 0){
+            if(isHeaderEnabled()){
+                return HEADER_VIEW;
+            } else if(isLoadingEnabled() && isLoading() && this.items.size() == 0){
+                return LOADING_VIEW;
+            }else if (items.size() == 0){
+                return EMPTY_VIEW;
+            }else{
+                return super.getItemViewType(position);
             }
-            if (items.size() >= 0 && position == 0) {
-                return isLoadingStateEnabled() ? LOADING_VIEW : HEADER_VIEW;
+        }else if(position == 1){
+            if(isLoadingEnabled() && isLoading() && this.items.size() == 0){
+                return LOADING_VIEW;
+            }else if(items.size() == 0){
+                return EMPTY_VIEW;
+            }else if(isLoadingMoreEnabled() && isLoadingMore() && position == headerViewCount() + this.items.size() - 1 + loadMoreViewCount()){
+                return LOAD_MORE_VIEW;
+            }else{
+                return super.getItemViewType(position);
+            }
+        }else{
+            if (isLoadingMoreEnabled() && isLoadingMore() && position == headerViewCount() + this.items.size() - 1 + loadMoreViewCount()) {
+                return LOAD_MORE_VIEW;
+            } else {
+                return super.getItemViewType(position);
             }
         }
-
-        if (isEmptyState() && items.size() == 0) {
-            return isLoadingStateEnabled() ? LOADING_VIEW : EMPTY_VIEW;
-        }
-
-        if (haveToShowHeader(position)) {
-            return HEADER_VIEW;
-        }
-
-        return super.getItemViewType(position);
-
-    }
-
-    private boolean haveToShowHeader(int position) {
-        return haveAdapterHeaderView() && items.size() >= 0 && position == 0;
-    }
-
-    private boolean haveToShowMore(int position) {
-        return (position >= items.size() + getPositionByRules()) && haveLoadMoreView() && items.size() > 0;
     }
 
     private void validateItemsNullAndCreate() {
@@ -116,8 +112,8 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
      * @return The item that found in the position or null in case to don't founded.
      */
     public T getItem(int position) {
-        if (items != null && position - getPositionByRules() < items.size()) {
-            return items.get(position - getPositionByRules());
+        if (items != null && position - headerViewCount() < items.size()) {
+            return items.get(position - headerViewCount());
         }
         return null;
     }
@@ -130,8 +126,9 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
      */
     public void cleanItemsAndUpdate(@Nullable List<T> list) {
         validateItemsNullAndCreate();
-        items.clear();
-        addItems(list);
+        this.items.clear();
+        this.items.addAll(list);
+        this.notifyDataSetChanged();
     }
 
     /**
@@ -142,8 +139,11 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
      */
     public void addItems(@Nullable List<T> list) {
         validateItemsNullAndCreate();
-        this.items.addAll(list == null ? new ArrayList<T>() : list);
-        notifyDataSetChanged();
+        if(list != null && list.size() > 0) {
+            int startRange = getItemCount() + 1;
+            this.items.addAll(list);
+            notifyItemRangeInserted(startRange,list.size());
+        }
     }
 
     /**
@@ -154,8 +154,10 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
      */
     public boolean removeItem(@NonNull T item) {
         validateItemsNullAndCreate();
-        if (items.remove(item)) {
-            notifyDataSetChanged();
+        int index = items.indexOf(item);
+        if (index != -1) {
+            items.remove(item);
+            notifyItemRemoved(index);
             return true;
         }
         return false;
@@ -171,7 +173,7 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         validateItemsNullAndCreate();
         if (position < items.size()) {
             items.remove(position);
-            notifyItemRemoved(position + getPositionByRules());
+            notifyItemRemoved(position + headerViewCount());
             return true;
         }
         return false;
@@ -187,7 +189,6 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         items.add(item);
         notifyItemInserted(getItemPosition(getItemCount()));
     }
-
 
     /**
      * This method add an item adapter and notify all the adapter.
@@ -210,20 +211,28 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         validateItemsNullAndCreate();
         if (position < items.size()) {
             items.add(position, item);
-            notifyItemInserted(position + getPositionByRules());
+            notifyItemInserted(position + headerViewCount());
         }
     }
 
-    public onItemClickListener<T> getClickListener() {
+    public BaseSimpleAdapter.onItemClickListener<T> getClickListener() {
         return clickListener;
     }
 
-    public void addClickListener(onItemClickListener<T> clickListener) {
+    public void addClickListener(BaseSimpleAdapter.onItemClickListener<T> clickListener) {
         this.clickListener = clickListener;
     }
 
-    private int getPositionByRules() {
-        return ((isEmptyState() && items.size() == 0) ? 1 : 0) + (haveAdapterHeaderView() ? 1 : 0);
+    private int headerViewCount(){
+        return isHeaderEnabled() ? 1 : 0;
+    }
+
+    private int loadViewCount(){
+        return isLoadingEnabled() && isLoading() && items.size() == 0 ? 1 : 0;
+    }
+
+    private int loadMoreViewCount(){
+        return isLoadingMoreEnabled() && isLoadingMore() ? 1 : 0;
     }
 
     public void setCallbackMoved(boolean callbackMoved) {
@@ -246,7 +255,6 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         void onItemViewsClick(T item, int position);
     }
 
-
     /**
      * Call the click item  Listener with the position of the item in the adapter and call
      * the @onItemViewsClick() executing the position rules and giving to the listener the position
@@ -267,26 +275,19 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
      * @return The Position of the items in the list.
      */
     public int getItemPosition(int adapterPosition) {
-        return adapterPosition - getPositionByRules();
+        return adapterPosition - headerViewCount();
     }
 
-    /**
-     * Entry State Elements.
-     */
-    public boolean isEmptyState() {
-        return entryState;
+    public boolean isLoading() {
+        return isLoading;
     }
 
-    /**
-     * Set the entry state value
-     *
-     * @param entryState Is true if you want user a entry state by default is true.
-     */
-    public void showEmptyState(boolean entryState) {
-        this.entryState = entryState;
+    public boolean isLoadingMore() {
+        return isLoadingMore;
     }
 
-    protected static class EmptyViewHolder<T> extends BaseViewHolder<T> {
+
+    protected static class EmptyViewHolder<T> extends BaseSimpleAdapter.BaseViewHolder<T> {
 
         public EmptyViewHolder(View itemView) {
             super(itemView);
@@ -315,53 +316,56 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
     }
 
     /**
-     * Header element.
-     */
-
-    public boolean haveAdapterHeaderView() {
-        return headerView;
-    }
-
-    /**
      * Set the entry state value in constructor builder
      *
-     * @param headerView Is true if you want user a entry state by default is true.
+     * @param show Is true if you want to show loading state.
      */
-    public void showHeaderView(boolean headerView) {
-        this.headerView = headerView;
-    }
-
-    /**
-     * Loading elements.
-     */
-    public boolean isLoadingStateEnabled() {
-        return loadingState;
-    }
-
-    /**
-     * Set the entry state value in constructor builder
-     *
-     * @param loadingState Is true if you want to show loading state.
-     */
-    public void showLoadingState(boolean loadingState) {
-        this.loadingState = loadingState;
-    }
-
-    /**
-     * Load More.
-     */
-    public boolean haveLoadMoreView() {
-        return isLoadMore;
+    public void showLoadingView(boolean show) {
+        this.isLoading = show;
+        if(show) {
+            notifyItemInserted(0);
+        }else{
+            notifyItemRemoved(0);
+        }
     }
 
     /**
      * Set the load more
      *
-     * @param isLoadMore Is true if you want add a load more view in the bottom of the list.
+     * @param show Is true if you want add a load more view in the bottom of the list.
      */
-    public void showLoadMoreView(boolean isLoadMore) {
-        this.isLoadMore = isLoadMore;
-        notifyDataSetChanged();
+    public void showLoadingMoreView(boolean show) {
+        if(show) {
+            this.isLoadingMore = show; // order is important DO NOT remove
+            notifyItemInserted(getItemCount() - 1);
+        } else{
+            notifyItemRemoved(getItemCount() - 1);
+            this.isLoadingMore = show;
+        }
+    }
+
+    public boolean isHeaderEnabled() {
+        return isHeaderEnabled;
+    }
+
+    public boolean isLoadingEnabled() {
+        return isLoadEnabled;
+    }
+
+    public boolean isLoadingMoreEnabled() {
+        return isLoadMoreEnabled;
+    }
+
+    public void setHeaderEnabled(boolean headerEnabled) {
+        isHeaderEnabled = headerEnabled;
+    }
+
+    public void setLoadEnabled(boolean loadEnabled) {
+        isLoadEnabled = loadEnabled;
+    }
+
+    public void setLoadMoreEnabled(boolean loadMoreEnabled) {
+        isLoadMoreEnabled = loadMoreEnabled;
     }
 
     /**
@@ -389,7 +393,7 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
             if (isCallbackSwiped()) {
                 swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
             }
-            if ((haveAdapterHeaderView() && viewHolder.getAdapterPosition() == 0)
+            if ((isHeaderEnabled() && viewHolder.getAdapterPosition() == 0)
                     || items.size() == 0) {
                 return 0;
             }
@@ -407,11 +411,11 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            if (!(haveAdapterHeaderView() && viewHolder.getAdapterPosition() == 0)) {
+            if (!(isHeaderEnabled() && viewHolder.getAdapterPosition() == 0)) {
                 int position = getItemPosition(viewHolder.getAdapterPosition());
                 T item = items.get(position);
                 items.remove(position);
-                notifyItemRemoved(position + getPositionByRules());
+                notifyItemRemoved(position + headerViewCount());
                 if (getItemTouchHelperAdapter() != null) {
                     getItemTouchHelperAdapter().onItemDismissed(position,
                             item);
@@ -421,7 +425,7 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
     }
 
     private boolean changeItemsByPosition(int adapterPositionStart, int adapterPositionEnd) {
-        if (haveAdapterHeaderView() && adapterPositionEnd == 0) {
+        if (isHeaderEnabled() && adapterPositionEnd == 0) {
             return false;
         }
         if (adapterPositionEnd > items.size()) {
@@ -465,16 +469,16 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         return changeItemsByPosition(whereItemEndToMove, whereItemStartToMove);
     }
 
-    public ItemTouchHelperAdapter<T> getItemTouchHelperAdapter() {
+    public BaseSimpleAdapter.ItemTouchHelperAdapter<T> getItemTouchHelperAdapter() {
         return itemTouchHelperAdapter;
     }
 
-    public void addItemTouchHelperAdapter(RecyclerView recyclerView, ItemTouchHelperAdapter<T> itemTouchHelperAdapter, boolean activeSwipe, boolean activeMove) {
+    public void addItemTouchHelperAdapter(RecyclerView recyclerView, BaseSimpleAdapter.ItemTouchHelperAdapter<T> itemTouchHelperAdapter, boolean activeSwipe, boolean activeMove) {
         this.itemTouchHelperAdapter = itemTouchHelperAdapter;
         setCallbackMoved(activeMove);
         setCallbackSwiped(activeSwipe);
         ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback();
+                new BaseSimpleAdapter.SimpleItemTouchHelperCallback();
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
     }
@@ -505,7 +509,8 @@ public abstract class BaseSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewH
         if (holder instanceof EmptyViewHolder) {
             ((EmptyViewHolder) holder).bindView();
         } else {
-            holder.bindView(items.get(getItemPosition(position)));
+            int pos = getItemPosition(position);
+            holder.bindView(items.get(pos));
         }
     }
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.kogimobile.android.baselibrary.R;
 
 /**
- * Created by Julian Cardona on 11/12/14.
+ * @author Julian Cardona on 11/12/14.
  */
 public class ErrorFactory {
 

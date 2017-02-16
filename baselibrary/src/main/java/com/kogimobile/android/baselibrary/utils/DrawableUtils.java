@@ -15,7 +15,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.widget.ImageView;
 
 /**
- * Created by Julian Cardona on 5/26/16.
+ * @author Julian Cardona on 5/26/16.
  */
 public class DrawableUtils {
 
