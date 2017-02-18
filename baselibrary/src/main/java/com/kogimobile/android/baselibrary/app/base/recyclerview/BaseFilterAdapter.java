@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.app.base.adapter;
+package com.kogimobile.android.baselibrary.app.base.recyclerview;
 
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -24,7 +24,7 @@ import java.util.List;
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  */
-public abstract class BaseFilterSimpleAdapter<T, H extends BaseSimpleAdapter.BaseViewHolder> extends BaseSimpleAdapter<T, H>
+public abstract class BaseFilterAdapter<T, H extends BaseAdapter.BaseViewHolder> extends BaseAdapter<T, H>
         implements Filterable {
 
     private int minNumberToCleanFilter = 0;
@@ -46,6 +46,20 @@ public abstract class BaseFilterSimpleAdapter<T, H extends BaseSimpleAdapter.Bas
         return filter;
     }
 
+    public List<T> getItemsByCondition() {
+        List<T> selectedItems = new ArrayList<>();
+        for (T t : getItems()) {
+            if (ifValidCondition(t))
+                selectedItems.add(t);
+        }
+        return selectedItems;
+    }
+
+    public boolean ifValidCondition(T t) {
+        return true;
+    }
+
+    protected abstract boolean searchCondition(T item, String query);
 
     class AdapterFilter extends Filter {
 
@@ -82,12 +96,9 @@ public abstract class BaseFilterSimpleAdapter<T, H extends BaseSimpleAdapter.Bas
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            cleanItemsAndUpdate((List<T>) results.values);
+            refreshItems((List<T>) results.values);
             notifyDataSetChanged();
         }
     }
-
-    protected abstract boolean searchCondition(T item, String query);
-
 
 }
