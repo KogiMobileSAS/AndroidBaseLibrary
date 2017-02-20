@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.app.base.list;
+package com.kogimobile.android.baselibrary.app.base.recyclerview;
 
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenterListener;
 
@@ -24,8 +24,10 @@ import java.util.List;
  */
 public interface BasePresenterListListener<T> extends BasePresenterListener {
 
-    void itemsLoaded(List<T> items);
+    void itemsLoaded(List<T> items,boolean isThereMoreDataToLoad);
 
-    void moreItemsLoaded(List<T> newItems);
+    void moreItemsLoaded(List<T> moreItems,boolean isThereMoreDataToLoad);
+
+    void refreshItemsLoaded(List<T> refreshItems,boolean isThereMoreDataToLoad);
 
 }
