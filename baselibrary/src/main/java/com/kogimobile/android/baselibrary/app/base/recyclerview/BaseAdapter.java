@@ -222,15 +222,15 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         }
     }
 
-    protected int headerViewCount(){
+    public int headerViewCount(){
         return isHeaderEnabled() ? 1 : 0;
     }
 
-    protected int loadViewCount(){
+    public int loadViewCount(){
         return isLoadEnabled() && isLoading() && getItems().size() == 0 ? 1 : 0;
     }
 
-    private int loadMoreViewCount(){
+    public int loadMoreViewCount(){
         return isLoadMoreEnabled() && isLoadingMore() ? 1 : 0;
     }
 
@@ -243,35 +243,6 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
     public int getItemPosition(int adapterPosition) {
         return adapterPosition - headerViewCount();
     }
-
-//    /**
-//     * Set the entry state value in constructor builder
-//     *
-//     * @param show Is true if you want to show loading state.
-//     */
-//    public void showLoadingView(boolean show) {
-//        setLoading(show);
-//        if(show) {
-//            notifyItemInserted(0);
-//        }else{
-//            notifyItemRemoved(0);
-//        }
-//    }
-//
-//    /**
-//     * Set the load more
-//     *
-//     * @param show Is true if you want add a load more view in the bottom of the list.
-//     */
-//    public void showLoadingMoreView(boolean show) {
-//        if(show) {
-//            setLoadingMore(show);// order is important DO NOT remove
-//            notifyItemInserted(getItemCount() - 1);
-//        } else{
-//            notifyItemRemoved(getItemCount() - 1);
-//            setLoadingMore(show);
-//        }
-//    }
 
     protected void checkLoadingViewState(){
         int loadingViewPosition = headerViewCount();

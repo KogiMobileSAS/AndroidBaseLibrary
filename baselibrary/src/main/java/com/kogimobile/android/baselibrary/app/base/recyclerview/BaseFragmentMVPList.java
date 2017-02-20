@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -27,7 +26,6 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     private boolean isLoadMoreEnabled;
     private boolean isRefreshEnabled;
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefresh;
     private BaseAdapter<M, BaseAdapter.BaseViewHolder<M>> adapter;
 
     public boolean isHeaderEnabled() {
@@ -90,14 +88,6 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         return adapter;
     }
 
-    public SwipeRefreshLayout getSwipeRefresh() {
-        return swipeRefresh;
-    }
-
-    public void setSwipeRefresh(@NonNull SwipeRefreshLayout swipeRefresh) {
-        this.swipeRefresh = swipeRefresh;
-    }
-
     @CallSuper
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -135,7 +125,6 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
             }
         });
-
     }
 
     /**
@@ -143,11 +132,9 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
      */
     @CallSuper
     protected void doLoadItems() {
-        if(getSwipeRefresh() != null){
-            getSwipeRefresh().setEnabled(false);
-        }
         getAdapter().setLoading(true);
         getAdapter().clearItems();
+        getAdapter().notifyDataSetChanged();
         getAdapter().checkLoadingViewState();
         onDoLoadItems();
     }
@@ -157,9 +144,6 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
      */
     @CallSuper
     protected void doLoadMoreItems() {
-        if(getSwipeRefresh() != null){
-            getSwipeRefresh().setEnabled(false);
-        }
         getAdapter().setLoadingMore(true);
         getAdapter().checkLoadingMoreViewState();
         getRecyclerView().smoothScrollToPosition(getAdapter().getItemCount() - 1);
@@ -186,9 +170,6 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     @CallSuper
     @Override
     public void itemsLoaded(@NonNull List<M> items,boolean isThereMoreDataToLoad) {
-        if(getSwipeRefresh() != null){
-            getSwipeRefresh().setEnabled(true);
-        }
         getAdapter().setLoadMoreEnabled(isThereMoreDataToLoad);
         getAdapter().setLoading(false);
         getAdapter().checkLoadingViewState();
@@ -199,10 +180,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     @CallSuper
     @Override
     public void moreItemsLoaded(@NonNull List<M> moreItems,boolean isThereMoreDataToLoad) {
-        if(getSwipeRefresh() != null){
-            getSwipeRefresh().setEnabled(true);
-        }
-        getAdapter().setLoadEnabled(isThereMoreDataToLoad);
+        getAdapter().setLoadMoreEnabled(isThereMoreDataToLoad);
         getAdapter().setLoadingMore(false);
         getAdapter().checkLoadingMoreViewState();
         getAdapter().addItems(moreItems);
@@ -213,12 +191,9 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     @Override
     public void refreshItemsLoaded(@NonNull List<M> refreshItems,boolean isThereMoreDataToLoad) {
         getAdapter().setLoadMoreEnabled(isThereMoreDataToLoad);
-        if(getSwipeRefresh() != null){
-            getSwipeRefresh().setRefreshing(false);
-        }
         getAdapter().setRefreshing(false);
         getAdapter().refreshItems(refreshItems);
-        onLoadMoreItemsFinished(refreshItems);
+        onRefreshItemsFinished(refreshItems);
     }
 
     public boolean isLoadingElements() {
