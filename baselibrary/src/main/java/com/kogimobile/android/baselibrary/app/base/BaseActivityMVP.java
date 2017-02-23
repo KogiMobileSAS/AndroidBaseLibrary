@@ -2,6 +2,7 @@ package com.kogimobile.android.baselibrary.app.base;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.CallSuper;
 
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenter;
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenterListener;
@@ -25,9 +26,10 @@ public abstract class BaseActivityMVP<T extends BasePresenter> extends BaseActiv
         this.presenter = presenter;
     }
 
+    @CallSuper
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if(this.presenter != null) {
             this.presenter.attachView(this);
         } else {
