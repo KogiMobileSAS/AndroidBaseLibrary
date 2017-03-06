@@ -179,6 +179,12 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
     @CallSuper
     @Override
+    public void itemsLoaded(@NonNull List<M> items) {
+        itemsLoaded(items,false);
+    }
+
+    @CallSuper
+    @Override
     public void moreItemsLoaded(@NonNull List<M> moreItems,boolean isThereMoreDataToLoad) {
         getAdapter().setLoadMoreEnabled(isThereMoreDataToLoad);
         getAdapter().setLoadingMore(false);
@@ -189,11 +195,23 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
     @CallSuper
     @Override
+    public void moreItemsLoaded(@NonNull List<M> moreItems) {
+        moreItemsLoaded(moreItems,false);
+    }
+
+    @CallSuper
+    @Override
     public void refreshItemsLoaded(@NonNull List<M> refreshItems,boolean isThereMoreDataToLoad) {
         getAdapter().setLoadMoreEnabled(isThereMoreDataToLoad);
         getAdapter().setRefreshing(false);
         getAdapter().refreshItems(refreshItems);
         onRefreshItemsFinished(refreshItems);
+    }
+
+    @CallSuper
+    @Override
+    public void refreshItemsLoaded(@NonNull List<M> refreshItems) {
+        refreshItemsLoaded(refreshItems,false);
     }
 
     public boolean isLoadingElements() {
