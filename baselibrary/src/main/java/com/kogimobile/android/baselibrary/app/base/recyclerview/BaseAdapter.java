@@ -133,7 +133,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
      *
      * @param list list of items to insert in the base list of items in the adapter.
      */
-    protected void refreshItems(@Nullable List<T> list) {
+    public void refreshItems(@Nullable List<T> list) {
         validateItemsNullAndCreate();
         clearItems();
         getItems().addAll(list);
@@ -244,7 +244,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         return adapterPosition - headerViewCount();
     }
 
-    protected void checkLoadingViewState(){
+    public void checkLoadingViewState(){
         int loadingViewPosition = headerViewCount();
         if(isLoading()) {
             notifyItemInserted(getItemCount());
@@ -253,7 +253,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         }
     }
 
-    protected void checkLoadingMoreViewState(){
+    public void checkLoadingMoreViewState(){
         int loadingMoreViewPosition = headerViewCount() + getItems().size();
         if(isLoadingMore()){
             notifyItemInserted(getItemCount());
@@ -263,7 +263,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         }
     }
 
-    protected void clearItems(){
+    public void clearItems(){
         validateItemsNullAndCreate();
         getItems().clear();
     }
@@ -280,15 +280,15 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         return isRefreshing;
     }
 
-    protected void setLoading(boolean loading) {
+    public void setLoading(boolean loading) {
         this.isLoading = loading;
     }
 
-    protected void setLoadingMore(boolean loadingMore) {
+    public void setLoadingMore(boolean loadingMore) {
         this.isLoadingMore = loadingMore;
     }
 
-    protected void setRefreshing(boolean refreshing) {
+    public void setRefreshing(boolean refreshing) {
         this.isRefreshing = refreshing;
     }
 
