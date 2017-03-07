@@ -26,8 +26,14 @@ public interface BasePresenterListListener<T> extends BasePresenterListener {
 
     void itemsLoaded(List<T> items,boolean isThereMoreDataToLoad);
 
+    void itemsLoaded(List<T> items);
+
     void moreItemsLoaded(List<T> moreItems,boolean isThereMoreDataToLoad);
 
+    void moreItemsLoaded(List<T> moreItems);
+
     void refreshItemsLoaded(List<T> refreshItems,boolean isThereMoreDataToLoad);
+
+    void refreshItemsLoaded(List<T> refreshItems);
 
 }
