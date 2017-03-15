@@ -26,7 +26,6 @@ import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
 import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
-import com.kogimobile.android.baselibrary.utils.DrawableUtils;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -242,7 +241,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
                     if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
 
                         if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
-                            getSupportActionBar().setHomeAsUpIndicator(DrawableUtils.getDrawableFromResource(this, homeUpIndicator));
+                            getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
                         } else {
                             getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
                         }
@@ -258,7 +257,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     public void setHomeAsUpIndicator(int resourceId) {
         homeUpIndicator = resourceId;
-        getSupportActionBar().setHomeAsUpIndicator(DrawableUtils.getDrawableFromResource(this, homeUpIndicator));
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
