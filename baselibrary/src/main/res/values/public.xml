@@ -29,6 +29,6 @@
     <public name="CheckboxStyle" type="style"></public>
     <public name="LargeTextStyle" type="style"></public>
     <public name="MediumTextStyle" type="style"></public>
-    <public name="MediumTextStyle" type="style"></public>
+    <public name="SmallTextStyle" type="style"></public>
     
 </resources>
