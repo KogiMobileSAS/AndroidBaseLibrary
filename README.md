@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-  compile 'com.kogimobile.android:baselibrary:1.0.8'
+  compile 'com.kogimobile.android:baselibrary:1.0.11'
 }
 ```
 

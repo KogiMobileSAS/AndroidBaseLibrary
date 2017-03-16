@@ -66,6 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     private Unbinder unbinder;
     private ProgressDialog progress;
     private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
+    private boolean enableTitleStack = true;
 
     public CompositeSubscription getSubscription() {
         return subscription;
@@ -231,34 +232,37 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     @CallSuper
     public void updateActionBarTitle() {
-        if (getSupportActionBar() != null) {
+        if (getSupportActionBar() != null && isTitleStackEnabled()) {
             if (titleStack.size() > 0) {
                 getSupportActionBar().setTitle(titleStack.get(titleStack.size() - 1));
                 if (titleStack.size() > 1) {
                     getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 } else {
-                    if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
-
-                        if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
-                            getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
-                        } else {
-                            getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
-                        }
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    } else {
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                    }
+                    updateActionBarUpIndicator();
                 }
             }
+        }
+    }
+
+    public void updateActionBarUpIndicator(){
+        if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
+
+            if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
+                getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
+            } else {
+                getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
+            }
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
 
     @CallSuper
     public void setHomeAsUpIndicator(int resourceId) {
         homeUpIndicator = resourceId;
-        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        updateActionBarUpIndicator();
     }
 
     public void openUrlWebPage(String url, int colorId) {
@@ -271,8 +275,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     public void enableHomeBackArrowIndicator() {
         homeUpIndicator = HOME_UP_INDICATOR_ARROW;
-        getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        updateActionBarUpIndicator();
     }
 
     @CallSuper
@@ -291,13 +294,21 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     public void onBackPressed() {
         clearKeyboardFromScreen();
-        if ((titleStack.size()) > 0) {
+        if (isTitleStackEnabled() && (titleStack.size()) > 0) {
             titleStack.remove(titleStack.size() - 1);
             if ((titleStack.size()) > 0) {
                 updateActionBarTitle();
             }
         }
         super.onBackPressed();
+    }
+
+    public boolean isTitleStackEnabled() {
+        return enableTitleStack;
+    }
+
+    public void setEnableTitleStack(boolean enableTitleStack) {
+        this.enableTitleStack = enableTitleStack;
     }
 
     public void sendSuccessResult(Intent data){
