@@ -9,7 +9,7 @@ public class EventProgressDialog {
         return new Builder();
     }
 
-    private boolean show = false;
+    private boolean show = true;
     private String progressDialogMessage = "";
 
     private EventProgressDialog(Builder builder){
@@ -36,6 +36,11 @@ public class EventProgressDialog {
 
         public Builder withMessage(String message) {
             this.message = message;
+            return this;
+        }
+
+        public Builder dismiss(){
+            this.show = false;
             return this;
         }
 
