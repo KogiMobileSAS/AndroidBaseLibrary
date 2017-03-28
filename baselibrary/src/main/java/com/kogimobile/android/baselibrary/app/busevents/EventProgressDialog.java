@@ -54,7 +54,7 @@ public class EventProgressDialog {
      * @deprecated Please use builder pattern
      */
     @Deprecated
-    private EventProgressDialog(boolean show, String message){
+    public EventProgressDialog(boolean show, String message){
         setShow(show);
         setProgressDialogMessage(message);
     }
