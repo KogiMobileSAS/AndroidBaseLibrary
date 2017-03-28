@@ -199,7 +199,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
         Snackbar snackBar = Snackbar.make(root, event.getMessage(), Snackbar.LENGTH_LONG);
         if (event.getActionListener() != null) {
-            snackBar.setAction(event.getAction(), event.getActionListener());
+            snackBar.setAction(event.getActionText(), event.getActionListener());
         }
         if (event.getCallback() != null) {
             snackBar.setCallback(event.getCallback());

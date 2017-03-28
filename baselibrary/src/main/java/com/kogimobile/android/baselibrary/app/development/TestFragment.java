@@ -11,6 +11,13 @@ import com.kogimobile.android.baselibrary.app.base.BaseFragment;
 
 public class TestFragment extends BaseFragment {
 
+	public static TestFragment newInstance() {
+		TestFragment fragment = new TestFragment();
+		Bundle args = new Bundle();
+		fragment.setArguments(args);
+		return fragment;
+	}
+
 	@Override
 	protected void initVars() {
 
