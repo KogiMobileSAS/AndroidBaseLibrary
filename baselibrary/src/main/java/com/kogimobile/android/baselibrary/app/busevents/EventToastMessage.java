@@ -4,6 +4,7 @@ package com.kogimobile.android.baselibrary.app.busevents;
  * @author Julian Cardona on 11/20/14.
 
  */
+@Deprecated
 public class EventToastMessage {
 
     private String message;
