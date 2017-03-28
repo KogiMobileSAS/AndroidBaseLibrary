@@ -19,7 +19,9 @@ public class EventAlertDialog {
     private String negativeButtonText;
     private DialogInterface.OnClickListener negativeListener;
 
-    public EventAlertDialog(Builder builder) {
+    public EventAlertDialog() {}
+
+    private EventAlertDialog(Builder builder) {
         this.title = builder.title;
         this.message = builder.message;
         this.cancellable = builder.cancellable;
