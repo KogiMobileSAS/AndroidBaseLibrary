@@ -17,7 +17,9 @@ public class EventSnackbarMessage {
     private View.OnClickListener actionListener;
     private Snackbar.Callback callback;
 
-    public EventSnackbarMessage(Builder builder) {
+    public EventSnackbarMessage() {}
+
+    private EventSnackbarMessage(Builder builder) {
         this.message = builder.message;
         this.actionText = builder.actionText;
         this.viewId = builder.viewId;

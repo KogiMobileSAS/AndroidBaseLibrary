@@ -12,6 +12,8 @@ public class EventProgressDialog {
     private boolean show = true;
     private String progressDialogMessage = "";
 
+    private EventProgressDialog(){}
+
     private EventProgressDialog(Builder builder){
         this.show = builder.show;
         this.progressDialogMessage = builder.message;
