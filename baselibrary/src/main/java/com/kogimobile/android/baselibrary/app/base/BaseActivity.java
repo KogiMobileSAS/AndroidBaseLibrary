@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -62,7 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     private static final int HOME_UP_INDICATOR_ARROW = 0;
 
     private CompositeSubscription subscription = new CompositeSubscription();
-    protected ArrayList<String> titleStack = new ArrayList<String>();
+    private ArrayList<String> titleStack = new ArrayList<String>();
     private Unbinder unbinder;
     private ProgressDialog progress;
     private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
@@ -70,6 +71,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     public CompositeSubscription getSubscription() {
         return subscription;
+    }
+
+    public ArrayList<String> getTitleStack() {
+        return titleStack;
     }
 
     public void addSubscription(Subscription serviceSubscription) {
@@ -235,19 +240,27 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         if (getSupportActionBar() != null && isTitleStackEnabled()) {
             if (titleStack.size() > 0) {
                 getSupportActionBar().setTitle(titleStack.get(titleStack.size() - 1));
-                if (titleStack.size() > 1) {
-                    getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                } else {
-                    updateActionBarUpIndicator();
-                }
+                updateActionBarUpIndicator();
             }
         }
     }
 
     public void updateActionBarUpIndicator(){
+        if(titleStack.size() > 1){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
+                Drawable upIndicator;
+                if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
+                    upIndicator = ContextCompat.getDrawable(this, homeUpIndicator);
+                } else {
+                    upIndicator = getDrawerToggleDelegate().getThemeUpIndicator();
+                }
+                getSupportActionBar().setHomeAsUpIndicator(upIndicator);
+            }
+        }else{
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
         if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
-
             if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
                 getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
             } else {
