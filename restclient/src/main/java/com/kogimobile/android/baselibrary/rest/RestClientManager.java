@@ -1,6 +1,5 @@
 package com.kogimobile.android.baselibrary.rest;
 
-import android.support.annotation.NonNull;
 
 import com.kogimobile.android.baselibrary.rest.model.ServiceConfiguration;
 
@@ -70,7 +69,6 @@ public class RestClientManager<T> {
         apiServicesInstances.put(currentServiceConfiguration.getApiServiceClass(), apiService);
     }
 
-    @NonNull
     private Retrofit configRetrofit(ServiceConfiguration currentServiceConfiguration) {
         return new Retrofit.Builder()
                 .baseUrl(currentServiceConfiguration.getBaseURL())
