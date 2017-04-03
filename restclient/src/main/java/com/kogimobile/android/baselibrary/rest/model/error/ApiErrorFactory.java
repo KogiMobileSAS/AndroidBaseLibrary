@@ -3,7 +3,7 @@ package com.kogimobile.android.baselibrary.rest.model.error;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.kogimobile.android.baselibrary.rest.utils.RestDelegate;
+import com.kogimobile.android.baselibrary.utils.RestDelegate;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
