@@ -57,7 +57,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     public void setLoadMoreEnabled(boolean loadMoreEnabled) {
         isLoadMoreEnabled = loadMoreEnabled;
         if(getAdapter() != null){
-            getAdapter().setLoadingMore(loadMoreEnabled);
+            getAdapter().setLoadMoreEnabled(loadMoreEnabled);
         }
     }
 
