@@ -54,7 +54,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
     @Override
     public int getItemCount() {
         validateItemsNullAndCreate();
-        if (getItems().size() == 0) {
+        if (isItemsEmpty()) {
             return validateNumberOfItemsFormEmptyList();
         } else {
             return headerViewCount() + getItems().size() + loadMoreViewCount();
@@ -75,7 +75,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         if (position == 0) {
             if (isHeaderEnabled()) {
                 return HEADER_VIEW;
-            } else if (isLoadEnabled() && isLoading() && getItems().size() == 0) {
+            } else if (isLoadEnabled() && isLoading() && isItemsEmpty()) {
                 return LOADING_VIEW;
             } else if (items.size() == 0) {
                 return EMPTY_VIEW;
@@ -83,7 +83,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
                 return super.getItemViewType(position);
             }
         } else if (position == 1) {
-            if (isLoadEnabled() && isLoading() && getItems().size() == 0) {
+            if (isLoadEnabled() && isLoading() && isItemsEmpty()) {
                 return LOADING_VIEW;
             } else if (items.size() == 0) {
                 return EMPTY_VIEW;
@@ -235,7 +235,11 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
     }
 
     public int loadViewCount() {
-        return isLoadEnabled() && isLoading() && getItems().size() == 0 ? 1 : 0;
+        return isLoadEnabled() && isLoading() && isItemsEmpty() ? 1 : 0;
+    }
+
+    private boolean isItemsEmpty() {
+        return getItems().size() == 0;
     }
 
     public int loadMoreViewCount() {

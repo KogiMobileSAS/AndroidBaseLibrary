@@ -3,14 +3,11 @@ package com.kogimobile.android.baselibrary.rest.model;
 import android.webkit.URLUtil;
 
 import com.google.gson.GsonBuilder;
-import com.kogimobile.android.baselibrary.R;
-import com.kogimobile.android.baselibrary.app.base.BaseApp;
 import com.kogimobile.android.baselibrary.rest.ApiServiceFactory;
 import com.kogimobile.android.baselibrary.rest.BaseService;
-import com.kogimobile.android.baselibrary.rest.utils.CollectionTypedAdapter;
-import com.kogimobile.android.baselibrary.rest.utils.DoubleTypedAdapter;
-import com.kogimobile.android.baselibrary.rest.utils.LongTypedAdapter;
-import com.kogimobile.android.baselibrary.utils.StringUtils;
+import com.kogimobile.android.baselibrary.utils.CollectionTypedAdapter;
+import com.kogimobile.android.baselibrary.utils.DoubleTypedAdapter;
+import com.kogimobile.android.baselibrary.utils.LongTypedAdapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,10 +21,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * @author kogiandroid on 1/14/16.
- * Modified by Julian Cardona 04/19/16.
- * Use this class to put the custom configuration for the Services instances on your apps.
- * Feel free to subclass this for overwriting the getters on the app class in the way you prefer.
- * The type of the class should be the same as the ApiService
+ *         Modified by Julian Cardona 04/19/16.
+ *         Use this class to put the custom configuration for the Services instances on your apps.
+ *         Feel free to subclass this for overwriting the getters on the app class in the way you prefer.
+ *         The type of the class should be the same as the ApiService
  */
 public class ServiceConfiguration<S extends BaseService<I>, I> {
 
@@ -41,7 +38,6 @@ public class ServiceConfiguration<S extends BaseService<I>, I> {
             .registerTypeHierarchyAdapter(Collection.class, new CollectionTypedAdapter())
             .registerTypeHierarchyAdapter(Long.class, new LongTypedAdapter())
             .registerTypeHierarchyAdapter(Double.class, new DoubleTypedAdapter())
-            .setDateFormat(BaseApp.getGlobalContext().getString(R.string.date_format_general))
             .excludeFieldsWithoutExposeAnnotation()
             .create());
     private ArrayList<Header> headers = new ArrayList<>();
@@ -49,30 +45,22 @@ public class ServiceConfiguration<S extends BaseService<I>, I> {
     private OkHttpClient client;
     private Interceptor requestInterceptor;
 
-
     /**
-     *
-     * @param baseURL
-     * @param interfaceClass must be an interface
-     */
-
-    /**
-     *
-     * @param baseURL must be a valid URL
-     * @param apiServiceFactory must extend from the BaseService
-     * @param apiInterfaceServiceFactory must be an interface
+     * @param baseURL           must be a valid URL
+     * @param apiServiceFactory must extend from the BaseService¡
      */
     public ServiceConfiguration(String baseURL, ApiServiceFactory<S> apiServiceFactory,
-                                Class apiInterfaceServiceClass){
-        if (StringUtils.isBlank(baseURL)){
+                                Class apiInterfaceServiceClass) {
+
+        if (isValidUrl(baseURL)) {
             throw new RuntimeException("url cannot be empty!!!");
-        }else if (!URLUtil.isValidUrl(baseURL)){
+        } else if (!URLUtil.isValidUrl(baseURL)) {
             throw new RuntimeException("url is not valid!!!");
         }
         this.baseURL = baseURL;
 //            apiInterfaceService = apiInterfaceServiceFactory.factory();
         this.apiInterfaceServiceClass = apiInterfaceServiceClass;
-        if (!apiInterfaceServiceClass.isInterface()){
+        if (!apiInterfaceServiceClass.isInterface()) {
             throw new RuntimeException("Interface is not an interface!!!");
         }
         try {
@@ -83,6 +71,10 @@ public class ServiceConfiguration<S extends BaseService<I>, I> {
             throw new RuntimeException("InstantiationException", e);
         }
         this.apiServiceFactory = apiServiceFactory;
+    }
+
+    private boolean isValidUrl(String baseURL) {
+        return baseURL == null || baseURL.trim().length() == 0;
     }
 
     public String getBaseURL() {
@@ -100,25 +92,25 @@ public class ServiceConfiguration<S extends BaseService<I>, I> {
     /**
      * Remember to subclass the ServiceConfiguration instance for runtime operations.
      * Suggested for this field
+     *
      * @return a log level for retrofit @see retrofit.RestAdapter.LogLevel
      */
-    public HttpLoggingInterceptor.Level getLogLevel(){
+    public HttpLoggingInterceptor.Level getLogLevel() {
         return loggingInterceptor.getLevel();
     }
 
-    public void setLogLevel(HttpLoggingInterceptor.Level logLevel){
+    public void setLogLevel(HttpLoggingInterceptor.Level logLevel) {
         this.loggingInterceptor.setLevel(logLevel);
     }
 
     /**
-     *
      * @return by Default an OkClient
      */
     public OkHttpClient getClient() {
-        if (client ==null){
+        if (client == null) {
             OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-            builder.readTimeout(30,TimeUnit.SECONDS).addInterceptor(loggingInterceptor);
-            if(requestInterceptor!=null){
+            builder.readTimeout(30, TimeUnit.SECONDS).addInterceptor(loggingInterceptor);
+            if (requestInterceptor != null) {
                 builder.addInterceptor(requestInterceptor);
             }
             client = builder.build();
@@ -133,6 +125,7 @@ public class ServiceConfiguration<S extends BaseService<I>, I> {
     /**
      * Remember to subclass the ServiceConfiguration instance for runtime operations.
      * Suggested for this field
+     *
      * @return an arrayList of headers
      * @deprecated use setInterceptor instead
      */
@@ -142,6 +135,7 @@ public class ServiceConfiguration<S extends BaseService<I>, I> {
 
     /**
      * deprecated use setInterceptor instead
+     *
      * @param headers
      */
     public void setHeaders(ArrayList<Header> headers) {
