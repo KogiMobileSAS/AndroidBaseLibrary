@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.rest.utils;
+package com.kogimobile.android.baselibrary.utils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;

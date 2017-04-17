@@ -1,6 +1,7 @@
-package com.kogimobile.android.baselibrary.rest.utils;
+package com.kogimobile.android.baselibrary.utils;
 
-import com.kogimobile.android.baselibrary.R;
+
+import com.kogimobile.android.baselibrary.rest.R;
 
 /**
  * @author kogiandroid on 12/24/15.
@@ -10,7 +11,7 @@ public class RestDelegate {
     private static RestDelegate _delegate = null;
 
     public static RestDelegate getInstance() {
-        if (_delegate==null){
+        if (_delegate == null) {
             _delegate = new RestDelegate();
         }
         return _delegate;
