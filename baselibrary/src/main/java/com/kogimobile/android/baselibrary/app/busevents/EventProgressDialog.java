@@ -28,7 +28,7 @@ public class EventProgressDialog {
     }
 
     public static class Builder {
-        private boolean show;
+        private boolean show = true;
         private String message;
 
         public Builder withShow(boolean show) {
