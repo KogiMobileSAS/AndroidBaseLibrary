@@ -2,7 +2,7 @@ package com.kogimobile.android.baselibrary.rest.model.error;
 
 import android.content.Context;
 
-import com.kogimobile.android.baselibrary.rest.R;
+import com.kogimobile.android.baselibrary.restclient.R;
 
 /**
  * @author Julian Cardona on 11/12/14.
