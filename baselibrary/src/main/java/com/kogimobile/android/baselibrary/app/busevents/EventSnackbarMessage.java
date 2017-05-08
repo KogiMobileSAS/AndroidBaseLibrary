@@ -1,5 +1,6 @@
 package com.kogimobile.android.baselibrary.app.busevents;
 
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
@@ -12,16 +13,23 @@ public class EventSnackbarMessage {
     }
 
     private String message;
+    @StringRes
+    private int messageId;
     private String actionText;
+    @StringRes
+    private int actionTextId;
     private int viewId = NONE_VIEW;
     private View.OnClickListener actionListener;
     private Snackbar.Callback callback;
 
-    public EventSnackbarMessage() {}
+    public EventSnackbarMessage() {
+    }
 
     private EventSnackbarMessage(Builder builder) {
         this.message = builder.message;
+        this.messageId = builder.messageId;
         this.actionText = builder.actionText;
+        this.actionTextId = builder.actionTextId;
         this.viewId = builder.viewId;
         this.actionListener = builder.actionListener;
         this.callback = builder.callback;
@@ -47,9 +55,22 @@ public class EventSnackbarMessage {
         return viewId;
     }
 
-    public static class Builder {
+    public int getMessageId() {
+        return messageId;
+    }
+
+    public int getActionTextId() {
+        return actionTextId;
+    }
+
+    private static class Builder {
+
         private String message;
+        @StringRes
+        private int messageId;
         private String actionText;
+        @StringRes
+        private int actionTextId;
         private int viewId = NONE_VIEW;
         private View.OnClickListener actionListener;
         private Snackbar.Callback callback;
@@ -59,8 +80,18 @@ public class EventSnackbarMessage {
             return this;
         }
 
+        public Builder withMessage(@StringRes int messageId) {
+            this.messageId = messageId;
+            return this;
+        }
+
         public Builder withActionText(String actionText) {
             this.actionText = actionText;
+            return this;
+        }
+
+        public Builder withActionText(@StringRes int actionTextId) {
+            this.actionTextId = actionTextId;
             return this;
         }
 
@@ -85,17 +116,15 @@ public class EventSnackbarMessage {
     }
 
     /**
-     *
      * @deprecated Please use builder pattern
      */
     @Deprecated
-    public EventSnackbarMessage withMessage(String message){
+    public EventSnackbarMessage withMessage(String message) {
         this.message = message;
         return this;
     }
 
     /**
-     *
      * @deprecated Please use builder pattern
      */
     @Deprecated
@@ -106,21 +135,19 @@ public class EventSnackbarMessage {
     }
 
     /**
-     *
      * @deprecated Please use builder pattern
      */
     @Deprecated
-    public EventSnackbarMessage withCallback(Snackbar.Callback callback){
+    public EventSnackbarMessage withCallback(Snackbar.Callback callback) {
         this.callback = callback;
         return this;
     }
 
     /**
-     *
      * @deprecated Please use builder pattern
      */
     @Deprecated
-    public EventSnackbarMessage withViewId(int id){
+    public EventSnackbarMessage withViewId(int id) {
         this.viewId = id;
         return this;
     }

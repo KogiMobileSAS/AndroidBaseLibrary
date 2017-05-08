@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -20,13 +19,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.kogimobile.android.baselibrary.R;
 import com.kogimobile.android.baselibrary.app.busevents.EventAlertDialog;
 import com.kogimobile.android.baselibrary.app.busevents.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
 import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
+import com.kogimobile.android.baselibrary.utils.SnackBarEventBuilder;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -177,7 +176,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
                 }
             } : alert.getNegativeListener());
         }
-
         builder.show();
     }
 
@@ -193,23 +191,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Subscribe
     public void onSnackbarMessageEvent(EventSnackbarMessage event) {
         clearKeyboardFromScreen();
-        View root;
-        if (event.getViewId() != EventSnackbarMessage.NONE_VIEW) {
-            root = getWindow().getDecorView().findViewById(event.getViewId());
-        } else if (getWindow().getDecorView().findViewById(R.id.coordinator) != null) {
-            root = getWindow().getDecorView().findViewById(R.id.coordinator);
-        } else {
-            root = getWindow().getDecorView().findViewById(android.R.id.content);
-        }
+        SnackBarEventBuilder snackBarEventBuilder = new SnackBarEventBuilder(event, getViewDecorator());
+        snackBarEventBuilder.showSnackBar();
+    }
 
-        Snackbar snackBar = Snackbar.make(root, event.getMessage(), Snackbar.LENGTH_LONG);
-        if (event.getActionListener() != null) {
-            snackBar.setAction(event.getActionText(), event.getActionListener());
-        }
-        if (event.getCallback() != null) {
-            snackBar.setCallback(event.getCallback());
-        }
-        snackBar.show();
+    private View getViewDecorator() {
+        return getWindow().getDecorView();
     }
 
     public void clearKeyboardFromScreen() {
@@ -245,8 +232,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         }
     }
 
-    public void updateActionBarUpIndicator(){
-        if(titleStack.size() > 1){
+    public void updateActionBarUpIndicator() {
+        if (titleStack.size() > 1) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
                 Drawable upIndicator;
@@ -257,7 +244,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
                 }
                 getSupportActionBar().setHomeAsUpIndicator(upIndicator);
             }
-        }else{
+        } else {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
         if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
@@ -324,8 +311,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         this.enableTitleStack = enableTitleStack;
     }
 
-    public void sendSuccessResult(Intent data){
-        setResult(RESULT_OK,data);
+    public void sendSuccessResult(Intent data) {
+        setResult(RESULT_OK, data);
         finish();
     }
 

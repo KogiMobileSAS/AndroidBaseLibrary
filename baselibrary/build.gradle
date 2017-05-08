@@ -1,9 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'com.jakewharton.butterknife'
 apply from: 'maven.gradle'
 apply from: 'bintray.gradle'
-
 
 android {
     compileSdkVersion 25

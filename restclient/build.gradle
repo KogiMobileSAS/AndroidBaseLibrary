@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply from: 'maven.gradle'
+apply from: 'bintray.gradle'
 
 android {
     compileSdkVersion 25
@@ -8,25 +10,43 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        versionName "$mavenVersion"
+        consumerProguardFiles 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
     }
+
+    dexOptions {
+        javaMaxHeapSize "1g"
+    }
+
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.google.code.gson:gson:2.8.0'
+}
+
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (task.name.equals("bintrayUpload")) {
+        println '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+        println "${task.name} ends with state ${state.didWork ? "done" : "FAILED"} "
+        println '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'
+    }
 }

@@ -55,20 +55,6 @@
 -dontwarn org.joda.convert.FromString
 -dontwarn org.joda.convert.ToString
 
-# OkHttp3
--keep class okhttp3.** { *; }
--keep interface okhttp3.** { *; }
--dontwarn okhttp3.**
-
-# Retrofit2
--dontwarn retrofit2.**
--keep class retrofit2.** { *; }
--keepattributes Signature
--keepattributes Exceptions
-
-#okio
--dontwarn okio.**
-
 #Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {

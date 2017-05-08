@@ -1,7 +1,6 @@
 package com.kogimobile.android.baselibrary.utils;
 
-
-import com.kogimobile.android.baselibrary.rest.R;
+import com.kogimobile.android.baselibrary.restclient.R;
 
 /**
  * @author kogiandroid on 12/24/15.
