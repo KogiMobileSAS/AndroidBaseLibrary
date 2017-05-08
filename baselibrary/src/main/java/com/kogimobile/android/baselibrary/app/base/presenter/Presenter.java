@@ -16,7 +16,7 @@ package com.kogimobile.android.baselibrary.app.base.presenter;
  *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
- * @modified Pedro Scott. scott7462@gmail.com
+ * @modified Pedro Scott. pedro@kogimobile.com
  */
 public interface Presenter<V> {
 

@@ -15,8 +15,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author Julian Cardona. julian@kogimobile.com
@@ -34,19 +34,19 @@ import rx.subscriptions.CompositeSubscription;
  *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
- * @modified Pedro Scott. scott7462@gmail.com
+ * @modified Pedro Scott. pedro@kogimobile.com
  */
 public abstract class BaseFragment extends Fragment {
 
     private Unbinder unbinder;
-    private CompositeSubscription subscription;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public CompositeSubscription getSubscription() {
-        return subscription;
+    public CompositeDisposable getDisposables() {
+        return disposables;
     }
 
-    public void addSubscription(@NonNull Subscription serviceSubscription) {
-        this.subscription.add(serviceSubscription);
+    public void addDisposable(@NonNull Disposable disposable) {
+        this.disposables.add(disposable);
     }
 
     abstract protected void initVars();
@@ -55,7 +55,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        subscription = new CompositeSubscription();
         initVars();
     }
 
@@ -79,10 +78,6 @@ public abstract class BaseFragment extends Fragment {
 
     abstract protected void initListeners();
 
-    @Subscribe
-    public void onEventGhost(EventGhost event) {
-    }
-
     @CallSuper
     @Override
     public void onStop() {
@@ -101,9 +96,11 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if (subscription != null) {
-            subscription.unsubscribe();
-        }
+        getDisposables().clear();
+    }
+
+    @Subscribe
+    public void onEventGhost(EventGhost event) {
     }
 
 }

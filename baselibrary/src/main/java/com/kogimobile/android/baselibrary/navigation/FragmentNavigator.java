@@ -4,42 +4,52 @@ package com.kogimobile.android.baselibrary.navigation;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 
 public class FragmentNavigator {
 
-    public static void navigateTo(FragmentManager manager, Fragment newFragment, int containerId, FragmentNavigatorOptions options){
+    public static void navigateTo(FragmentManager manager, Fragment fragment, int containerId){
+        navigateTo(
+                manager,
+                fragment,
+                containerId,
+                fragment.getClass().getSimpleName(),
+                false,
+                false
+        );
+    }
+
+    public static void navigateTo(FragmentManager manager, Fragment fragment, int containerId,boolean addToBackStack){
+        navigateTo(
+                manager,
+                fragment,
+                containerId,
+                fragment.getClass().getSimpleName(),
+                addToBackStack,
+                false
+        );
+    }
+
+    public static void navigateTo(FragmentManager manager,
+                                  Fragment fragment,
+                                  int containerId,
+                                  String fragmentTag,
+                                  boolean addToBackStack,
+                                  boolean allowCommitStateLoss){
         FragmentTransaction ft = manager.beginTransaction();
-
-        if (options.getFragmentCustomAnimation()!=null){
-            ft.setCustomAnimations(
-                    options.getFragmentCustomAnimation().getEnter(),
-                    options.getFragmentCustomAnimation().getExit(),
-                    options.getFragmentCustomAnimation().getPopEnter(),
-                    options.getFragmentCustomAnimation().getPopExit());
-        }
-
-        if(options.isNoHistoryForCurrent())
-            manager.popBackStack();
-
-        if(TextUtils.isEmpty(options.getTag())){
-            options.setTag(newFragment.getClass().getSimpleName());
-        }
-        ft.replace(containerId, newFragment, options.getTag());
-
-        if(options.isAddingToStack()) {
-            ft.addToBackStack(options.getTag());
-        }
-
-        if(options.isAllowingStateLoss()) {
+        ft.addToBackStack(fragmentTag);
+        ft.replace(containerId, fragment,fragmentTag);
+        if(allowCommitStateLoss){
             ft.commitAllowingStateLoss();
         }
         else {
             ft.commit();
         }
+        if(addToBackStack) {
+
+        }
     }
 
-    public static void cleanFragmentStack(FragmentManager fm){
+    public static void cleanFragmentStack(FragmentManager fm) {
         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 

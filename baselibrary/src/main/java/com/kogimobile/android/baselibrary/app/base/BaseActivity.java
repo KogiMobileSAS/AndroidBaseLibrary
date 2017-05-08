@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -24,7 +25,6 @@ import com.kogimobile.android.baselibrary.app.busevents.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
 import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
-import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
 import com.kogimobile.android.baselibrary.utils.SnackBarEventBuilder;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
@@ -35,8 +35,8 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author Julian Cardona. julian@kogimobile.com
@@ -54,30 +54,30 @@ import rx.subscriptions.CompositeSubscription;
  *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
- * @modified Pedro Scott. scott7462@gmail.com
+ * @modified Pedro Scott. pedro@kogimobile.com
  */
 public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener {
 
     private static final int HOME_UP_INDICATOR_NONE = -1;
     private static final int HOME_UP_INDICATOR_ARROW = 0;
 
-    private CompositeSubscription subscription = new CompositeSubscription();
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private ArrayList<String> titleStack = new ArrayList<String>();
     private Unbinder unbinder;
     private ProgressDialog progress;
     private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
     private boolean enableTitleStack = true;
 
-    public CompositeSubscription getSubscription() {
-        return subscription;
+    public CompositeDisposable getDisposables() {
+        return disposables;
     }
 
     public ArrayList<String> getTitleStack() {
         return titleStack;
     }
 
-    public void addSubscription(Subscription serviceSubscription) {
-        this.subscription.add(serviceSubscription);
+    public void addDisposable(@NonNull Disposable disposable) {
+        this.disposables.add(disposable);
     }
 
     @CallSuper
@@ -209,14 +209,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
         titleStack.add(title);
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(true));
+        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId,true);
         updateActionBarTitle();
     }
 
     @CallSuper
     public void navigateToActivityRootLevel(Fragment frg, int layoutContainerId, String title) {
         FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(false));
+        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId);
         titleStack.clear();
         titleStack.add(title);
         updateActionBarTitle();
@@ -281,9 +281,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     @Override
     protected void onDestroy() {
-        if (subscription != null) {
-            subscription.unsubscribe();
-        }
+        getDisposables().clear();
         if (this.unbinder != null) {
             this.unbinder.unbind();
         }
