@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.utils;
+package com.kogimobile.android.baselibrary.app.busevents.utils;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -11,26 +11,26 @@ import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
  * @author Pedro Scott pedro@kogimobile.com on 5/5/17.
  */
 
-public class SnackBarEventBuilder {
+public class SnackbarEventBuilder {
 
     private EventSnackbarMessage event;
     private View viewRoot;
 
-    public SnackBarEventBuilder(@NonNull EventSnackbarMessage event, @NonNull View view) {
+    public SnackbarEventBuilder(@NonNull EventSnackbarMessage event, @NonNull View view) {
         this.event = event;
-        this.viewRoot = getViewRootToSnackBar(view);
+        this.viewRoot = getViewRootToSnackbar(view);
     }
 
     public void showSnackBar() {
-        getSnackBarByEvent().show();
+        getSnackbarByEvent().show();
     }
 
-    private Snackbar getSnackBarByEvent() {
+    private Snackbar getSnackbarByEvent() {
         Snackbar snackBar = Snackbar.make(viewRoot, getMessageEvent(), Snackbar.LENGTH_LONG);
-        if (hasSnacBarAction()) {
-            snackBar.setAction(getActionTextSnackBar(), event.getActionListener());
+        if (hasSnackbarAction()) {
+            snackBar.setAction(getActionTextSnackbar(), event.getActionListener());
         }
-        if (hasSnackBarCallBack()) {
+        if (hasSnackbarCallBack()) {
             snackBar.setCallback(event.getCallback());
         }
         return snackBar;
@@ -40,30 +40,30 @@ public class SnackBarEventBuilder {
         return event.getMessage() != null ? event.getMessage() : viewRoot.getContext().getString(event.getMessageId());
     }
 
-    private boolean isCoordinatorView() {
-        return viewRoot.findViewById(R.id.coordinator) != null;
+    private boolean isCoordinatorView(View view) {
+        return view.findViewById(R.id.coordinator) != null;
     }
 
-    private boolean isViewDiferentToNoneView(@NonNull EventSnackbarMessage event) {
+    private boolean isViewDifferentToNoneView(@NonNull EventSnackbarMessage event) {
         return event.getViewId() != EventSnackbarMessage.NONE_VIEW;
     }
 
-    private boolean hasSnacBarAction() {
+    private boolean hasSnackbarAction() {
         return event.getActionListener() != null;
     }
 
-    private boolean hasSnackBarCallBack() {
+    private boolean hasSnackbarCallBack() {
         return event.getCallback() != null;
     }
 
-    private String getActionTextSnackBar() {
+    private String getActionTextSnackbar() {
         return event.getActionText() != null ? getMessageEvent() : viewRoot.getContext().getString(event.getMessageId());
     }
 
-    private View getViewRootToSnackBar(View view) {
-        if (isViewDiferentToNoneView(event)) {
+    private View getViewRootToSnackbar(View view) {
+        if (isViewDifferentToNoneView(event)) {
             viewRoot = view.findViewById(event.getViewId());
-        } else if (isCoordinatorView()) {
+        } else if (isCoordinatorView(view)) {
             viewRoot = view.findViewById(R.id.coordinator);
         } else {
             viewRoot = view.findViewById(android.R.id.content);
