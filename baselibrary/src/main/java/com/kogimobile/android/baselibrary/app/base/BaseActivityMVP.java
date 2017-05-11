@@ -1,7 +1,6 @@
 package com.kogimobile.android.baselibrary.app.base;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.CallSuper;
 
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenter;
