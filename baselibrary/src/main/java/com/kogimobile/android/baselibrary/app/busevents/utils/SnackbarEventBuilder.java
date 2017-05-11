@@ -30,7 +30,7 @@ public class SnackbarEventBuilder {
         if (hasSnackbarAction()) {
             snackbar.setAction(getActionTextSnackbar(), event.getActionListener());
         }
-        if (hasSnackBarCallback()) {
+        if (hasSnackbarCallback()) {
             snackbar.setCallback(event.getCallback());
         }
         return snackbar;
@@ -52,7 +52,7 @@ public class SnackbarEventBuilder {
         return event.getActionListener() != null;
     }
 
-    private boolean hasSnackbarCallBack() {
+    private boolean hasSnackbarCallback() {
         return event.getCallback() != null;
     }
 

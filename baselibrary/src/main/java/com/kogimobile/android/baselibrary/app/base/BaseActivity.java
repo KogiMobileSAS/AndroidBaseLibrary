@@ -26,10 +26,6 @@ import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
 import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
 import com.kogimobile.android.baselibrary.app.busevents.utils.SnackbarEventBuilder;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
-import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
-import com.kogimobile.android.baselibrary.utils.SnackBarEventBuilder;
-import com.kogimobile.android.baselibrary.app.busevents.utils.SnackbarEventBuilder;
-import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
