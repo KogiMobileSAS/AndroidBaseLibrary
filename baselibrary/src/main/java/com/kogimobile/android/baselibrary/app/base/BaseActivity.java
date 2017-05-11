@@ -24,8 +24,12 @@ import com.kogimobile.android.baselibrary.app.busevents.EventAlertDialog;
 import com.kogimobile.android.baselibrary.app.busevents.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
 import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
-import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
 import com.kogimobile.android.baselibrary.app.busevents.utils.SnackbarEventBuilder;
+import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
+import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
+import com.kogimobile.android.baselibrary.utils.SnackBarEventBuilder;
+import com.kogimobile.android.baselibrary.app.busevents.utils.SnackbarEventBuilder;
+import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -192,7 +196,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     public void onSnackbarMessageEvent(EventSnackbarMessage event) {
         clearKeyboardFromScreen();
         SnackbarEventBuilder snackbarEventBuilder = new SnackbarEventBuilder(event, getViewDecorator());
-        snackbarEventBuilder.showSnackBar();
+        snackbarEventBuilder.showSnackbar();
     }
 
     private View getViewDecorator() {

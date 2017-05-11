@@ -21,19 +21,19 @@ public class SnackbarEventBuilder {
         this.viewRoot = getViewRootToSnackbar(view);
     }
 
-    public void showSnackBar() {
+    public void showSnackbar() {
         getSnackbarByEvent().show();
     }
 
     private Snackbar getSnackbarByEvent() {
-        Snackbar snackBar = Snackbar.make(viewRoot, getMessageEvent(), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(viewRoot, getMessageEvent(), Snackbar.LENGTH_LONG);
         if (hasSnackbarAction()) {
-            snackBar.setAction(getActionTextSnackbar(), event.getActionListener());
+            snackbar.setAction(getActionTextSnackbar(), event.getActionListener());
         }
-        if (hasSnackbarCallBack()) {
-            snackBar.setCallback(event.getCallback());
+        if (hasSnackBarCallback()) {
+            snackbar.setCallback(event.getCallback());
         }
-        return snackBar;
+        return snackbar;
     }
 
     private String getMessageEvent() {
@@ -70,6 +70,5 @@ public class SnackbarEventBuilder {
         }
         return viewRoot;
     }
-
 
 }
