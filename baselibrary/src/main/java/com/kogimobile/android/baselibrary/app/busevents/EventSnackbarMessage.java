@@ -63,7 +63,7 @@ public class EventSnackbarMessage {
         return actionTextId;
     }
 
-    private static class Builder {
+    public static class Builder {
 
         private String message;
         @StringRes
