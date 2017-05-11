@@ -165,6 +165,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
         getAdapter().setLoading(false);
         getAdapter().setLoadingMore(false);
         getAdapter().setRefreshing(false);
+        getAdapter().notifyDataSetChanged();
     }
 
     @CallSuper
