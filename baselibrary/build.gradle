@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jakewharton.butterknife'
 apply from: 'maven.gradle'
 apply from: 'bintray.gradle'
 
@@ -14,6 +13,7 @@ android {
         versionCode 1
         versionName "$mavenVersion"
         consumerProguardFiles 'proguard-rules.pro'
+        resConfigs "en"
     }
 
     packagingOptions {
@@ -29,25 +29,21 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
 
-    dexOptions {
-        javaMaxHeapSize "1g"
-    }
-
 }
 
 dependencies {
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:customtabs:25.3.1'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.jakewharton:butterknife:8.5.1'
-    compile 'joda-time:joda-time:2.9.9'
-    compile 'com.jakewharton.timber:timber:4.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:support-v4:25.3.1'
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support:design:25.3.1'
+    implementation 'com.android.support:customtabs:25.3.1'
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.jakewharton:butterknife:8.6.0'
+    implementation 'joda-time:joda-time:2.9.9'
+    implementation 'com.jakewharton.timber:timber:4.5.1'
 }
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
