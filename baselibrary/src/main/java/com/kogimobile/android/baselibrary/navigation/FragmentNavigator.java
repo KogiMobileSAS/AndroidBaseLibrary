@@ -1,6 +1,5 @@
 package com.kogimobile.android.baselibrary.navigation;
 
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,16 +35,17 @@ public class FragmentNavigator {
                                   boolean addToBackStack,
                                   boolean allowCommitStateLoss){
         FragmentTransaction ft = manager.beginTransaction();
-        ft.addToBackStack(fragmentTag);
         ft.replace(containerId, fragment,fragmentTag);
+
+        if(addToBackStack) {
+            ft.addToBackStack(fragmentTag);
+        }
+
         if(allowCommitStateLoss){
             ft.commitAllowingStateLoss();
         }
         else {
             ft.commit();
-        }
-        if(addToBackStack) {
-
         }
     }
 
