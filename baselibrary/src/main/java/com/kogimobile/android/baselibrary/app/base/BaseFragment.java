@@ -1,21 +1,21 @@
 package com.kogimobile.android.baselibrary.app.base;
 
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.ButterKnifeLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.RxLifeObserver;
 import com.kogimobile.android.baselibrary.app.busevents.EventGhost;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -36,17 +36,18 @@ import io.reactivex.disposables.Disposable;
  *          limitations under the License.
  * @modified Pedro Scott. pedro@kogimobile.com
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements LifecycleOwner{
 
-    private Unbinder unbinder;
-    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
+    private RxLifeObserver rxLifeObserver = new RxLifeObserver();
 
-    public CompositeDisposable getDisposables() {
-        return disposables;
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return this.mRegistry;
     }
 
-    public void addDisposable(@NonNull Disposable disposable) {
-        this.disposables.add(disposable);
+    public void addDispossable(Disposable disposable){
+        rxLifeObserver.addDisposable(disposable);
     }
 
     abstract protected void initVars();
@@ -55,6 +56,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
+        getLifecycle().addObserver(rxLifeObserver);
         initVars();
     }
 
@@ -69,7 +71,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
+        getLifecycle().addObserver(new ButterKnifeLifeObserver(getContext(),view));
         initViews();
         initListeners();
     }
@@ -83,20 +85,6 @@ public abstract class BaseFragment extends Fragment {
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @CallSuper
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @CallSuper
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        getDisposables().clear();
     }
 
     @Subscribe
