@@ -55,7 +55,7 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
         setSupportActionBar(toolbar);
         setHomeAsUpIndicator(R.drawable.ic_menu);
         setupDrawerContent(navigationView);
-        navigateToActivityRootLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_1));
+        navigateToActivityRootLevel(FrgEvents.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_1));
         navigationView.getMenu().getItem(0).setChecked(true);
     }
 
@@ -78,7 +78,7 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.nav_section_1:
-                                navigateToActivityRootLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_1));
+                                navigateToActivityRootLevel(FrgEvents.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_1));
                                 break;
                             case R.id.nav_section_2:
                                 navigateToActivityRootLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_2));

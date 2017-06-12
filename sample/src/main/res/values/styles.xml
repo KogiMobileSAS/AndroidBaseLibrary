@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.MyTheme"/>
+    <style name="AppTheme" parent="Theme.MyTheme" />
 
     <style name="Theme.MyTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
@@ -11,6 +11,14 @@
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/primary</item>
+    </style>
+
+    <style name="MagentaButtonStyle" parent="@style/ButtonsStyle">
+        <item name="android:background">@drawable/selector_button_magenta</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">@dimen/default_large_size</item>
+        <item name="android:textColor">@color/primary</item>
     </style>
 
 </resources>

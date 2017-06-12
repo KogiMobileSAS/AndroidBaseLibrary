@@ -4,10 +4,23 @@
     <string name="app_name">Base Librarydimens.xml</string>
 
     <!--Navigation Drawer-->
-    <string name="nav_drawer_item_section_1">Section 1</string>
+    <string name="nav_drawer_item_section_1">@string/frg_events_title</string>
     <string name="nav_drawer_item_section_2">Section 2</string>
     <string name="nav_drawer_item_section_3">Section 3</string>
     <string name="nav_drawer_item_subsection_1">SubSection 1</string>
     <string name="nav_drawer_item_subsection_2">SubSection 2</string>
+
+
+    <!--Frg Events-->
+    <string name="frg_events_title">Events</string>
+    <string name="frg_events_button_snackbar">Send Snackbar Event</string>
+    <string name="frg_events_message_snackbar">This is a Snackbar Event</string>
+    <string name="frg_events_button_progress">Send Progress Event</string>
+    <string name="frg_events_message_progress">This is a Progress Event</string>
+    <string name="frg_events_button_alert_dialog">Send Alert Dialog Event</string>
+    <string name="frg_events_title_alert_dialog">Title</string>
+    <string name="frg_events_message_alert_dialog">This is an Alert Dialog Event</string>
+    <string name="frg_events_message_positive_alert_dialog">Ok</string>
+    <string name="frg_events_message_negavite_alert_dialog">Cancel</string>
 
 </resources>

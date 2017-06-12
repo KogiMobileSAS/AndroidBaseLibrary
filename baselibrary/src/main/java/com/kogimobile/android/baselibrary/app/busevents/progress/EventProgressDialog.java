@@ -1,5 +1,7 @@
 package com.kogimobile.android.baselibrary.app.busevents.progress;
 
+import android.support.annotation.StringRes;
+
 /**
  * @author Julian Cardona on 7/11/14.
  */
@@ -9,40 +11,60 @@ public class EventProgressDialog {
         return new Builder();
     }
 
-    private boolean show = true;
-    private String progressDialogMessage = "";
-
-    private EventProgressDialog(){}
+    @StringRes
+    private int messageId;
+    private String message = "";
+    private boolean isCancelable = false;
+    private boolean isDismiss = false;
 
     private EventProgressDialog(Builder builder){
-        this.show = builder.show;
-        this.progressDialogMessage = builder.message;
+        this.messageId = builder.messageId;
+        this.message = builder.message;
+        this.isCancelable = builder.isCancelable;
+        this.isDismiss = builder.isDismiss;
     }
 
-    public boolean isShown() {
-        return show;
+    public int getMessageId() {
+        return messageId;
     }
 
-    public String getProgressDialogMessage() {
-        return progressDialogMessage;
+    public String getMessage() {
+        return message;
+    }
+
+    public boolean isCancelable() {
+        return isCancelable;
+    }
+
+    public boolean isDismiss() {
+        return isDismiss;
     }
 
     public static class Builder {
-        private boolean show = true;
-        private String message;
 
-        public Builder withShow(boolean show) {
-            this.show = show;
-            return this;
-        }
+        @StringRes
+        private int messageId;
+        private String message;
+        private boolean isDismiss = false;
+        private boolean isCancelable = false;
 
         public Builder withMessage(String message) {
             this.message = message;
             return this;
         }
 
+        public Builder withMessageId(@StringRes int messageId) {
+            this.messageId = messageId;
+            return this;
+        }
+
         public Builder dismiss(){
-            this.show = false;
+            this.isDismiss = true;
+            return this;
+        }
+
+        public Builder withCancelable(boolean cancelable){
+            this.isCancelable = cancelable;
             return this;
         }
 

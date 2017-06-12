@@ -96,8 +96,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progress = new ProgressDialog(this);
-        progress.setCancelable(false);
         initVars();
     }
 
@@ -145,35 +143,54 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     @Subscribe
     public void onProgressDialogEvent(EventProgressDialog event) {
-        if (event.isShown()) {
-            clearKeyboardFromScreen();
-            if (progress.isShowing()) {
-                progress.dismiss();
-            }
-            progress.setMessage(event.getProgressDialogMessage());
-            progress.show();
-        } else {
-            if (progress.isShowing()) {
-                progress.dismiss();
-            }
+        buildProgressDialog(event);
+    }
+
+    private void buildProgressDialog(EventProgressDialog event){
+        getProgress().dismiss();
+        if(event.isDismiss()){
+            return;
         }
+        clearKeyboardFromScreen();
+        getProgress().setCancelable(event.isCancelable());
+        getProgress().setMessage(
+                StringUtils.isBlank(event.getMessage()) ? getString(event.getMessageId()) : event.getMessage()
+        );
+        getProgress().show();
     }
 
     @CallSuper
     @Override
     @Subscribe
     public void onAlertDialogEvent(EventAlertDialog alert) {
+        buildAlertDialog(alert);
+    }
+
+    private void buildAlertDialog(EventAlertDialog alert){
+
+        String title = StringUtils.isBlank(alert.getTitle()) ? getString(alert.getTitleId()) : alert.getTitle();
+        String message = StringUtils.isBlank(alert.getMessage()) ? getString(alert.getMessageId()) : alert.getMessage();
+        String positive = StringUtils.isBlank(alert.getPositiveButtonText()) ? getString(alert.getPositiveTextId()) : alert.getPositiveButtonText();
+        if(StringUtils.isBlank(positive)){
+            positive = getString(android.R.string.ok);
+        }
+
+        String negative = StringUtils.isBlank(alert.getNegativeButtonText()) ? getString(alert.getNegativeTextId()) : alert.getNegativeButtonText();
+        if(StringUtils.isBlank(negative)){
+            negative = getString(android.R.string.cancel);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(alert.getTitle())
-                .setMessage(alert.getMessage())
+                .setTitle(title)
+                .setMessage(message)
                 .setCancelable(alert.isCancellable())
-                .setPositiveButton(StringUtils.isBlank(alert.getPositiveButtonText()) ? getString(android.R.string.ok) : alert.getPositiveButtonText(), alert.getPositiveListener() == null ? new DialogInterface.OnClickListener() {
+                .setPositiveButton(positive, alert.getPositiveListener() == null ? new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 } : alert.getPositiveListener());
         if (alert.getNegativeListener() != null) {
-            builder.setNegativeButton(StringUtils.isBlank(alert.getNegativeButtonText()) ? getString(android.R.string.cancel) : alert.getNegativeButtonText(), alert.getNegativeListener() == null ? new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(negative, alert.getNegativeListener() == null ? new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -286,6 +303,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
             }
         }
         super.onBackPressed();
+    }
+
+    private ProgressDialog getProgress() {
+        if(progress == null){
+            progress = new ProgressDialog(this);
+        }
+        return progress;
     }
 
     public boolean isTitleStackEnabled() {

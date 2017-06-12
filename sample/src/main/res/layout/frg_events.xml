@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/bFrgEventSnackbar"
+        style="@style/MagentaButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/frg_events_button_snackbar" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/bFrgEventProgress"
+        style="@style/MagentaButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/frg_events_button_progress" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/bFrgEventAlert"
+        style="@style/MagentaButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/frg_events_button_alert_dialog" />
+
+</LinearLayout>

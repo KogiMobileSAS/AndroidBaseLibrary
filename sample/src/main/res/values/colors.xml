@@ -4,7 +4,7 @@
     <!--General-->
     <color name="primary">#D60046</color>
     <color name="primary_dark">#AB0038</color>
-    <color name="accent">#00D690</color>
+    <color name="accent">#D60046</color>
     <color name="text_primary">@android:color/white</color>
     <color name="window_background">#FFF1F1F1</color>
 
