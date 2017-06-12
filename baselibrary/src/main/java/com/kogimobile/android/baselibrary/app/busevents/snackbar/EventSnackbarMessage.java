@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.app.busevents;
+package com.kogimobile.android.baselibrary.app.busevents.snackbar;
 
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -113,43 +113,6 @@ public class EventSnackbarMessage {
         public EventSnackbarMessage build() {
             return new EventSnackbarMessage(this);
         }
-    }
-
-    /**
-     * @deprecated Please use builder pattern
-     */
-    @Deprecated
-    public EventSnackbarMessage withMessage(String message) {
-        this.message = message;
-        return this;
-    }
-
-    /**
-     * @deprecated Please use builder pattern
-     */
-    @Deprecated
-    public EventSnackbarMessage withAction(String action, View.OnClickListener actionListener) {
-        this.actionText = action;
-        this.actionListener = actionListener;
-        return this;
-    }
-
-    /**
-     * @deprecated Please use builder pattern
-     */
-    @Deprecated
-    public EventSnackbarMessage withCallback(Snackbar.Callback callback) {
-        this.callback = callback;
-        return this;
-    }
-
-    /**
-     * @deprecated Please use builder pattern
-     */
-    @Deprecated
-    public EventSnackbarMessage withViewId(int id) {
-        this.viewId = id;
-        return this;
     }
 
 }

@@ -1,0 +1,13 @@
+<resources>
+
+    <!--General-->
+    <string name="app_name">Base Librarydimens.xml</string>
+
+    <!--Navigation Drawer-->
+    <string name="nav_drawer_item_section_1">Section 1</string>
+    <string name="nav_drawer_item_section_2">Section 2</string>
+    <string name="nav_drawer_item_section_3">Section 3</string>
+    <string name="nav_drawer_item_subsection_1">SubSection 1</string>
+    <string name="nav_drawer_item_subsection_2">SubSection 2</string>
+
+</resources>

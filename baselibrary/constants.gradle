@@ -9,7 +9,7 @@ ext {
 
     mavenGroup = 'com.kogimobile.android'
     mavenArtifactId = 'baselibrary'
-    mavenVersion = '1.2.0-RC2'
+    mavenVersion = '2.0.0-RC1'
 
     bintrayOrg = 'kogimobile'
 }

@@ -27,7 +27,7 @@ public class RxLifeObserver implements LifecycleObserver {
 
     public void addDisposable(@NonNull Disposable disposable) {
         if(isCompositeDisposableEmpty()){
-            disposable = new CompositeDisposable();
+            this.disposables = new CompositeDisposable();
         }
         this.disposables.add(disposable);
     }
@@ -40,19 +40,23 @@ public class RxLifeObserver implements LifecycleObserver {
     }
 
     public void clearDisposables(){
-        this.disposables.clear();
+        if(!isCompositeDisposableEmpty()) {
+            this.disposables.clear();
+        }
     }
 
     public void clearDisposablesForever(){
-        this.disposablesForever.clear();
+        if(!isCompositeDisposableForeverEmpty()) {
+            this.disposablesForever.clear();
+        }
     }
 
     private boolean isCompositeDisposableEmpty() {
-        return disposables==null;
+        return disposables == null;
     }
 
     private boolean isCompositeDisposableForeverEmpty() {
-        return disposablesForever==null;
+        return disposablesForever == null;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

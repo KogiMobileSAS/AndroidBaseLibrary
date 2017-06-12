@@ -1,7 +1,7 @@
 package com.kogimobile.android.baselibrary.app.base;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -10,12 +10,13 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.ButterKnifeLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.EventBusLifeCycleObserver;
 import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.RxLifeObserver;
-import com.kogimobile.android.baselibrary.app.busevents.EventGhost;
+import com.kogimobile.android.baselibrary.app.busevents.utils.EventGhost;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -36,7 +37,7 @@ import io.reactivex.disposables.Disposable;
  *          limitations under the License.
  * @modified Pedro Scott. pedro@kogimobile.com
  */
-public abstract class BaseFragment extends Fragment implements LifecycleOwner{
+public abstract class BaseFragment extends Fragment implements LifecycleRegistryOwner{
 
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
     private RxLifeObserver rxLifeObserver = new RxLifeObserver();
@@ -46,8 +47,20 @@ public abstract class BaseFragment extends Fragment implements LifecycleOwner{
         return this.mRegistry;
     }
 
-    public void addDispossable(Disposable disposable){
+    public void addDisposable(Disposable disposable){
         rxLifeObserver.addDisposable(disposable);
+    }
+
+    public void addDisposableForever(Disposable disposable){
+        rxLifeObserver.addDisposableForever(disposable);
+    }
+
+    public CompositeDisposable getDisposables() {
+        return rxLifeObserver.getDisposables();
+    }
+
+    public CompositeDisposable getDisposablesForever() {
+        return rxLifeObserver.getDisposablesForever();
     }
 
     abstract protected void initVars();
@@ -60,32 +73,24 @@ public abstract class BaseFragment extends Fragment implements LifecycleOwner{
         initVars();
     }
 
-    @CallSuper
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
 
     @CallSuper
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getLifecycle().addObserver(new ButterKnifeLifeObserver(getContext(),view));
+        initLifeCycleObservers(view);
         initViews();
         initListeners();
+    }
+
+    private void initLifeCycleObservers(View view){
+        getLifecycle().addObserver(new ButterKnifeLifeObserver(this,view));
+        getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
     }
 
     abstract protected void initViews();
 
     abstract protected void initListeners();
-
-    @CallSuper
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
 
     @Subscribe
     public void onEventGhost(EventGhost event) {

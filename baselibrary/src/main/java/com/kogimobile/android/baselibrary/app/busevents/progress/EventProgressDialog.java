@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.app.busevents;
+package com.kogimobile.android.baselibrary.app.busevents.progress;
 
 /**
  * @author Julian Cardona on 7/11/14.
@@ -49,36 +49,6 @@ public class EventProgressDialog {
         public EventProgressDialog build() {
             return new EventProgressDialog(this);
         }
-    }
-
-    /**
-     *
-     * @deprecated Please use builder pattern
-     */
-    @Deprecated
-    public EventProgressDialog(boolean show, String message){
-        setShow(show);
-        setProgressDialogMessage(message);
-    }
-
-    /**
-     *
-     * @deprecated Please use builder pattern
-     */
-    @Deprecated
-    public EventProgressDialog setShow(boolean show) {
-        this.show = show;
-        return this;
-    }
-
-    /**
-     *
-     * @deprecated Please use builder pattern
-     */
-    @Deprecated
-    public EventProgressDialog setProgressDialogMessage(String progressDialogMessage) {
-        this.progressDialogMessage = progressDialogMessage;
-        return this;
     }
 
 }

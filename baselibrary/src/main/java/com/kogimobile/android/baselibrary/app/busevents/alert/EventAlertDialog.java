@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.app.busevents;
+package com.kogimobile.android.baselibrary.app.busevents.alert;
 
 import android.content.DialogInterface;
 

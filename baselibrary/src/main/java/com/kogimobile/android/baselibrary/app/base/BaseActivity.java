@@ -1,6 +1,8 @@
 package com.kogimobile.android.baselibrary.app.base;
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -18,23 +19,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
-import com.kogimobile.android.baselibrary.app.busevents.EventAlertDialog;
-import com.kogimobile.android.baselibrary.app.busevents.EventProgressDialog;
-import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
-import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
-import com.kogimobile.android.baselibrary.app.busevents.utils.SnackbarEventBuilder;
+import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.ButterKnifeLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.EventBusLifeCycleObserver;
+import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.RxLifeObserver;
+import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
+import com.kogimobile.android.baselibrary.app.busevents.progress.EventProgressDialog;
+import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
+import com.kogimobile.android.baselibrary.app.busevents.snackbar.SnackbarEventBuilder;
 import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -56,28 +55,41 @@ import io.reactivex.disposables.Disposable;
  *          limitations under the License.
  * @modified Pedro Scott. pedro@kogimobile.com
  */
-public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener {
+public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener,LifecycleRegistryOwner {
 
     private static final int HOME_UP_INDICATOR_NONE = -1;
     private static final int HOME_UP_INDICATOR_ARROW = 0;
 
-    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
+    private RxLifeObserver rxLifeObserver = new RxLifeObserver();
     private ArrayList<String> titleStack = new ArrayList<String>();
-    private Unbinder unbinder;
     private ProgressDialog progress;
     private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
     private boolean enableTitleStack = true;
 
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return this.mRegistry;
+    }
+
+    public void addDisposable(Disposable disposable){
+        rxLifeObserver.addDisposable(disposable);
+    }
+
+    public void addDisposableForever(Disposable disposable){
+        rxLifeObserver.addDisposableForever(disposable);
+    }
+
     public CompositeDisposable getDisposables() {
-        return disposables;
+        return rxLifeObserver.getDisposables();
+    }
+
+    public CompositeDisposable getDisposablesForever() {
+        return rxLifeObserver.getDisposablesForever();
     }
 
     public ArrayList<String> getTitleStack() {
         return titleStack;
-    }
-
-    public void addDisposable(@NonNull Disposable disposable) {
-        this.disposables.add(disposable);
     }
 
     @CallSuper
@@ -87,12 +99,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         progress = new ProgressDialog(this);
         progress.setCancelable(false);
         initVars();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     abstract protected void initVars();
@@ -118,9 +124,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
-        this.unbinder = ButterKnife.bind(this);
+        initLifeCycleObservers();
         initViews();
         initListeners();
+    }
+
+    private void initLifeCycleObservers(){
+        getLifecycle().addObserver(new ButterKnifeLifeObserver(this));
+        getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
     }
 
     @CallSuper
@@ -128,13 +139,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     protected void onResume() {
         super.onResume();
         updateActionBarTitle();
-    }
-
-    @CallSuper
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
     }
 
     @CallSuper
@@ -177,13 +181,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
             } : alert.getNegativeListener());
         }
         builder.show();
-    }
-
-    @CallSuper
-    @Override
-    @Subscribe
-    public void onToastMessageEvent(EventToastMessage event) {
-        Toast.makeText(this, event.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @CallSuper
@@ -276,16 +273,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     public void enableHomeBackArrowIndicator() {
         homeUpIndicator = HOME_UP_INDICATOR_ARROW;
         updateActionBarUpIndicator();
-    }
-
-    @CallSuper
-    @Override
-    protected void onDestroy() {
-        getDisposables().clear();
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-        }
-        super.onDestroy();
     }
 
     @CallSuper

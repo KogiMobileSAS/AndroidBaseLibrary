@@ -1,0 +1,14 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/splash_white_robot"
+    tools:ignore="NewApi">
+    <target
+        android:name="eye_left"
+        android:animation="@anim/splash_white_robot_eye_left_blink">
+    </target>
+    <target
+        android:name="eye_right"
+        android:animation="@anim/splash_white_robot_eye_right_blink">
+    </target>
+</animated-vector>

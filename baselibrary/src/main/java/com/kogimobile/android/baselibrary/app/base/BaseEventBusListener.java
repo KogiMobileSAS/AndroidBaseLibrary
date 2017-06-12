@@ -1,9 +1,8 @@
 package com.kogimobile.android.baselibrary.app.base;
 
-import com.kogimobile.android.baselibrary.app.busevents.EventAlertDialog;
-import com.kogimobile.android.baselibrary.app.busevents.EventProgressDialog;
-import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
-import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
+import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
+import com.kogimobile.android.baselibrary.app.busevents.progress.EventProgressDialog;
+import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
 
 /**
  * @author Julian Cardona. julian@kogimobile.com
@@ -28,8 +27,6 @@ public interface BaseEventBusListener {
     void onProgressDialogEvent(EventProgressDialog event);
 
     void onAlertDialogEvent(EventAlertDialog alert);
-
-    void onToastMessageEvent(EventToastMessage event);
 
     void onSnackbarMessageEvent(EventSnackbarMessage event);
 

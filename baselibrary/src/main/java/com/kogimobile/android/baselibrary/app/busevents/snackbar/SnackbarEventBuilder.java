@@ -1,11 +1,10 @@
-package com.kogimobile.android.baselibrary.app.busevents.utils;
+package com.kogimobile.android.baselibrary.app.busevents.snackbar;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.kogimobile.android.baselibrary.R;
-import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
 
 /**
  * @author Pedro Scott pedro@kogimobile.com on 5/5/17.
