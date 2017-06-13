@@ -55,13 +55,19 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
         setSupportActionBar(toolbar);
         setHomeAsUpIndicator(R.drawable.ic_menu);
         setupDrawerContent(navigationView);
-        navigateToActivityRootLevel(FrgEvents.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_1));
+        navigateToActivityRootLevel(FrgNavigation.newInstance(getSupportFragmentManager().getBackStackEntryCount()),R.id.container,getString(R.string.nav_drawer_item_section_1));
         navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
     protected void initListeners() {
 
+    }
+
+    @Override
+    public void navigateBackRootLevel() {
+        super.navigateBackRootLevel();
+        setHomeAsUpIndicator(R.drawable.ic_menu);
     }
 
     @Override
@@ -78,13 +84,13 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.nav_section_1:
-                                navigateToActivityRootLevel(FrgEvents.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_1));
+                                navigateToActivityRootLevel(FrgNavigation.newInstance(getSupportFragmentManager().getBackStackEntryCount()),R.id.container,getString(R.string.nav_drawer_item_section_1));
                                 break;
                             case R.id.nav_section_2:
-                                navigateToActivityRootLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_2));
+                                navigateToActivityRootLevel(FrgEvents.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_2));
                                 break;
                             case R.id.nav_section_3:
-                                navigateToActivityRootLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_3));
+                                navigateToActivityRootLevel(FrgUtils.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_3));
                                 break;
                             case R.id.nav_subsection_1:
                                 navigateToActivityLowLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_subsection_1));

@@ -221,18 +221,27 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
-        titleStack.add(title);
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId,true);
-        updateActionBarTitle();
-    }
-
-    @CallSuper
     public void navigateToActivityRootLevel(Fragment frg, int layoutContainerId, String title) {
         FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
         FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId);
         titleStack.clear();
         titleStack.add(title);
+        updateActionBarTitle();
+    }
+
+    @CallSuper
+    public void navigateBackRootLevel() {
+        FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
+        String firstTitle = titleStack.get(0);
+        titleStack.clear();
+        titleStack.add(firstTitle);
+        updateActionBarTitle();
+    }
+
+    @CallSuper
+    public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
+        titleStack.add(title);
+        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId,true);
         updateActionBarTitle();
     }
 

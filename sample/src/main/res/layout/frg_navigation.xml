@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/bFrgNavigationDescription"
+        style="@style/MediumTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_extra_large_size"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        tools:text="@string/frg_navigation_description" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/bFrgNavigationRoot"
+        style="@style/MagentaButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/frg_navigation_root" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/bFrgNavigationLowLevel"
+        style="@style/MagentaButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/frg_navigation_lower_level" />
+
+</LinearLayout>

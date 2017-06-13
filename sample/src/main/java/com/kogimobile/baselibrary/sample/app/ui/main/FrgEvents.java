@@ -59,7 +59,7 @@ public class FrgEvents extends BaseFragment {
             R.id.bFrgEventProgress,
             R.id.bFrgEventAlert
 	})
-    public void onclickView(View view){
+    public void onClickView(View view){
         switch (view.getId()){
             case R.id.bFrgEventSnackbar:
                 sendEventSnackbar();
@@ -120,7 +120,7 @@ public class FrgEvents extends BaseFragment {
                                         }
                                 )
                                 .withNegativeButton(
-                                        R.string.frg_events_message_negavite_alert_dialog,
+                                        R.string.frg_events_message_negative_alert_dialog,
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

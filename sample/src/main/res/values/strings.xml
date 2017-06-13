@@ -4,12 +4,17 @@
     <string name="app_name">Base Librarydimens.xml</string>
 
     <!--Navigation Drawer-->
-    <string name="nav_drawer_item_section_1">@string/frg_events_title</string>
-    <string name="nav_drawer_item_section_2">Section 2</string>
-    <string name="nav_drawer_item_section_3">Section 3</string>
+    <string name="nav_drawer_item_section_1">@string/frg_navigation_title</string>
+    <string name="nav_drawer_item_section_2">@string/frg_events_title</string>
+    <string name="nav_drawer_item_section_3">@string/frg_utils_title</string>
     <string name="nav_drawer_item_subsection_1">SubSection 1</string>
     <string name="nav_drawer_item_subsection_2">SubSection 2</string>
 
+    <!--Frg Navigation-->
+    <string name="frg_navigation_title">Navigation</string>
+    <string name="frg_navigation_description">Navigation level = %d</string>
+    <string name="frg_navigation_root">Navigate to Root Fragment</string>
+    <string name="frg_navigation_lower_level">Navigate to a Fragment Lower level</string>
 
     <!--Frg Events-->
     <string name="frg_events_title">Events</string>
@@ -21,6 +26,14 @@
     <string name="frg_events_title_alert_dialog">Title</string>
     <string name="frg_events_message_alert_dialog">This is an Alert Dialog Event</string>
     <string name="frg_events_message_positive_alert_dialog">Ok</string>
-    <string name="frg_events_message_negavite_alert_dialog">Cancel</string>
+    <string name="frg_events_message_negative_alert_dialog">Cancel</string>
+
+    <!--Frg Utils-->
+    <string name="frg_utils_title">Utils</string>
+    <string name="frg_utils_connectivity_title">Connectivity</string>
+    <string name="frg_utils_connectivity_connected_label">Is connected to Intenet:</string>
+    <string name="frg_utils_connectivity_connected_wifi_label">Is connected to wifi:</string>
+    <string name="frg_utils_connectivity_connected_mobile_label">Is connected to Mobile:</string>
+    <string name="frg_utils_connectivity_refresh">Refresh</string>
 
 </resources>

@@ -21,4 +21,15 @@
         <item name="android:textColor">@color/primary</item>
     </style>
 
+    <style name="SectionTitleStyle" parent="@style/MediumTextStyle">
+        <item name="android:layout_margin">@dimen/default_medium_size</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LabelTitleStyle" parent="@style/SmallTextStyle">
+        <item name="android:layout_margin">@dimen/default_medium_size</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
 </resources>
