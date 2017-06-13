@@ -8,7 +8,10 @@ import android.widget.TextView;
 
 import com.kogimobile.android.baselibrary.app.base.BaseFragment;
 import com.kogimobile.android.baselibrary.utils.ConnectivityUtils;
+import com.kogimobile.android.baselibrary.utils.DateTimeUtils;
 import com.kogimobile.baselibrary.sample.R;
+
+import org.joda.time.DateTime;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -18,6 +21,8 @@ import butterknife.OnClick;
  */
 
 public class FrgUtils extends BaseFragment {
+
+    private final String DATETIME_FROM = "2017/06/12T10:11:12";
 
     public static FrgUtils newInstance() {
         FrgUtils frg = new FrgUtils();
@@ -32,6 +37,8 @@ public class FrgUtils extends BaseFragment {
     TextView tVFrgUtilsConnectivityOnWifi;
     @BindView(R.id.tVFrgUtilsConnectivityOnMobile)
     TextView tVFrgUtilsConnectivityOnMobile;
+    @BindView(R.id.tVFrgUtilsDateTimeConvert)
+    TextView tVFrgUtilsDateTimeConvert;
 
     @Override
     protected void initVars() {
@@ -46,6 +53,7 @@ public class FrgUtils extends BaseFragment {
     @Override
     protected void initViews() {
         setUpConnectivityInfo();
+        convertDateTime();
     }
 
     @Override
@@ -57,6 +65,23 @@ public class FrgUtils extends BaseFragment {
         tVFrgUtilsConnectivityOn.setText(Boolean.toString(ConnectivityUtils.isConnected(getContext())));
         tVFrgUtilsConnectivityOnWifi.setText(Boolean.toString(ConnectivityUtils.isConnectedWifi(getContext())));
         tVFrgUtilsConnectivityOnMobile.setText(Boolean.toString(ConnectivityUtils.isConnectedMobile(getContext())));
+    }
+
+    private void convertDateTime(){
+        DateTime dateTimeFrom = DateTimeUtils.getDateTimeFromPattern(
+                getString(R.string.date_format_convert_from),
+                DATETIME_FROM
+        );
+        tVFrgUtilsDateTimeConvert.setText(
+                getString(
+                        R.string.frg_utils_datetime_convert,
+                        DATETIME_FROM,
+                        DateTimeUtils.getStringPatternFromDateTime(
+                                getString(R.string.date_format_convert_to),
+                                dateTimeFrom
+                        )
+                )
+        );
     }
 
     @OnClick(R.id.bFrgUtilsConnectivityRefresh)

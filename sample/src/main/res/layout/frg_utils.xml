@@ -103,6 +103,29 @@
             android:layout_height="1dp"
             android:background="@color/primary" />
 
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/SectionTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/frg_utils_datetime"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tVFrgUtilsDateTimeConvert"
+                style="@style/LabelTitleStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/frg_utils_datetime_convert"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 

@@ -35,5 +35,7 @@
     <string name="frg_utils_connectivity_connected_wifi_label">Is connected to wifi:</string>
     <string name="frg_utils_connectivity_connected_mobile_label">Is connected to Mobile:</string>
     <string name="frg_utils_connectivity_refresh">Refresh</string>
+    <string name="frg_utils_datetime">DateTime</string>
+    <string name="frg_utils_datetime_convert">Convert from %1$s to %2$s</string>
 
 </resources>
