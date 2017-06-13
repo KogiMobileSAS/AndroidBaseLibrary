@@ -7,8 +7,7 @@
     <string name="nav_drawer_item_section_1">@string/frg_navigation_title</string>
     <string name="nav_drawer_item_section_2">@string/frg_events_title</string>
     <string name="nav_drawer_item_section_3">@string/frg_utils_title</string>
-    <string name="nav_drawer_item_subsection_1">SubSection 1</string>
-    <string name="nav_drawer_item_subsection_2">SubSection 2</string>
+    <string name="nav_drawer_item_section_4">RecyclerView</string>
 
     <!--Frg Navigation-->
     <string name="frg_navigation_title">Navigation</string>

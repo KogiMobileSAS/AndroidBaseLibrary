@@ -1,4 +1,4 @@
-package com.kogimobile.baselibrary.sample.app.ui.main;
+package com.kogimobile.baselibrary.sample.app.ui.main.navigation;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

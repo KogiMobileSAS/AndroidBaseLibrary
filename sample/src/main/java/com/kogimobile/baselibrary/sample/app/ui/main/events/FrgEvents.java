@@ -1,4 +1,4 @@
-package com.kogimobile.baselibrary.sample.app.ui.main;
+package com.kogimobile.baselibrary.sample.app.ui.main.events;
 
 import android.content.DialogInterface;
 import android.os.Bundle;

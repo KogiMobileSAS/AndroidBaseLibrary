@@ -9,10 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.kogimobile.android.baselibrary.app.base.BaseActivityMVP;
-import com.kogimobile.android.baselibrary.app.development.TestFragment;
 import com.kogimobile.baselibrary.sample.R;
+import com.kogimobile.baselibrary.sample.app.ui.main.events.FrgEvents;
+import com.kogimobile.baselibrary.sample.app.ui.main.navigation.FrgNavigation;
 import com.kogimobile.baselibrary.sample.app.ui.main.presenter.PresenterActivityMain;
 import com.kogimobile.baselibrary.sample.app.ui.main.presenter.PresenterListenerActivityMain;
+import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.FrgRecyclerView;
+import com.kogimobile.baselibrary.sample.app.ui.main.utils.FrgUtils;
 
 import butterknife.BindView;
 
@@ -92,11 +95,8 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
                             case R.id.nav_section_3:
                                 navigateToActivityRootLevel(FrgUtils.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_3));
                                 break;
-                            case R.id.nav_subsection_1:
-                                navigateToActivityLowLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_subsection_1));
-                                break;
-                            case R.id.nav_subsection_2:
-                                navigateToActivityLowLevel(TestFragment.newInstance(),R.id.container,getString(R.string.nav_drawer_item_subsection_2));
+                            case R.id.nav_section_4:
+                                navigateToActivityRootLevel(FrgRecyclerView.newInstance(),R.id.container,getString(R.string.nav_drawer_item_section_4));
                                 break;
                         }
                         menuItem.setChecked(true);

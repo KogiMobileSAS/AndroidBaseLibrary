@@ -16,16 +16,11 @@
             android:id="@+id/nav_section_3"
             android:icon="@mipmap/ic_launcher"
             android:title="@string/nav_drawer_item_section_3"/>
-
-    </group>
-
-    <group android:id="@+id/sub_sections">
         <item
-            android:id="@+id/nav_subsection_1"
-            android:title="@string/nav_drawer_item_subsection_1"/>
-        <item
-            android:id="@+id/nav_subsection_2"
-            android:title="@string/nav_drawer_item_subsection_2"/>
+            android:id="@+id/nav_section_4"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/nav_drawer_item_section_4"/>
+
     </group>
 
 </menu>
