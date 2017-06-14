@@ -7,10 +7,10 @@
     android:padding="@dimen/default_medium_size">
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/tVThemeName"
+        android:id="@+id/tVListItemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        tools:text="My Theme" />
+        tools:text="Item 1" />
 
 </LinearLayout>

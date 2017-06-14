@@ -7,7 +7,7 @@
     <string name="nav_drawer_item_section_1">@string/frg_navigation_title</string>
     <string name="nav_drawer_item_section_2">@string/frg_events_title</string>
     <string name="nav_drawer_item_section_3">@string/frg_utils_title</string>
-    <string name="nav_drawer_item_section_4">RecyclerView</string>
+    <string name="nav_drawer_item_section_4">@string/frg_recycler_view_title</string>
 
     <!--Frg Navigation-->
     <string name="frg_navigation_title">Navigation</string>
@@ -36,5 +36,12 @@
     <string name="frg_utils_connectivity_refresh">Refresh</string>
     <string name="frg_utils_datetime">DateTime</string>
     <string name="frg_utils_datetime_convert">Convert from %1$s to %2$s</string>
+
+    <!--Frg RecyclerView-->
+    <string name="frg_recycler_view_title">RecyclerView</string>
+    <string name="frg_recycler_view_item_name">Item #%1$d</string>
+    <string name="frg_recycler_view_items_empty_message">No items to show</string>
+    <string name="frg_recycler_view_items_loading_message">Loading items &#8239;</string>
+    <string name="frg_recycler_view_items_loading_more_message">Loading more items &#8239;</string>
 
 </resources>

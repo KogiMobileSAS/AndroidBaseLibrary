@@ -17,7 +17,7 @@ import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMe
 import com.kogimobile.baselibrary.sample.R;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterListenerRecyclerView;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterRecyclerView;
-import com.kogimobile.baselibrary.sample.entities.Theme;
+import com.kogimobile.baselibrary.sample.entities.Item;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -29,7 +29,7 @@ import butterknife.BindView;
  * @author Julian Cardona on 6/13/17.
  */
 
-public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, Theme> implements PresenterListenerRecyclerView {
+public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, Item> implements PresenterListenerRecyclerView {
 
     @BindView(R.id.sRLFrgRecyclerView)
     SwipeRefreshLayout sRLFrgRecyclerView;
@@ -47,7 +47,7 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
     protected void initVars() {
         setLoadMoreEnabled(true);
         setPresenter(new PresenterRecyclerView());
-        setAdapter(new AdapterHome());
+        setAdapter(new AdapterItems());
         doLoadItems();
     }
 
@@ -105,17 +105,17 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
     }
 
     @Override
-    protected void onLoadItemsFinished(@NonNull List<Theme> list) {
+    protected void onLoadItemsFinished(@NonNull List<Item> list) {
 
     }
 
     @Override
-    protected void onLoadMoreItemsFinished(@NonNull List<Theme> list) {
+    protected void onLoadMoreItemsFinished(@NonNull List<Item> list) {
 
     }
 
     @Override
-    protected void onRefreshItemsFinished(@NonNull List<Theme> list) {
+    protected void onRefreshItemsFinished(@NonNull List<Item> list) {
         if (this.sRLFrgRecyclerView != null) {
             this.sRLFrgRecyclerView.setRefreshing(false);
         }

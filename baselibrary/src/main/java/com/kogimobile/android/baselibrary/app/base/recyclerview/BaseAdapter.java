@@ -1,5 +1,6 @@
 package com.kogimobile.android.baselibrary.app.base.recyclerview;
 
+import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -378,11 +379,19 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
 
     public abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
+        private Context context;
+
         public BaseViewHolder(View itemView) {
             super(itemView);
+            this.context = itemView.getContext();
             ButterKnife.bind(this, itemView);
         }
 
         protected abstract void bindView(T item);
+
+        @CallSuper
+        public Context getContext(){
+            return this.context;
+        }
     }
 }

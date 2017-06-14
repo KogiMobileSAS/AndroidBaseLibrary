@@ -1,7 +1,7 @@
 package com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter;
 
 import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenter;
-import com.kogimobile.baselibrary.sample.entities.Theme;
+import com.kogimobile.baselibrary.sample.entities.Item;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,13 +32,13 @@ public class PresenterRecyclerView extends BasePresenter<PresenterListenerRecycl
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                new Consumer<ArrayList<Theme>>() {
+                                new Consumer<ArrayList<Item>>() {
                                     @Override
-                                    public void accept(ArrayList<Theme> themes) throws Exception {
+                                    public void accept(ArrayList<Item> items) throws Exception {
                                         if (isRefreshing) {
-                                            getViewListener().refreshItemsLoaded(themes, true);
+                                            getViewListener().refreshItemsLoaded(items, true);
                                         } else {
-                                            getViewListener().itemsLoaded(themes, true);
+                                            getViewListener().itemsLoaded(items, true);
                                         }
                                     }
                                 },
@@ -63,10 +63,10 @@ public class PresenterRecyclerView extends BasePresenter<PresenterListenerRecycl
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                new Consumer<ArrayList<Theme>>() {
+                                new Consumer<ArrayList<Item>>() {
                                     @Override
-                                    public void accept(ArrayList<Theme> themes) throws Exception {
-                                        getViewListener().moreItemsLoaded(themes);
+                                    public void accept(ArrayList<Item> items) throws Exception {
+                                        getViewListener().moreItemsLoaded(items);
                                     }
                                 },
                                 new Consumer<Throwable>() {
@@ -79,15 +79,15 @@ public class PresenterRecyclerView extends BasePresenter<PresenterListenerRecycl
         );
     }
 
-    private ArrayList<Theme> generateRandomThemeArray(){
-        ArrayList<Theme> themes = new ArrayList<>();
+    private ArrayList<Item> generateRandomThemeArray(){
+        ArrayList<Item> items = new ArrayList<>();
         final int min = MIN_RANDOM_THEMES_TO_GENERATE;
         final int max = MAX_RANDOM_THEMES_TO_GENERATE;
         int amount = new Random().nextInt((max - min) + 1) + min;
         for (int i = 0; i < amount; i++) {
-            themes.add(new Theme());
+            items.add(new Item());
         }
-        return themes;
+        return items;
     }
 
 }
