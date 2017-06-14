@@ -9,12 +9,10 @@ import com.kogimobile.baselibrary.sample.entities.Item;
 
 public interface PresenterListenerRecyclerView extends BasePresenterListListener<Item> {
 
-    void onThemesLoadFail();
+    void onListItemsLoadFail();
 
-    void onThemesLoadMoreFail();
+    void onListItemsLoadMoreFail();
 
-    void onThemesRefreshFail();
-
-    void onShowMessage(String message);
+    void onListItemsRefreshFail();
 
 }

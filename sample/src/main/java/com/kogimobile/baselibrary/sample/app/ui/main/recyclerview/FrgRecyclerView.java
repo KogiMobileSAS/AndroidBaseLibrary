@@ -13,13 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kogimobile.android.baselibrary.app.base.recyclerview.BaseFragmentMVPList;
-import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
 import com.kogimobile.baselibrary.sample.R;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterListenerRecyclerView;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterRecyclerView;
 import com.kogimobile.baselibrary.sample.entities.Item;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -91,17 +88,17 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
 
     @Override
     protected void onDoLoadItems() {
-        getPresenter().doLoadThemes(false);
+        getPresenter().doLoadListItems(false);
     }
 
     @Override
     protected void onDoLoadMoreItems() {
-        getPresenter().doLoadMoreThemes();
+        getPresenter().doLoadMoreListItems();
     }
 
     @Override
     protected void onDoRefreshItems() {
-        getPresenter().doLoadThemes(true);
+        getPresenter().doLoadListItems(true);
     }
 
     @Override
@@ -122,27 +119,17 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
     }
 
     @Override
-    public void onThemesLoadFail() {
+    public void onListItemsLoadFail() {
 
     }
 
     @Override
-    public void onThemesLoadMoreFail() {
+    public void onListItemsLoadMoreFail() {
 
     }
 
     @Override
-    public void onThemesRefreshFail() {
+    public void onListItemsRefreshFail() {
 
-    }
-
-    @Override
-    public void onShowMessage(String message) {
-        EventBus.getDefault()
-                .post(
-                        EventSnackbarMessage.getBuilder()
-                                .withMessage(message)
-                                .build()
-                );
     }
 }

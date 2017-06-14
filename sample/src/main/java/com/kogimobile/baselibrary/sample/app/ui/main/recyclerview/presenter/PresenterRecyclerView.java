@@ -25,7 +25,7 @@ public class PresenterRecyclerView extends BasePresenter<PresenterListenerRecycl
     private final int MAX_LOAD_FETCH_ITEMS_DELAY = 1;//Seconds
     private final int MAX_LOAD_MORE_FETCH_ITEMS_DELAY = 2;//Seconds
 
-    public void doLoadThemes(final boolean isRefreshing){
+    public void doLoadListItems(final boolean isRefreshing){
         addDisposable(
                 Observable.just(generateRandomThemeArray())
                         .delay(MAX_LOAD_FETCH_ITEMS_DELAY, TimeUnit.SECONDS)
@@ -46,9 +46,9 @@ public class PresenterRecyclerView extends BasePresenter<PresenterListenerRecycl
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
                                         if(isRefreshing){
-                                            getViewListener().onThemesRefreshFail();
+                                            getViewListener().onListItemsRefreshFail();
                                         }else{
-                                            getViewListener().onThemesLoadFail();
+                                            getViewListener().onListItemsLoadFail();
                                         }
                                     }
                                 }
@@ -56,7 +56,7 @@ public class PresenterRecyclerView extends BasePresenter<PresenterListenerRecycl
         );
     }
 
-    public void doLoadMoreThemes(){
+    public void doLoadMoreListItems(){
         addDisposable(
                 Observable.just(generateRandomThemeArray())
                         .delay(MAX_LOAD_MORE_FETCH_ITEMS_DELAY, TimeUnit.SECONDS)
@@ -72,7 +72,7 @@ public class PresenterRecyclerView extends BasePresenter<PresenterListenerRecycl
                                 new Consumer<Throwable>() {
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
-                                        getViewListener().onThemesLoadMoreFail();
+                                        getViewListener().onListItemsLoadMoreFail();
                                     }
                                 }
                         )
