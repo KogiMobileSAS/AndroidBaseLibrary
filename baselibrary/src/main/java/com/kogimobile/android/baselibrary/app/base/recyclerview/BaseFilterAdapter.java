@@ -83,7 +83,7 @@ public abstract class BaseFilterAdapter<T, H extends BaseAdapter.BaseViewHolder>
             if (constraint.length() == minNumberToCleanFilter) {
                 getFilteredItemList().addAll(originalList);
             } else {
-                for (final T item : getItems()) {
+                for (final T item : originalList) {
                     if (searchCondition(item, constraint.toString())) {
                         getFilteredItemList().add(item);
                     }
