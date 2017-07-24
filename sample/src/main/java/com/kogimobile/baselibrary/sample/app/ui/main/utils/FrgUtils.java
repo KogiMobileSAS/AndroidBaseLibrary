@@ -1,28 +1,27 @@
 package com.kogimobile.baselibrary.sample.app.ui.main.utils;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.kogimobile.android.baselibrary.app.base.BaseFragment;
 import com.kogimobile.android.baselibrary.utils.ConnectivityUtils;
 import com.kogimobile.android.baselibrary.utils.DateTimeUtils;
 import com.kogimobile.baselibrary.sample.R;
+import com.kogimobile.baselibrary.sample.databinding.FrgUtilsBinding;
 
 import org.joda.time.DateTime;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * @author Julian Cardona on 6/13/17.
  */
 
-public class FrgUtils extends BaseFragment {
+public class FrgUtils extends BaseFragment implements EventHandlerUtils{
 
     private final String DATETIME_FROM = "2017/06/12T10:11:12";
+    private FrgUtilsBinding binding;
 
     public static FrgUtils newInstance() {
         FrgUtils frg = new FrgUtils();
@@ -31,15 +30,6 @@ public class FrgUtils extends BaseFragment {
         return frg;
     }
 
-    @BindView(R.id.tVFrgUtilsConnectivityOn)
-    TextView tVFrgUtilsConnectivityOn;
-    @BindView(R.id.tVFrgUtilsConnectivityOnWifi)
-    TextView tVFrgUtilsConnectivityOnWifi;
-    @BindView(R.id.tVFrgUtilsConnectivityOnMobile)
-    TextView tVFrgUtilsConnectivityOnMobile;
-    @BindView(R.id.tVFrgUtilsDateTimeConvert)
-    TextView tVFrgUtilsDateTimeConvert;
-
     @Override
     protected void initVars() {
 
@@ -47,7 +37,9 @@ public class FrgUtils extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frg_utils, container, false);
+        this.binding = DataBindingUtil.inflate(inflater, R.layout.frg_utils, container, false);
+        this.binding.setEventHandler(this);
+        return this.binding.getRoot();
     }
 
     @Override
@@ -61,18 +53,12 @@ public class FrgUtils extends BaseFragment {
 
     }
 
-    private void setUpConnectivityInfo(){
-        tVFrgUtilsConnectivityOn.setText(Boolean.toString(ConnectivityUtils.isConnected(getContext())));
-        tVFrgUtilsConnectivityOnWifi.setText(Boolean.toString(ConnectivityUtils.isConnectedWifi(getContext())));
-        tVFrgUtilsConnectivityOnMobile.setText(Boolean.toString(ConnectivityUtils.isConnectedMobile(getContext())));
-    }
-
     private void convertDateTime(){
         DateTime dateTimeFrom = DateTimeUtils.getDateTimeFromPattern(
                 getString(R.string.date_format_convert_from),
                 DATETIME_FROM
         );
-        tVFrgUtilsDateTimeConvert.setText(
+        this.binding.timeConvert.setText(
                 getString(
                         R.string.frg_utils_datetime_convert,
                         DATETIME_FROM,
@@ -84,13 +70,14 @@ public class FrgUtils extends BaseFragment {
         );
     }
 
-    @OnClick(R.id.bFrgUtilsConnectivityRefresh)
-    public void onViewClick(View view){
-        switch (view.getId()){
-            case R.id.bFrgUtilsConnectivityRefresh:
-                setUpConnectivityInfo();
-                break;
-        }
+    @Override
+    public void onClickRefresh() {
+        setUpConnectivityInfo();
     }
 
+    private void setUpConnectivityInfo(){
+        this.binding.connectivityOn.setText(Boolean.toString(ConnectivityUtils.isConnected(getContext())));
+        this.binding.connectivityOnWifi.setText(Boolean.toString(ConnectivityUtils.isConnectedWifi(getContext())));
+        this.binding.connectivityOnMobile.setText(Boolean.toString(ConnectivityUtils.isConnectedMobile(getContext())));
+    }
 }

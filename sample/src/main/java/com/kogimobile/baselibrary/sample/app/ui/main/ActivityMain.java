@@ -1,11 +1,11 @@
 package com.kogimobile.baselibrary.sample.app.ui.main;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.kogimobile.android.baselibrary.app.base.BaseActivityMVP;
@@ -16,17 +16,11 @@ import com.kogimobile.baselibrary.sample.app.ui.main.presenter.PresenterActivity
 import com.kogimobile.baselibrary.sample.app.ui.main.presenter.PresenterListenerActivityMain;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.FrgRecyclerView;
 import com.kogimobile.baselibrary.sample.app.ui.main.utils.FrgUtils;
-
-import butterknife.BindView;
+import com.kogimobile.baselibrary.sample.databinding.ActivityMainBinding;
 
 public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> implements PresenterListenerActivityMain {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
+    private ActivityMainBinding binding;
 
     @Override
     protected void initVars(){
@@ -36,7 +30,7 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        this.binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
     }
 
     @Override
@@ -46,7 +40,7 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
                 if(getTitleStack().size()>1){
                     return super.onOptionsItemSelected(item);
                 }else {
-                    mDrawerLayout.openDrawer(GravityCompat.START);
+                    binding.drawerLayout.openDrawer(GravityCompat.START);
                 }
                 return true;
         }
@@ -55,11 +49,11 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
 
     @Override
     protected void initViews() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.includeToolbar.toolbar);
         setHomeAsUpIndicator(R.drawable.ic_menu);
-        setupDrawerContent(navigationView);
+        setupDrawerContent(binding.navView);
         navigateToActivityRootLevel(FrgNavigation.newInstance(getSupportFragmentManager().getBackStackEntryCount()),R.id.container,getString(R.string.nav_drawer_item_section_1));
-        navigationView.getMenu().getItem(0).setChecked(true);
+        binding.navView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -76,7 +70,7 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
     @Override
     public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
         super.navigateToActivityLowLevel(frg, layoutContainerId, title);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         enableHomeBackArrowIndicator();
     }
 
@@ -100,7 +94,7 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
                                 break;
                         }
                         menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
+                        binding.drawerLayout.closeDrawers();
                         return true;
                     }
                 });
@@ -108,13 +102,13 @@ public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> impleme
 
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
-            mDrawerLayout.closeDrawers();
+        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+            binding.drawerLayout.closeDrawers();
         }else{
             super.onBackPressed();
             if(getTitleStack().size()==1){
                 setHomeAsUpIndicator(R.drawable.ic_menu);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.kogimobile.android.baselibrary.app.base.recyclerview;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,8 +11,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.ButterKnife;
 
 /**
  * @author Pedro Scott. pedro@kogimobile.com
@@ -359,7 +359,7 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         }
     }
 
-    protected static class EmptyViewHolder<T> extends BaseAdapter.BaseViewHolder<T> {
+    public static class EmptyViewHolder<T> extends BaseAdapter.BaseViewHolder<T> {
 
         public EmptyViewHolder(View itemView) {
             super(itemView);
@@ -377,14 +377,20 @@ public abstract class BaseAdapter<T, H extends BaseAdapter.BaseViewHolder> exten
         }
     }
 
-    public abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder {
+    public static abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
         private Context context;
+        private ViewDataBinding binding;
 
         public BaseViewHolder(View itemView) {
             super(itemView);
             this.context = itemView.getContext();
-            ButterKnife.bind(this, itemView);
+            this.binding = DataBindingUtil.bind(itemView);
+        }
+
+        @CallSuper
+        protected <B extends ViewDataBinding> B getBinding() {
+            return (B)binding;
         }
 
         protected abstract void bindView(T item);

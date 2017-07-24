@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.ButterKnifeLifeObserver;
 import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.EventBusLifeCycleObserver;
 import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.RxLifeObserver;
 import com.kogimobile.android.baselibrary.app.busevents.utils.EventGhost;
@@ -69,7 +68,7 @@ public abstract class BaseFragment extends Fragment implements LifecycleRegistry
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        getLifecycle().addObserver(rxLifeObserver);
+        initLifeCycleObservers();
         initVars();
     }
 
@@ -78,13 +77,12 @@ public abstract class BaseFragment extends Fragment implements LifecycleRegistry
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initLifeCycleObservers(view);
         initViews();
         initListeners();
     }
 
-    private void initLifeCycleObservers(View view){
-        getLifecycle().addObserver(new ButterKnifeLifeObserver(this,view));
+    private void initLifeCycleObservers(){
+        getLifecycle().addObserver(rxLifeObserver);
         getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
     }
 

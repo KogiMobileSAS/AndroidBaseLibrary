@@ -18,12 +18,6 @@
 -keepattributes *Annotation*
 -keepattributes EnclosingMethod
 
-# Butterknife
--keep class butterknife.*
--keepclasseswithmembernames class * { @butterknife.* <methods>; }
--keepclasseswithmembernames class * { @butterknife.* <fields>; }
--keep public class * implements butterknife.Unbinder { public <init>(...); }
-
 # Timber
 -dontwarn org.jetbrains.annotations.**
 

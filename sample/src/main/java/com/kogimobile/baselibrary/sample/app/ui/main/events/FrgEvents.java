@@ -1,31 +1,28 @@
 package com.kogimobile.baselibrary.sample.app.ui.main.events;
 
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.kogimobile.android.baselibrary.app.base.BaseFragment;
 import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
 import com.kogimobile.android.baselibrary.app.busevents.progress.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
 import com.kogimobile.baselibrary.sample.R;
+import com.kogimobile.baselibrary.sample.databinding.FrgEventsBinding;
 
 import org.greenrobot.eventbus.EventBus;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * @author Julian Cardona on 6/12/17.
  */
 
-public class FrgEvents extends BaseFragment {
+public class FrgEvents extends BaseFragment implements EventHandlerEvents{
 
-    @BindView(R.id.bFrgEventSnackbar)
-    Button bFrgEventSnackbar;
+    private FrgEventsBinding binding;
 
     public static FrgEvents newInstance() {
         FrgEvents frg = new FrgEvents();
@@ -39,38 +36,32 @@ public class FrgEvents extends BaseFragment {
 
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.frg_events, container, false);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.binding = DataBindingUtil.inflate(inflater, R.layout.frg_events, container, false);
+        this.binding.setEventHandler(this);
+        return this.binding.getRoot();
+    }
 
     @Override
-    protected void initViews() {
-
-	}
+    protected void initViews() {}
 
     @Override
-    protected void initListeners() {
+    protected void initListeners() {}
 
-	}
+    @Override
+    public void onClickEventSnackBar() {
+        sendEventSnackbar();
+    }
 
-	@OnClick({
-	        R.id.bFrgEventSnackbar,
-            R.id.bFrgEventProgress,
-            R.id.bFrgEventAlert
-	})
-    public void onClickView(View view){
-        switch (view.getId()){
-            case R.id.bFrgEventSnackbar:
-                sendEventSnackbar();
-                break;
-            case R.id.bFrgEventProgress:
-                sendEventProgress();
-                break;
-            case R.id.bFrgEventAlert:
-                sendEventAlertDialog();
-                break;
-        }
+    @Override
+    public void onClickEventProgress() {
+        sendEventProgress();
+    }
+
+    @Override
+    public void onClickEventAlert() {
+        sendEventAlertDialog();
     }
 
     private void sendEventSnackbar(){
@@ -128,7 +119,7 @@ public class FrgEvents extends BaseFragment {
                                             }
                                         }
                                 )
-                        .build()
+                                .build()
                 );
     }
 

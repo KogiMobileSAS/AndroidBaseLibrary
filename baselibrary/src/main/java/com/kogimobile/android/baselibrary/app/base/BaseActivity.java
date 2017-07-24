@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.LayoutRes;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -20,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.ButterKnifeLifeObserver;
 import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.EventBusLifeCycleObserver;
 import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.RxLifeObserver;
 import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
@@ -96,7 +94,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initLifeCycleObservers();
         initVars();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initViews();
+        initListeners();
     }
 
     abstract protected void initVars();
@@ -118,17 +124,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         return super.onOptionsItemSelected(item);
     }
 
-    @CallSuper
-    @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
-        initLifeCycleObservers();
-        initViews();
-        initListeners();
-    }
-
     private void initLifeCycleObservers(){
-        getLifecycle().addObserver(new ButterKnifeLifeObserver(this));
+        getLifecycle().addObserver(rxLifeObserver);
         getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
     }
 

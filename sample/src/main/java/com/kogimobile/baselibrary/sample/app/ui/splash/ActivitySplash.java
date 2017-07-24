@@ -1,18 +1,18 @@
 package com.kogimobile.baselibrary.sample.app.ui.splash;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.AppCompatImageView;
 
 import com.kogimobile.android.baselibrary.app.base.BaseActivity;
 import com.kogimobile.baselibrary.sample.R;
 import com.kogimobile.baselibrary.sample.app.ui.main.ActivityMain;
+import com.kogimobile.baselibrary.sample.databinding.ActivitySplashBinding;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -27,18 +27,15 @@ public class ActivitySplash extends BaseActivity{
     static {AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);}
     private static final int DEFAULT_BLINK_DELAY_TIME = 4;
     private static final int DEFAULT_DELAY_TIME = 5;
-
-    @BindView(R.id.iVSplashLogo)
-    AppCompatImageView iVSplashLogo;
+    private ActivitySplashBinding binding;
 
     @Override
-    protected void initVars() {
-    }
+    protected void initVars() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
     }
 
     @Override
@@ -49,12 +46,10 @@ public class ActivitySplash extends BaseActivity{
     }
 
     @Override
-    protected void initListeners() {
-
-    }
+    protected void initListeners() {}
 
     private void startLogoAnimation(){
-        ((Animatable)iVSplashLogo.getDrawable()).start();
+        ((Animatable)binding.logo.getDrawable()).start();
     }
 
     private void AddAnimationBlink(){
@@ -68,8 +63,8 @@ public class ActivitySplash extends BaseActivity{
                                 new Consumer<Timed<Long>>() {
                                     @Override
                                     public void accept(Timed<Long> longTimed) throws Exception {
-                                        if (!((Animatable) iVSplashLogo.getDrawable()).isRunning()) {
-                                            ((Animatable) iVSplashLogo.getDrawable()).start();
+                                        if (!((Animatable) binding.logo.getDrawable()).isRunning()) {
+                                            ((Animatable) binding.logo.getDrawable()).start();
                                         }
                                     }
                                 }

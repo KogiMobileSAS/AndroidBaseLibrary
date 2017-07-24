@@ -1,10 +1,10 @@
 package com.kogimobile.baselibrary.sample.app.ui.main.recyclerview;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,11 +16,10 @@ import com.kogimobile.android.baselibrary.app.base.recyclerview.BaseFragmentMVPL
 import com.kogimobile.baselibrary.sample.R;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterListenerRecyclerView;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterRecyclerView;
+import com.kogimobile.baselibrary.sample.databinding.FrgRecyclerviewBinding;
 import com.kogimobile.baselibrary.sample.entities.Item;
 
 import java.util.List;
-
-import butterknife.BindView;
 
 /**
  * @author Julian Cardona on 6/13/17.
@@ -28,10 +27,7 @@ import butterknife.BindView;
 
 public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, Item> implements PresenterListenerRecyclerView {
 
-    @BindView(R.id.sRLFrgRecyclerView)
-    SwipeRefreshLayout sRLFrgRecyclerView;
-    @BindView(R.id.rVFrgRecyclerView)
-    RecyclerView rVFrgRecyclerView;
+    private FrgRecyclerviewBinding binding;
 
     public static FrgRecyclerView newInstance() {
         FrgRecyclerView fragment = new FrgRecyclerView();
@@ -50,7 +46,8 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frg_recyclerview, container, false);
+        this.binding = DataBindingUtil.inflate(inflater, R.layout.frg_recyclerview, container, false);
+        return this.binding.getRoot();
     }
 
     @Override
@@ -65,15 +62,17 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
 
     @Override
     protected void initViews() {
-        setRecyclerView(rVFrgRecyclerView);
+        setRecyclerView(this.binding.recyclerView);
         getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
         getRecyclerView().setHasFixedSize(true);
-        this.sRLFrgRecyclerView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                doRefreshItems();
-            }
-        });
+        this.binding.swipeRefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        doRefreshItems();
+                    }
+                }
+        );
     }
 
     @Override
@@ -113,8 +112,8 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
 
     @Override
     protected void onRefreshItemsFinished(@NonNull List<Item> list) {
-        if (this.sRLFrgRecyclerView != null) {
-            this.sRLFrgRecyclerView.setRefreshing(false);
+        if (this.binding.swipeRefresh != null) {
+            this.binding.swipeRefresh.setRefreshing(false);
         }
     }
 
