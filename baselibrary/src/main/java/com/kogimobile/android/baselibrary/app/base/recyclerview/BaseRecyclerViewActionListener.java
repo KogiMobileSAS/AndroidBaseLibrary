@@ -1,4 +1,6 @@
-package com.kogimobile.android.baselibrary.app.base.presenter;
+package com.kogimobile.android.baselibrary.app.base.recyclerview;
+
+import java.util.List;
 
 /**
  * @author Julian Cardona. julian@kogimobile.com
@@ -18,5 +20,24 @@ package com.kogimobile.android.baselibrary.app.base.presenter;
  *          limitations under the License.
  * @modified Pedro Scott. pedro@kogimobile.com
  */
-public interface BasePresenterListener {
+public interface BaseRecyclerViewActionListener<T>{
+
+    void itemsLoaded(List<T> items,boolean isThereMoreDataToLoad);
+
+    void itemsLoaded(List<T> items);
+
+    void onLoadItemsFail();
+
+    void moreItemsLoaded(List<T> moreItems,boolean isThereMoreDataToLoad);
+
+    void moreItemsLoaded(List<T> moreItems);
+
+    void onLoadMoreItemsFail();
+
+    void refreshItemsLoadFail(List<T> refreshItems, boolean isThereMoreDataToLoad);
+
+    void refreshItemsLoaded(List<T> refreshItems);
+
+    void onRefreshItemsLoadFail();
+
 }

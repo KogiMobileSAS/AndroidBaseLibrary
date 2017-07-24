@@ -9,8 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.kogimobile.android.baselibrary.app.base.BaseFragmentMVP;
-import com.kogimobile.android.baselibrary.app.base.presenter.BasePresenter;
+import com.kogimobile.android.baselibrary.app.base.BaseFragment;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
  *
  * @modified Pedro Scott. predro@kogimobile.com
  */
-public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends BaseFragmentMVP<P> implements BasePresenterListListener<M> {
+public abstract class BaseFragmentRecyclerView<M> extends BaseFragment implements BaseRecyclerViewActionListener<M> {
 
     private boolean isHeaderEnabled;
     private boolean isLoadEnabled = true;
@@ -202,7 +201,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
 
     @CallSuper
     @Override
-    public void refreshItemsLoaded(@NonNull List<M> refreshItems,boolean isThereMoreDataToLoad) {
+    public void refreshItemsLoadFail(@NonNull List<M> refreshItems, boolean isThereMoreDataToLoad) {
         getAdapter().setLoadMoreEnabled(isThereMoreDataToLoad);
         getAdapter().setRefreshing(false);
         getAdapter().refreshItems(refreshItems);
@@ -212,7 +211,7 @@ public abstract class BaseFragmentMVPList<P extends BasePresenter, M> extends Ba
     @CallSuper
     @Override
     public void refreshItemsLoaded(@NonNull List<M> refreshItems) {
-        refreshItemsLoaded(refreshItems,false);
+        refreshItemsLoadFail(refreshItems,false);
     }
 
     public boolean isLoadingElements() {

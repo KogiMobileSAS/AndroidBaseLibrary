@@ -1,8 +1,10 @@
 package com.kogimobile.baselibrary.sample.app.ui.main.recyclerview;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -12,22 +14,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kogimobile.android.baselibrary.app.base.recyclerview.BaseFragmentMVPList;
+import com.kogimobile.android.baselibrary.app.base.recyclerview.BaseFragmentRecyclerView;
 import com.kogimobile.baselibrary.sample.R;
-import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterListenerRecyclerView;
-import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.presenter.PresenterRecyclerView;
 import com.kogimobile.baselibrary.sample.databinding.FrgRecyclerviewBinding;
 import com.kogimobile.baselibrary.sample.entities.Item;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * @author Julian Cardona on 6/13/17.
  */
 
-public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, Item> implements PresenterListenerRecyclerView {
+public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
 
     private FrgRecyclerviewBinding binding;
+    private ViewModelRecyclerView viemodel;
 
     public static FrgRecyclerView newInstance() {
         FrgRecyclerView fragment = new FrgRecyclerView();
@@ -39,8 +43,13 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
     @Override
     protected void initVars() {
         setLoadMoreEnabled(true);
-        setPresenter(new PresenterRecyclerView());
         setAdapter(new AdapterItems());
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.viemodel = ViewModelProviders.of(this).get(ViewModelRecyclerView.class);
         doLoadItems();
     }
 
@@ -87,17 +96,60 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
 
     @Override
     protected void onDoLoadItems() {
-        getPresenter().doLoadListItems(false);
+        this.viemodel.getListItems()
+                .subscribe(
+                        new Consumer<ArrayList<Item>>() {
+                               @Override
+                               public void accept(ArrayList<Item> items) throws Exception {
+                                   itemsLoaded(items,viemodel.hasMoreToLoad());
+                               }
+                           },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                onLoadItemsFail();
+                            }
+                        }
+                );
     }
 
     @Override
     protected void onDoLoadMoreItems() {
-        getPresenter().doLoadMoreListItems();
+        this.viemodel.getMoreListItems()
+                .subscribe(
+                        new Consumer<ArrayList<Item>>() {
+                            @Override
+                            public void accept(ArrayList<Item> items) throws Exception {
+                                moreItemsLoaded(items,viemodel.hasMoreToLoad());
+                                onLoadMoreItemsFinished(items);
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                onLoadMoreItemsFail();
+                            }
+                        }
+                );
     }
 
     @Override
     protected void onDoRefreshItems() {
-        getPresenter().doLoadListItems(true);
+        this.viemodel.getMoreListItems()
+                .subscribe(
+                        new Consumer<ArrayList<Item>>() {
+                            @Override
+                            public void accept(ArrayList<Item> items) throws Exception {
+                                refreshItemsLoaded(items);
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                onRefreshItemsLoadFail();
+                            }
+                        }
+                );
     }
 
     @Override
@@ -106,7 +158,17 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
     }
 
     @Override
+    public void onLoadItemsFail() {
+
+    }
+
+    @Override
     protected void onLoadMoreItemsFinished(@NonNull List<Item> list) {
+
+    }
+
+    @Override
+    public void onLoadMoreItemsFail() {
 
     }
 
@@ -118,17 +180,8 @@ public class FrgRecyclerView extends BaseFragmentMVPList<PresenterRecyclerView, 
     }
 
     @Override
-    public void onListItemsLoadFail() {
+    public void onRefreshItemsLoadFail() {
 
     }
 
-    @Override
-    public void onListItemsLoadMoreFail() {
-
-    }
-
-    @Override
-    public void onListItemsRefreshFail() {
-
-    }
 }

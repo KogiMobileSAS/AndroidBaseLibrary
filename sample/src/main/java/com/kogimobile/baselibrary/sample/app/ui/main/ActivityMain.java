@@ -8,23 +8,21 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 
-import com.kogimobile.android.baselibrary.app.base.BaseActivityMVP;
+import com.kogimobile.android.baselibrary.app.base.BaseActivity;
 import com.kogimobile.baselibrary.sample.R;
 import com.kogimobile.baselibrary.sample.app.ui.main.events.FrgEvents;
 import com.kogimobile.baselibrary.sample.app.ui.main.navigation.FrgNavigation;
-import com.kogimobile.baselibrary.sample.app.ui.main.presenter.PresenterActivityMain;
-import com.kogimobile.baselibrary.sample.app.ui.main.presenter.PresenterListenerActivityMain;
 import com.kogimobile.baselibrary.sample.app.ui.main.recyclerview.FrgRecyclerView;
 import com.kogimobile.baselibrary.sample.app.ui.main.utils.FrgUtils;
 import com.kogimobile.baselibrary.sample.databinding.ActivityMainBinding;
 
-public class ActivityMain extends BaseActivityMVP<PresenterActivityMain> implements PresenterListenerActivityMain {
+public class ActivityMain extends BaseActivity{
 
     private ActivityMainBinding binding;
 
     @Override
     protected void initVars(){
-        setPresenter(new PresenterActivityMain());
+
     }
 
     @Override
