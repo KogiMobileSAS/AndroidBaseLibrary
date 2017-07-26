@@ -9,8 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.EventBusLifeCycleObserver;
-import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.RxLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.EventBusLifeCycleObserver;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.RxLifeObserver;
 import com.kogimobile.android.baselibrary.app.busevents.utils.EventGhost;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -72,6 +72,10 @@ public abstract class BaseFragment extends Fragment implements LifecycleRegistry
         initVars();
     }
 
+    private void initLifeCycleObservers(){
+        getLifecycle().addObserver(rxLifeObserver);
+        getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
+    }
 
     @CallSuper
     @Override
@@ -79,11 +83,6 @@ public abstract class BaseFragment extends Fragment implements LifecycleRegistry
         super.onViewCreated(view, savedInstanceState);
         initViews();
         initListeners();
-    }
-
-    private void initLifeCycleObservers(){
-        getLifecycle().addObserver(rxLifeObserver);
-        getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
     }
 
     abstract protected void initViews();

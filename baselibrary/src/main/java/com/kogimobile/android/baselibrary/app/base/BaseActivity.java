@@ -19,13 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.EventBusLifeCycleObserver;
-import com.kogimobile.android.baselibrary.app.base.life_cycle_observers.RxLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.EventBusLifeCycleObserver;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.RxLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.navigation.BaseFragmentNavigator;
 import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
 import com.kogimobile.android.baselibrary.app.busevents.progress.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
 import com.kogimobile.android.baselibrary.app.busevents.snackbar.SnackbarEventBuilder;
-import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -90,6 +90,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         return titleStack;
     }
 
+    abstract protected void initVars();
+
     @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +106,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         initViews();
         initListeners();
     }
-
-    abstract protected void initVars();
-
-    abstract protected void initViews();
-
-    abstract protected void initListeners();
 
     @CallSuper
     @Override
@@ -136,6 +132,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         updateActionBarTitle();
     }
 
+    abstract protected void initViews();
+
+    abstract protected void initListeners();
+
     @CallSuper
     @Override
     @Subscribe
@@ -151,7 +151,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         clearKeyboardFromScreen();
         getProgress().setCancelable(event.isCancelable());
         getProgress().setMessage(
-                StringUtils.isBlank(event.getMessage()) ? getString(event.getMessageId()) : event.getMessage()
+                StringUtils.isEmpty(event.getMessage()) ? getString(event.getMessageId()) : event.getMessage()
         );
         getProgress().show();
     }
@@ -165,15 +165,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     private void buildAlertDialog(EventAlertDialog alert){
 
-        String title = StringUtils.isBlank(alert.getTitle()) ? getString(alert.getTitleId()) : alert.getTitle();
-        String message = StringUtils.isBlank(alert.getMessage()) ? getString(alert.getMessageId()) : alert.getMessage();
-        String positive = StringUtils.isBlank(alert.getPositiveButtonText()) ? getString(alert.getPositiveTextId()) : alert.getPositiveButtonText();
-        if(StringUtils.isBlank(positive)){
+        String title = StringUtils.isEmpty(alert.getTitle()) ? getString(alert.getTitleId()) : alert.getTitle();
+        String message = StringUtils.isEmpty(alert.getMessage()) ? getString(alert.getMessageId()) : alert.getMessage();
+        String positive = StringUtils.isEmpty(alert.getPositiveButtonText()) ? getString(alert.getPositiveTextId()) : alert.getPositiveButtonText();
+        if(StringUtils.isEmpty(positive)){
             positive = getString(android.R.string.ok);
         }
 
-        String negative = StringUtils.isBlank(alert.getNegativeButtonText()) ? getString(alert.getNegativeTextId()) : alert.getNegativeButtonText();
-        if(StringUtils.isBlank(negative)){
+        String negative = StringUtils.isEmpty(alert.getNegativeButtonText()) ? getString(alert.getNegativeTextId()) : alert.getNegativeButtonText();
+        if(StringUtils.isEmpty(negative)){
             negative = getString(android.R.string.cancel);
         }
 
@@ -219,8 +219,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     @CallSuper
     public void navigateToActivityRootLevel(Fragment frg, int layoutContainerId, String title) {
-        FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId);
+        BaseFragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
+        BaseFragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId);
         titleStack.clear();
         titleStack.add(title);
         updateActionBarTitle();
@@ -228,7 +228,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     @CallSuper
     public void navigateBackRootLevel() {
-        FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
+        BaseFragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
         String firstTitle = titleStack.get(0);
         titleStack.clear();
         titleStack.add(firstTitle);
@@ -238,7 +238,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     @CallSuper
     public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
         titleStack.add(title);
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId,true);
+        BaseFragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId,true);
         updateActionBarTitle();
     }
 

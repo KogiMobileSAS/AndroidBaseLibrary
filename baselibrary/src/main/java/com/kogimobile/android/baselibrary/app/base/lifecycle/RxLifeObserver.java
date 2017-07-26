@@ -1,4 +1,4 @@
-package com.kogimobile.android.baselibrary.app.base.life_cycle_observers;
+package com.kogimobile.android.baselibrary.app.base.lifecycle;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;

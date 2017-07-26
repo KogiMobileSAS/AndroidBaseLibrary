@@ -1,10 +1,10 @@
-package com.kogimobile.android.baselibrary.navigation;
+package com.kogimobile.android.baselibrary.app.base.navigation;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-public class FragmentNavigator {
+public class BaseFragmentNavigator {
 
     public static void navigateTo(FragmentManager manager, Fragment fragment, int containerId){
         navigateTo(

@@ -5,7 +5,7 @@ package com.kogimobile.android.baselibrary.utils;
  */
 public class StringUtils {
 
-    public static boolean isBlank(CharSequence string){
+    public static boolean isEmpty(CharSequence string){
         return (string == null || string.toString().trim().length() == 0);
     }
 

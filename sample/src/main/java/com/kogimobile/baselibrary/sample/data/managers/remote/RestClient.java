@@ -49,7 +49,7 @@ public class RestClient {
                     String accessToken = ""; // set access token
                     String tokenType = ""; // set token type
 
-                    if (!StringUtils.isBlank(tokenType) && !StringUtils.isBlank(accessToken)) {
+                    if (!StringUtils.isEmpty(tokenType) && !StringUtils.isEmpty(accessToken)) {
                         Header currentHeader = new Header("Authorization", String.format("%s %s", tokenType, accessToken));
                         builder.addHeader(currentHeader.name.utf8(), currentHeader.value.utf8());
                     }
