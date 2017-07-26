@@ -31,7 +31,7 @@ import io.reactivex.functions.Consumer;
 public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
 
     private FrgRecyclerviewBinding binding;
-    private ViewModelRecyclerView viemodel;
+    private ViewModelRecyclerView viewModel;
 
     public static FrgRecyclerView newInstance() {
         FrgRecyclerView fragment = new FrgRecyclerView();
@@ -49,7 +49,7 @@ public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.viemodel = ViewModelProviders.of(this).get(ViewModelRecyclerView.class);
+        this.viewModel = ViewModelProviders.of(this).get(ViewModelRecyclerView.class);
         doLoadItems();
     }
 
@@ -90,18 +90,13 @@ public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     protected void onDoLoadItems() {
-        this.viemodel.getListItems()
+        this.viewModel.getListItems()
                 .subscribe(
                         new Consumer<ArrayList<Item>>() {
                                @Override
                                public void accept(ArrayList<Item> items) throws Exception {
-                                   itemsLoaded(items,viemodel.hasMoreToLoad());
+                                   itemsLoaded(items, viewModel.hasMoreToLoad());
                                }
                            },
                         new Consumer<Throwable>() {
@@ -115,12 +110,12 @@ public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
 
     @Override
     protected void onDoLoadMoreItems() {
-        this.viemodel.getMoreListItems()
+        this.viewModel.getMoreListItems()
                 .subscribe(
                         new Consumer<ArrayList<Item>>() {
                             @Override
                             public void accept(ArrayList<Item> items) throws Exception {
-                                moreItemsLoaded(items,viemodel.hasMoreToLoad());
+                                moreItemsLoaded(items, viewModel.hasMoreToLoad());
                                 onLoadMoreItemsFinished(items);
                             }
                         },
@@ -135,7 +130,7 @@ public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
 
     @Override
     protected void onDoRefreshItems() {
-        this.viemodel.getMoreListItems()
+        this.viewModel.getMoreListItems()
                 .subscribe(
                         new Consumer<ArrayList<Item>>() {
                             @Override
