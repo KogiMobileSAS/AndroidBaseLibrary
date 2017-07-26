@@ -7,10 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,9 +18,9 @@ import com.kogimobile.baselibrary.sample.R;
 import com.kogimobile.baselibrary.sample.databinding.FrgRecyclerviewBinding;
 import com.kogimobile.baselibrary.sample.entities.Item;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -54,26 +53,24 @@ public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
     }
 
     @Override
+    protected RecyclerView getRecyclerView() {
+        return this.binding.recyclerView;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.binding = DataBindingUtil.inflate(inflater, R.layout.frg_recyclerview, container, false);
         return this.binding.getRoot();
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void initViews() {
-        setRecyclerView(this.binding.recyclerView);
         getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
         getRecyclerView().setHasFixedSize(true);
+    }
+
+    @Override
+    protected void initListeners() {
         this.binding.swipeRefresh.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -85,98 +82,38 @@ public class FrgRecyclerView extends BaseFragmentRecyclerView<Item>{
     }
 
     @Override
-    protected void initListeners() {
-
+    protected Single<Pair<List<Item>, Boolean>> getItemsFromSource() {
+        return this.viewModel.getListItems();
     }
 
     @Override
-    protected void onDoLoadItems() {
-        this.viewModel.getListItems()
-                .subscribe(
-                        new Consumer<ArrayList<Item>>() {
-                               @Override
-                               public void accept(ArrayList<Item> items) throws Exception {
-                                   itemsLoaded(items, viewModel.hasMoreToLoad());
-                               }
-                           },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                onLoadItemsFail();
-                            }
-                        }
-                );
+    protected Single<Pair<List<Item>, Boolean>> getMoreItemsFromSource() {
+        return this.viewModel.getMoreListItems();
     }
 
+    @NonNull
     @Override
-    protected void onDoLoadMoreItems() {
-        this.viewModel.getMoreListItems()
-                .subscribe(
-                        new Consumer<ArrayList<Item>>() {
-                            @Override
-                            public void accept(ArrayList<Item> items) throws Exception {
-                                moreItemsLoaded(items, viewModel.hasMoreToLoad());
-                                onLoadMoreItemsFinished(items);
-                            }
-                        },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                onLoadMoreItemsFail();
-                            }
-                        }
-                );
+    protected Consumer<Pair<List<Item>, Boolean>> onRefreshItemsLoadSuccess() {
+        return new Consumer<Pair<List<Item>, Boolean>>() {
+            @Override
+            public void accept(Pair<List<Item>, Boolean> listBooleanPair) throws Exception {
+                hideRefresh();
+            }
+        };
     }
 
+    @NonNull
     @Override
-    protected void onDoRefreshItems() {
-        this.viewModel.getMoreListItems()
-                .subscribe(
-                        new Consumer<ArrayList<Item>>() {
-                            @Override
-                            public void accept(ArrayList<Item> items) throws Exception {
-                                refreshItemsLoaded(items);
-                            }
-                        },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                onRefreshItemsLoadFail();
-                            }
-                        }
-                );
+    protected Consumer<Throwable> onRefreshItemsLoadFail() {
+        return new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                hideRefresh();
+            }
+        };
     }
 
-    @Override
-    protected void onLoadItemsFinished(@NonNull List<Item> list) {
-
+    private void hideRefresh(){
+        this.binding.swipeRefresh.setRefreshing(false);
     }
-
-    @Override
-    public void onLoadItemsFail() {
-
-    }
-
-    @Override
-    protected void onLoadMoreItemsFinished(@NonNull List<Item> list) {
-
-    }
-
-    @Override
-    public void onLoadMoreItemsFail() {
-
-    }
-
-    @Override
-    protected void onRefreshItemsFinished(@NonNull List<Item> list) {
-        if (this.binding.swipeRefresh != null) {
-            this.binding.swipeRefresh.setRefreshing(false);
-        }
-    }
-
-    @Override
-    public void onRefreshItemsLoadFail() {
-
-    }
-
 }

@@ -90,7 +90,6 @@ public abstract class BaseFragment extends Fragment implements LifecycleRegistry
     abstract protected void initListeners();
 
     @Subscribe
-    public void onEventGhost(EventGhost event) {
-    }
+    public void onEventGhost(EventGhost event) {}
 
 }
