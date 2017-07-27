@@ -2,7 +2,7 @@ package com.kogimobile.baselibrary.sample.app.ui.main;
 
 import com.kogimobile.android.baselibrary.app.base.BaseActivityInnerNavigation;
 import com.kogimobile.android.baselibrary.app.base.BaseFragment;
-import com.kogimobile.android.baselibrary.app.base.navigation.BaseInnerNavigationControllerActivityInner;
+import com.kogimobile.android.baselibrary.app.base.navigation.BaseActivityInnerNavigationController;
 import com.kogimobile.android.baselibrary.app.development.TestFragment;
 import com.kogimobile.baselibrary.sample.R;
 import com.kogimobile.baselibrary.sample.app.ui.main.events.FrgEvents;
@@ -16,7 +16,7 @@ import java.util.HashMap;
  * @author Julian Cardona on 6/15/17.
  */
 
-public class NavigationControllerActivityMain extends BaseInnerNavigationControllerActivityInner {
+public class NavigationControllerActivityMain extends BaseActivityInnerNavigationController {
 
     private HashMap<String,BaseFragment> navFragments;
 

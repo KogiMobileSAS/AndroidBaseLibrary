@@ -10,7 +10,7 @@ import com.kogimobile.android.baselibrary.app.base.BaseActivityInnerNavigation;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class BaseInnerNavigationControllerActivityInner extends BaseNavigationController {
+public class BaseActivityInnerNavigationController extends BaseActivityNavigationController {
 
     private final int innerNavContainerId;
     private ArrayList<String> titleStack = new ArrayList<>();
@@ -24,7 +24,7 @@ public class BaseInnerNavigationControllerActivityInner extends BaseNavigationCo
         return titleStack;
     }
 
-    public BaseInnerNavigationControllerActivityInner(BaseActivityInnerNavigation weakRefActivity, @IdRes int innerNavContainerId) {
+    public BaseActivityInnerNavigationController(BaseActivityInnerNavigation weakRefActivity, @IdRes int innerNavContainerId) {
         super(weakRefActivity.getSupportFragmentManager());
         this.weakRefActivity = new WeakReference<>(weakRefActivity);
         this.innerNavContainerId = innerNavContainerId;

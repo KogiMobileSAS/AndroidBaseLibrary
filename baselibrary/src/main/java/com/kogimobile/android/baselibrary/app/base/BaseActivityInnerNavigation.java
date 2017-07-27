@@ -2,12 +2,10 @@ package com.kogimobile.android.baselibrary.app.base;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 
-import com.kogimobile.android.baselibrary.R;
-import com.kogimobile.android.baselibrary.app.base.navigation.BaseInnerNavigationControllerActivityInner;
+import com.kogimobile.android.baselibrary.app.base.navigation.BaseActivityInnerNavigationController;
 
 import java.util.ArrayList;
 
@@ -21,19 +19,10 @@ public abstract class BaseActivityInnerNavigation extends BaseActivity{
     private static final int HOME_UP_INDICATOR_ARROW = 0;
 
     private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
-    private BaseInnerNavigationControllerActivityInner navigationController;
 
-    protected <N extends BaseInnerNavigationControllerActivityInner> N getNavigationControllerOf(Class<N> clazz) {
-        if(navigationController == null){
-            navigationController = new BaseInnerNavigationControllerActivityInner(this, R.id.container);
-        }
-        return clazz.cast(navigationController);
-    }
-
-    public abstract @NonNull <N extends BaseInnerNavigationControllerActivityInner> N getNavigationController();
-
-    protected void setNavigationController(BaseInnerNavigationControllerActivityInner navigationController) {
-        this.navigationController = navigationController;
+    @Override
+    protected BaseActivityInnerNavigationController getNavigationController() {
+        return super.getNavigationController();
     }
 
     @CallSuper
@@ -59,15 +48,15 @@ public abstract class BaseActivityInnerNavigation extends BaseActivity{
     @CallSuper
     public void updateActionBarTitle() {
         if (getSupportActionBar() != null) {
-            if (getNavigationControllerOf(BaseInnerNavigationControllerActivityInner.class).getTitleStack().size() > 0) {
-                getSupportActionBar().setTitle(getNavigationControllerOf(BaseInnerNavigationControllerActivityInner.class).getTitleStack().get(getNavigationController().getTitleStack().size() - 1));
+            if (getNavigationController().getTitleStack().size() > 0) {
+                getSupportActionBar().setTitle(getNavigationController().getTitleStack().get(getNavigationController().getTitleStack().size() - 1));
                 updateActionBarUpIndicator();
             }
         }
     }
 
     public ArrayList<String> getTitleStack(){
-        return getNavigationControllerOf(BaseInnerNavigationControllerActivityInner.class).getTitleStack();
+        return getNavigationController().getTitleStack();
     }
 
     @CallSuper
@@ -114,9 +103,9 @@ public abstract class BaseActivityInnerNavigation extends BaseActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if ((getNavigationControllerOf(BaseInnerNavigationControllerActivityInner.class).getTitleStack().size()) > 0) {
+        if ((getNavigationController().getTitleStack().size()) > 0) {
             getNavigationController().getTitleStack().remove(getNavigationController().getTitleStack().size() - 1);
-            if ((getNavigationControllerOf(BaseInnerNavigationControllerActivityInner.class).getTitleStack().size()) > 0) {
+            if ((getNavigationController().getTitleStack().size()) > 0) {
                 updateActionBarTitle();
             }
         }

@@ -32,7 +32,7 @@ public class ActivityMain extends BaseActivityInnerNavigation{
     @NonNull
     @Override
     public NavigationControllerActivityMain getNavigationController() {
-        return getNavigationControllerOf(NavigationControllerActivityMain.class);
+        return (NavigationControllerActivityMain) super.getNavigationController();
     }
 
     @Override

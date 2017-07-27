@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentTransaction;
  * @author Julian Cardona on 6/15/17.
  */
 
-public class BaseNavigationController {
+public class BaseActivityNavigationController {
 
     private final FragmentManager fragmentManager;
 
-    public BaseNavigationController(FragmentManager fragmentManager) {
+    public BaseActivityNavigationController(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
 

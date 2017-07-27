@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.kogimobile.android.baselibrary.app.base.lifecycle.EventBusLifeCycleObserver;
 import com.kogimobile.android.baselibrary.app.base.lifecycle.RxLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.navigation.BaseActivityNavigationController;
 import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
 import com.kogimobile.android.baselibrary.app.busevents.progress.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
@@ -53,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     private final RxLifeObserver rxLifeObserver = new RxLifeObserver();
     private final EventBusLifeCycleObserver busLifeObserver = new EventBusLifeCycleObserver(this);
 
+    private Object navigationController;
     private ProgressDialog progress;
 
     @Override
@@ -74,6 +76,17 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     public CompositeDisposable getDisposablesForever() {
         return rxLifeObserver.getDisposablesForever();
+    }
+
+    protected <N extends BaseActivityNavigationController> N getNavigationController(){
+        if(navigationController == null){
+            navigationController = new BaseActivityNavigationController(getSupportFragmentManager());
+        }
+        return (N) navigationController;
+    }
+
+    protected <N extends BaseActivityNavigationController> void setNavigationController(N navigationController) {
+        this.navigationController = navigationController;
     }
 
     abstract protected void initVars();
