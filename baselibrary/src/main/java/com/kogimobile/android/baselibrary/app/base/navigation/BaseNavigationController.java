@@ -4,25 +4,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import com.kogimobile.android.baselibrary.R;
-import com.kogimobile.android.baselibrary.app.base.BaseActivity;
-
 /**
  * @author Julian Cardona on 6/15/17.
  */
 
 public class BaseNavigationController {
 
-    private final int containerId;
     private final FragmentManager fragmentManager;
 
-    public BaseNavigationController(BaseActivity activity) {
-        this.containerId = R.id.container;
-        this.fragmentManager = activity.getSupportFragmentManager();
-    }
-
-    public int getContainerId() {
-        return containerId;
+    public BaseNavigationController(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
 
     public FragmentManager getFragmentManager() {
