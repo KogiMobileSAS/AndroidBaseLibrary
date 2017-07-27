@@ -16,11 +16,11 @@ import java.util.HashMap;
  * @author Julian Cardona on 6/15/17.
  */
 
-public class NavigatorMainControllerActivityInnerMain extends BaseInnerNavigationControllerActivityInner {
+public class NavigationControllerActivityMain extends BaseInnerNavigationControllerActivityInner {
 
     private HashMap<String,BaseFragment> navFragments;
 
-    public NavigatorMainControllerActivityInnerMain(BaseActivityInnerNavigation activity) {
+    public NavigationControllerActivityMain(BaseActivityInnerNavigation activity) {
         super(activity,R.id.container);
         initFragments();
     }

@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kogimobile.android.baselibrary.app.base.BaseActivity;
 import com.kogimobile.android.baselibrary.app.base.BaseFragment;
 import com.kogimobile.baselibrary.sample.R;
+import com.kogimobile.baselibrary.sample.app.ui.main.ActivityMain;
 import com.kogimobile.baselibrary.sample.databinding.FrgNavigationBinding;
 
 /**
@@ -70,15 +70,16 @@ public class FrgNavigation extends BaseFragment implements EventHandlerNavigatio
 
     @Override
     public void onClickRoot() {
-        ((BaseActivity)getActivity()).navigateBackRootLevel();
+        ((ActivityMain)getActivity()).navigateBackRootLevel();
     }
 
     @Override
     public void onClickLowLevel() {
-        ((BaseActivity)getActivity())
-                .navigateToActivityLowLevel(
-                        FrgNavigation.newInstance(getActivity().getSupportFragmentManager().getBackStackEntryCount() + 1),
-                        R.id.container,
-                        getString(R.string.frg_navigation_title));
+        int stackCount = getActivity().getSupportFragmentManager().getBackStackEntryCount() + 1;
+        ((ActivityMain)getActivity())
+                .navigateSection1LowLevel(
+                        FrgNavigation.newInstance(stackCount),
+                        String.format("%s %d",getString(R.string.frg_navigation_title),stackCount)
+                );
     }
 }

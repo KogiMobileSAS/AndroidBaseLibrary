@@ -23,8 +23,8 @@ public class EventBusLifeCycleObserver implements LifecycleObserver {
         EventBus.getDefault().register(subscriber);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void onStop(){
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onPause(){
         EventBus.getDefault().unregister(subscriber);
     }
 

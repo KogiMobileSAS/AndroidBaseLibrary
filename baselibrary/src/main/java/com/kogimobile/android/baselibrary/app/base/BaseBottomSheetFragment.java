@@ -23,6 +23,7 @@ public abstract class BaseBottomSheetFragment extends BottomSheetDialogFragment 
 
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     private final RxLifeObserver rxLifeObserver = new RxLifeObserver();
+    private final EventBusLifeCycleObserver busLifeObserver = new EventBusLifeCycleObserver(this);
 
     @Override
     public LifecycleRegistry getLifecycle() {
@@ -56,7 +57,7 @@ public abstract class BaseBottomSheetFragment extends BottomSheetDialogFragment 
 
     private void initLifeCycleObservers(){
         getLifecycle().addObserver(rxLifeObserver);
-        getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
+        getLifecycle().addObserver(busLifeObserver);
     }
 
     @Subscribe

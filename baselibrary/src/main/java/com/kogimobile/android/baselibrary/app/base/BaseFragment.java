@@ -39,7 +39,8 @@ import io.reactivex.disposables.Disposable;
 public abstract class BaseFragment extends Fragment implements LifecycleRegistryOwner{
 
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
-    private RxLifeObserver rxLifeObserver = new RxLifeObserver();
+    private final RxLifeObserver rxLifeObserver = new RxLifeObserver();
+    private final EventBusLifeCycleObserver busLifeObserver = new EventBusLifeCycleObserver(this);
 
     @Override
     public LifecycleRegistry getLifecycle() {
@@ -74,7 +75,7 @@ public abstract class BaseFragment extends Fragment implements LifecycleRegistry
 
     private void initLifeCycleObservers(){
         getLifecycle().addObserver(rxLifeObserver);
-        getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
+        getLifecycle().addObserver(busLifeObserver);
     }
 
     @CallSuper

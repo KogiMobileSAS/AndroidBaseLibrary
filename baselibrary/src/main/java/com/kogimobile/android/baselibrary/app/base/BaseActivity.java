@@ -6,22 +6,18 @@ import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.kogimobile.android.baselibrary.app.base.lifecycle.EventBusLifeCycleObserver;
 import com.kogimobile.android.baselibrary.app.base.lifecycle.RxLifeObserver;
-import com.kogimobile.android.baselibrary.app.base.navigation.BaseFragmentNavigator;
 import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
 import com.kogimobile.android.baselibrary.app.busevents.progress.EventProgressDialog;
 import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
@@ -29,8 +25,6 @@ import com.kogimobile.android.baselibrary.app.busevents.snackbar.SnackbarEventBu
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -55,15 +49,11 @@ import io.reactivex.disposables.Disposable;
  */
 public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener,LifecycleRegistryOwner {
 
-    private static final int HOME_UP_INDICATOR_NONE = -1;
-    private static final int HOME_UP_INDICATOR_ARROW = 0;
-
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
-    private RxLifeObserver rxLifeObserver = new RxLifeObserver();
-    private ArrayList<String> titleStack = new ArrayList<String>();
+    private final RxLifeObserver rxLifeObserver = new RxLifeObserver();
+    private final EventBusLifeCycleObserver busLifeObserver = new EventBusLifeCycleObserver(this);
+
     private ProgressDialog progress;
-    private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
-    private boolean enableTitleStack = true;
 
     @Override
     public LifecycleRegistry getLifecycle() {
@@ -86,10 +76,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         return rxLifeObserver.getDisposablesForever();
     }
 
-    public ArrayList<String> getTitleStack() {
-        return titleStack;
-    }
-
     abstract protected void initVars();
 
     @CallSuper
@@ -107,29 +93,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         initListeners();
     }
 
-    @CallSuper
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if ((titleStack.size() == 0 && homeUpIndicator != HOME_UP_INDICATOR_NONE) || titleStack.size() > 0) {
-                    onBackPressed();
-                }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void initLifeCycleObservers(){
         getLifecycle().addObserver(rxLifeObserver);
-        getLifecycle().addObserver(new EventBusLifeCycleObserver(this));
-    }
-
-    @CallSuper
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateActionBarTitle();
+        getLifecycle().addObserver(busLifeObserver);
     }
 
     abstract protected void initViews();
@@ -217,74 +183,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         }
     }
 
-    @CallSuper
-    public void navigateToActivityRootLevel(Fragment frg, int layoutContainerId, String title) {
-        BaseFragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
-        BaseFragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId);
-        titleStack.clear();
-        titleStack.add(title);
-        updateActionBarTitle();
-    }
-
-    @CallSuper
-    public void navigateBackRootLevel() {
-        BaseFragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
-        String firstTitle = titleStack.get(0);
-        titleStack.clear();
-        titleStack.add(firstTitle);
-        updateActionBarTitle();
-    }
-
-    @CallSuper
-    public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
-        titleStack.add(title);
-        BaseFragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId,true);
-        updateActionBarTitle();
-    }
-
-    @CallSuper
-    public void updateActionBarTitle() {
-        if (getSupportActionBar() != null && isTitleStackEnabled()) {
-            if (titleStack.size() > 0) {
-                getSupportActionBar().setTitle(titleStack.get(titleStack.size() - 1));
-                updateActionBarUpIndicator();
-            }
-        }
-    }
-
-    public void updateActionBarUpIndicator() {
-        if (titleStack.size() > 1) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
-                Drawable upIndicator;
-                if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
-                    upIndicator = ContextCompat.getDrawable(this, homeUpIndicator);
-                } else {
-                    upIndicator = getDrawerToggleDelegate().getThemeUpIndicator();
-                }
-                getSupportActionBar().setHomeAsUpIndicator(upIndicator);
-            }
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-        if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
-            if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
-                getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
-            } else {
-                getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
-            }
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-    }
-
-    @CallSuper
-    public void setHomeAsUpIndicator(int resourceId) {
-        homeUpIndicator = resourceId;
-        updateActionBarUpIndicator();
-    }
-
     public void openUrlWebPage(String url, int colorId) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(this, colorId));
@@ -293,21 +191,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    public void enableHomeBackArrowIndicator() {
-        homeUpIndicator = HOME_UP_INDICATOR_ARROW;
-        updateActionBarUpIndicator();
-    }
-
-    @CallSuper
     @Override
     public void onBackPressed() {
         clearKeyboardFromScreen();
-        if (isTitleStackEnabled() && (titleStack.size()) > 0) {
-            titleStack.remove(titleStack.size() - 1);
-            if ((titleStack.size()) > 0) {
-                updateActionBarTitle();
-            }
-        }
         super.onBackPressed();
     }
 
@@ -316,14 +202,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
             progress = new ProgressDialog(this);
         }
         return progress;
-    }
-
-    public boolean isTitleStackEnabled() {
-        return enableTitleStack;
-    }
-
-    public void setEnableTitleStack(boolean enableTitleStack) {
-        this.enableTitleStack = enableTitleStack;
     }
 
     public void sendSuccessResult(Intent data) {

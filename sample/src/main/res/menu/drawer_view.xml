@@ -21,6 +21,14 @@
             android:icon="@mipmap/ic_launcher"
             android:title="@string/nav_drawer_item_section_4"/>
 
+
     </group>
+
+    <group android:id="@+id/sub_sections">
+        <item
+            android:id="@+id/nav_subsection_1"
+            android:title="@string/nav_drawer_item_sub_section_1"/>
+    </group>
+
 
 </menu>
