@@ -3,7 +3,9 @@ package com.kogimobile.android.baselibrary.app.base;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 
 import com.kogimobile.android.baselibrary.app.base.lifecycle.EventBusLifeCycleObserver;
@@ -48,11 +50,11 @@ public abstract class BaseBottomSheetFragment extends BottomSheetDialogFragment 
 
     abstract protected void initVars();
 
-    @CallSuper
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
-        initLifeCycleObservers();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initVars();
+        initLifeCycleObservers();
     }
 
     private void initLifeCycleObservers(){
