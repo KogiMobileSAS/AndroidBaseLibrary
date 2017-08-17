@@ -135,9 +135,20 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
         getAdapter().notifyDataSetChanged();
         getAdapter().checkLoadingViewState();
         getItemsFromSource()
+                .doOnError(getActionOnLoadError())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(getFuncActionItemsLoaded())
                 .subscribe(onLoadItemsSuccess(),onLoadItemsFail());
+    }
+
+    @NonNull
+    private Consumer<Throwable> getActionOnLoadError() {
+        return new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                doCancelLoading();
+            }
+        };
     }
 
     @NonNull
@@ -173,13 +184,10 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
         };
     }
 
-    @CallSuper
     protected @NonNull Consumer<Throwable> onLoadItemsFail(){
         return new Consumer<Throwable>() {
             @Override
-            public void accept(Throwable throwable) throws Exception {
-                doCancelLoading();
-            }
+            public void accept(Throwable throwable) throws Exception {}
         };
     }
 
@@ -191,6 +199,7 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
         getAdapter().checkLoadingMoreViewState();
         getRecyclerView().smoothScrollToPosition(getAdapter().getItemCount() - 1);
         getMoreItemsFromSource()
+                .doOnError(getActionOnLoadError())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(getFuncActionMoreItemsLoaded())
                 .subscribe(onLoadMoreItemsSuccess(),onLoadMoreItemsFail());
@@ -229,13 +238,10 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
         };
     }
 
-    @CallSuper
     protected @NonNull Consumer<Throwable> onLoadMoreItemsFail(){
         return new Consumer<Throwable>() {
             @Override
-            public void accept(Throwable throwable) throws Exception {
-                doCancelLoading();
-            }
+            public void accept(Throwable throwable) throws Exception {}
         };
     }
 
@@ -246,8 +252,9 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
     protected void doRefreshItems() {
         getAdapter().setLoadMoreEnabled(false);
         getAdapter().setRefreshing(true);
-        getItemsFromSource().
-                observeOn(AndroidSchedulers.mainThread())
+        getItemsFromSource()
+                .doOnError(getActionOnLoadError())
+                .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(getFuncActionRefreshItems())
                 .subscribe(onRefreshItemsLoadSuccess(),onRefreshItemsLoadFail());
     }
@@ -272,19 +279,14 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
     protected @NonNull Consumer<Pair<List<M>,Boolean>> onRefreshItemsLoadSuccess(){
         return new Consumer<Pair<List<M>, Boolean>>() {
             @Override
-            public void accept(Pair<List<M>, Boolean> listBooleanPair) throws Exception {
-
-            }
+            public void accept(Pair<List<M>, Boolean> listBooleanPair) throws Exception {}
         };
     }
 
-    @CallSuper
     protected @NonNull Consumer<Throwable> onRefreshItemsLoadFail(){
         return new Consumer<Throwable>() {
             @Override
-            public void accept(Throwable throwable) throws Exception {
-                doCancelLoading();
-            }
+            public void accept(Throwable throwable) throws Exception {}
         };
     }
 
