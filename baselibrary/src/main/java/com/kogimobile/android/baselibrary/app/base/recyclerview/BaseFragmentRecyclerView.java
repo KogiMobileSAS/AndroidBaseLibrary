@@ -173,11 +173,12 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
         };
     }
 
+    @CallSuper
     protected @NonNull Consumer<Throwable> onLoadItemsFail(){
         return new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-
+                doCancelLoading();
             }
         };
     }
@@ -228,11 +229,12 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
         };
     }
 
+    @CallSuper
     protected @NonNull Consumer<Throwable> onLoadMoreItemsFail(){
         return new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-
+                doCancelLoading();
             }
         };
     }
@@ -276,11 +278,12 @@ public abstract class BaseFragmentRecyclerView<M> extends BaseFragment {
         };
     }
 
+    @CallSuper
     protected @NonNull Consumer<Throwable> onRefreshItemsLoadFail(){
         return new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-
+                doCancelLoading();
             }
         };
     }

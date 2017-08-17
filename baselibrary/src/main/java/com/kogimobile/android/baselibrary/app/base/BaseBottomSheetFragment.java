@@ -2,9 +2,7 @@ package com.kogimobile.android.baselibrary.app.base;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 
