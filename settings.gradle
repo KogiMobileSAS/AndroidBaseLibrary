@@ -1,1 +1,1 @@
-include ':baselibrary', ':restclient'
+include ':baselibrary', ':restclient', ':sample'

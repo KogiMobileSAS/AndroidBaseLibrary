@@ -1,0 +1,6 @@
+<resources>
+
+    <!--Navigation Drawer-->
+    <dimen name="nav_drawer_header_size">135dp</dimen>
+
+</resources>

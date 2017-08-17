@@ -8,7 +8,7 @@ import com.kogimobile.android.baselibrary.utils.RestDelegate;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-import retrofit2.adapter.rxjava.HttpException;
+import retrofit2.adapter.rxjava2.HttpException;
 
 /**
  * @author Julian Cardona on 11/13/14.

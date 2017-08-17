@@ -1,42 +1,34 @@
 package com.kogimobile.android.baselibrary.app.base;
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.LayoutRes;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
-import com.kogimobile.android.baselibrary.app.busevents.EventAlertDialog;
-import com.kogimobile.android.baselibrary.app.busevents.EventProgressDialog;
-import com.kogimobile.android.baselibrary.app.busevents.EventSnackbarMessage;
-import com.kogimobile.android.baselibrary.app.busevents.EventToastMessage;
-import com.kogimobile.android.baselibrary.app.busevents.utils.SnackbarEventBuilder;
-import com.kogimobile.android.baselibrary.navigation.FragmentNavigator;
-import com.kogimobile.android.baselibrary.navigation.FragmentNavigatorOptions;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.EventBusLifeCycleObserver;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.RxLifeObserver;
+import com.kogimobile.android.baselibrary.app.base.navigation.BaseActivityNavigationController;
+import com.kogimobile.android.baselibrary.app.busevents.alert.EventAlertDialog;
+import com.kogimobile.android.baselibrary.app.busevents.progress.EventProgressDialog;
+import com.kogimobile.android.baselibrary.app.busevents.snackbar.EventSnackbarMessage;
+import com.kogimobile.android.baselibrary.app.busevents.snackbar.SnackbarEventBuilder;
 import com.kogimobile.android.baselibrary.utils.StringUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author Julian Cardona. julian@kogimobile.com
@@ -54,48 +46,70 @@ import rx.subscriptions.CompositeSubscription;
  *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
- * @modified Pedro Scott. scott7462@gmail.com
+ * @modified Pedro Scott. pedro@kogimobile.com
  */
-public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener {
+public abstract class BaseActivity extends AppCompatActivity implements BaseEventBusListener,LifecycleRegistryOwner {
 
-    private static final int HOME_UP_INDICATOR_NONE = -1;
-    private static final int HOME_UP_INDICATOR_ARROW = 0;
+    private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
+    private final RxLifeObserver rxLifeObserver = new RxLifeObserver();
+    private final EventBusLifeCycleObserver busLifeObserver = new EventBusLifeCycleObserver(this);
 
-    private CompositeSubscription subscription = new CompositeSubscription();
-    private ArrayList<String> titleStack = new ArrayList<String>();
-    private Unbinder unbinder;
+    private Object navigationController;
     private ProgressDialog progress;
-    private int homeUpIndicator = HOME_UP_INDICATOR_NONE;
-    private boolean enableTitleStack = true;
 
-    public CompositeSubscription getSubscription() {
-        return subscription;
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return this.mRegistry;
     }
 
-    public ArrayList<String> getTitleStack() {
-        return titleStack;
+    public void addDisposable(Disposable disposable){
+        rxLifeObserver.addDisposable(disposable);
     }
 
-    public void addSubscription(Subscription serviceSubscription) {
-        this.subscription.add(serviceSubscription);
+    public void addDisposableForever(Disposable disposable){
+        rxLifeObserver.addDisposableForever(disposable);
     }
+
+    public CompositeDisposable getDisposables() {
+        return rxLifeObserver.getDisposables();
+    }
+
+    public CompositeDisposable getDisposablesForever() {
+        return rxLifeObserver.getDisposablesForever();
+    }
+
+    protected <N extends BaseActivityNavigationController> N getNavigationController(){
+        if(navigationController == null){
+            navigationController = new BaseActivityNavigationController(getSupportFragmentManager());
+        }
+        return (N) navigationController;
+    }
+
+    protected <N extends BaseActivityNavigationController> void setNavigationController(N navigationController) {
+        this.navigationController = navigationController;
+    }
+
+    abstract protected void initVars();
 
     @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progress = new ProgressDialog(this);
-        progress.setCancelable(false);
+        initLifeCycleObservers();
         initVars();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        initViews();
+        initListeners();
     }
 
-    abstract protected void initVars();
+    private void initLifeCycleObservers(){
+        getLifecycle().addObserver(rxLifeObserver);
+        getLifecycle().addObserver(busLifeObserver);
+    }
 
     abstract protected void initViews();
 
@@ -103,73 +117,56 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
 
     @CallSuper
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if ((titleStack.size() == 0 && homeUpIndicator != HOME_UP_INDICATOR_NONE) || titleStack.size() > 0) {
-                    onBackPressed();
-                }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @CallSuper
-    @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
-        this.unbinder = ButterKnife.bind(this);
-        initViews();
-        initListeners();
-    }
-
-    @CallSuper
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateActionBarTitle();
-    }
-
-    @CallSuper
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-    @CallSuper
-    @Override
     @Subscribe
     public void onProgressDialogEvent(EventProgressDialog event) {
-        if (event.isShown()) {
-            clearKeyboardFromScreen();
-            if (progress.isShowing()) {
-                progress.dismiss();
-            }
-            progress.setMessage(event.getProgressDialogMessage());
-            progress.show();
-        } else {
-            if (progress.isShowing()) {
-                progress.dismiss();
-            }
+        buildProgressDialog(event);
+    }
+
+    private void buildProgressDialog(EventProgressDialog event){
+        getProgress().dismiss();
+        if(event.isDismiss()){
+            return;
         }
+        clearKeyboardFromScreen();
+        getProgress().setCancelable(event.isCancelable());
+        getProgress().setMessage(
+                StringUtils.isEmpty(event.getMessage()) ? getString(event.getMessageId()) : event.getMessage()
+        );
+        getProgress().show();
     }
 
     @CallSuper
     @Override
     @Subscribe
     public void onAlertDialogEvent(EventAlertDialog alert) {
+        buildAlertDialog(alert);
+    }
+
+    private void buildAlertDialog(EventAlertDialog alert){
+
+        String title = StringUtils.isEmpty(alert.getTitle()) ? getString(alert.getTitleId()) : alert.getTitle();
+        String message = StringUtils.isEmpty(alert.getMessage()) ? getString(alert.getMessageId()) : alert.getMessage();
+        String positive = StringUtils.isEmpty(alert.getPositiveButtonText()) ? getString(alert.getPositiveTextId()) : alert.getPositiveButtonText();
+        if(StringUtils.isEmpty(positive)){
+            positive = getString(android.R.string.ok);
+        }
+
+        String negative = StringUtils.isEmpty(alert.getNegativeButtonText()) ? getString(alert.getNegativeTextId()) : alert.getNegativeButtonText();
+        if(StringUtils.isEmpty(negative)){
+            negative = getString(android.R.string.cancel);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(alert.getTitle())
-                .setMessage(alert.getMessage())
+                .setTitle(title)
+                .setMessage(message)
                 .setCancelable(alert.isCancellable())
-                .setPositiveButton(StringUtils.isBlank(alert.getPositiveButtonText()) ? getString(android.R.string.ok) : alert.getPositiveButtonText(), alert.getPositiveListener() == null ? new DialogInterface.OnClickListener() {
+                .setPositiveButton(positive, alert.getPositiveListener() == null ? new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 } : alert.getPositiveListener());
         if (alert.getNegativeListener() != null) {
-            builder.setNegativeButton(StringUtils.isBlank(alert.getNegativeButtonText()) ? getString(android.R.string.cancel) : alert.getNegativeButtonText(), alert.getNegativeListener() == null ? new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(negative, alert.getNegativeListener() == null ? new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -177,13 +174,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
             } : alert.getNegativeListener());
         }
         builder.show();
-    }
-
-    @CallSuper
-    @Override
-    @Subscribe
-    public void onToastMessageEvent(EventToastMessage event) {
-        Toast.makeText(this, event.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @CallSuper
@@ -206,65 +196,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
         }
     }
 
-    @CallSuper
-    public void navigateToActivityLowLevel(Fragment frg, int layoutContainerId, String title) {
-        titleStack.add(title);
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(true));
-        updateActionBarTitle();
-    }
-
-    @CallSuper
-    public void navigateToActivityRootLevel(Fragment frg, int layoutContainerId, String title) {
-        FragmentNavigator.cleanFragmentStack(getSupportFragmentManager());
-        FragmentNavigator.navigateTo(getSupportFragmentManager(), frg, layoutContainerId, new FragmentNavigatorOptions().setAddingToStack(false));
-        titleStack.clear();
-        titleStack.add(title);
-        updateActionBarTitle();
-    }
-
-    @CallSuper
-    public void updateActionBarTitle() {
-        if (getSupportActionBar() != null && isTitleStackEnabled()) {
-            if (titleStack.size() > 0) {
-                getSupportActionBar().setTitle(titleStack.get(titleStack.size() - 1));
-                updateActionBarUpIndicator();
-            }
-        }
-    }
-
-    public void updateActionBarUpIndicator() {
-        if (titleStack.size() > 1) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
-                Drawable upIndicator;
-                if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
-                    upIndicator = ContextCompat.getDrawable(this, homeUpIndicator);
-                } else {
-                    upIndicator = getDrawerToggleDelegate().getThemeUpIndicator();
-                }
-                getSupportActionBar().setHomeAsUpIndicator(upIndicator);
-            }
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-        if (homeUpIndicator != HOME_UP_INDICATOR_NONE) {
-            if (homeUpIndicator != HOME_UP_INDICATOR_ARROW) {
-                getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, homeUpIndicator));
-            } else {
-                getSupportActionBar().setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
-            }
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-    }
-
-    @CallSuper
-    public void setHomeAsUpIndicator(int resourceId) {
-        homeUpIndicator = resourceId;
-        updateActionBarUpIndicator();
-    }
-
     public void openUrlWebPage(String url, int colorId) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(this, colorId));
@@ -273,42 +204,17 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseEven
     }
 
     @CallSuper
-    public void enableHomeBackArrowIndicator() {
-        homeUpIndicator = HOME_UP_INDICATOR_ARROW;
-        updateActionBarUpIndicator();
-    }
-
-    @CallSuper
-    @Override
-    protected void onDestroy() {
-        if (subscription != null) {
-            subscription.unsubscribe();
-        }
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-        }
-        super.onDestroy();
-    }
-
-    @CallSuper
     @Override
     public void onBackPressed() {
         clearKeyboardFromScreen();
-        if (isTitleStackEnabled() && (titleStack.size()) > 0) {
-            titleStack.remove(titleStack.size() - 1);
-            if ((titleStack.size()) > 0) {
-                updateActionBarTitle();
-            }
-        }
         super.onBackPressed();
     }
 
-    public boolean isTitleStackEnabled() {
-        return enableTitleStack;
-    }
-
-    public void setEnableTitleStack(boolean enableTitleStack) {
-        this.enableTitleStack = enableTitleStack;
+    private ProgressDialog getProgress() {
+        if(progress == null){
+            progress = new ProgressDialog(this);
+        }
+        return progress;
     }
 
     public void sendSuccessResult(Intent data) {

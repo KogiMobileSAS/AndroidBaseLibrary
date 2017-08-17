@@ -6,7 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import java.util.Collections;
 
 /**
- * @author Pedro Scott. scott7462@gmail.com
+ * @author Pedro Scott. pedro@kogimobile.com
  * @version 9/4/16. *
  *          Copyright 2015 Kogi Mobile
  *          <p>

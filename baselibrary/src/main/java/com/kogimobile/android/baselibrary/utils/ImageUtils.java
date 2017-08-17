@@ -2,7 +2,8 @@ package com.kogimobile.android.baselibrary.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+
+import timber.log.Timber;
 
 public class ImageUtils {
 
@@ -27,7 +28,7 @@ public class ImageUtils {
 
         options.inJustDecodeBounds = false;
         options.inSampleSize = sampleSize;
-        Log.d(TAG, "Decoding bitmap on path: " + filePath + " with sample size of: " + sampleSize + " Dimensions:" + imageWidth + "x" + imageHeight);
+        Timber.d(TAG, "Decoding bitmap on path: " + filePath + " with sample size of: " + sampleSize + " Dimensions:" + imageWidth + "x" + imageHeight);
         return BitmapFactory.decodeFile(filePath, options);
     }
 
@@ -39,13 +40,13 @@ public class ImageUtils {
         if (width > height) {
             // landscape
             float ratio = width / maxSize;
-            Log.d(TAG, "Width > Height ---------->  Width: " + width + " Height: " + height + " Max Size: " + maxSize + " Radio : " + ratio);
+            Timber.d(TAG, "Width > Height ---------->  Width: " + width + " Height: " + height + " Max Size: " + maxSize + " Radio : " + ratio);
             width = maxSize;
             height = height / ratio;
         } else if (height > width) {
             // portrait
             float ratio = height / maxSize;
-            Log.d(TAG, "Height > Height---------->  Width: " + width + " Height: " + height + " Max Size: " + maxSize + " Radio : " + ratio);
+            Timber.d(TAG, "Height > Height---------->  Width: " + width + " Height: " + height + " Max Size: " + maxSize + " Radio : " + ratio);
             height = maxSize;
             width = width / ratio;
         } else {
@@ -53,7 +54,7 @@ public class ImageUtils {
             height = maxSize;
             width = maxSize;
         }
-        Log.d(TAG, "after scaling Width and height are " + width + "--" + height);
+        Timber.d(TAG, "after scaling Width and height are " + width + "--" + height);
 
         bm = Bitmap.createScaledBitmap(bm, (int)width, (int)height, true);
         return bm;

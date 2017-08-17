@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="date_format_convert_from">"yyyy/MM/dd'T'HH:mm:ss"</string>
+    <string name="date_format_convert_to">"dd MMM yyyy hh a"</string>
+
+</resources>

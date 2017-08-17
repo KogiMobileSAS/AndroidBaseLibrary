@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+     android:ordering="together"
+     android:shareInterpolator="true">
+    <objectAnimator
+        android:name="eye_right"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:valueFrom="M 334.256 365.523 C 318.089 365.523 305 352.223 305 335.732 C 305 319.3 318.089 306 334.256 306 C 350.428 306 363.576 319.3 363.576 335.732 C 363.576 352.223 350.428 365.523 334.256 365.523 L 334.256 365.523 Z"
+        android:valueTo="M334.717499,340.517439 C318.295759,340.517439 305,338.167465 305,335.253498 C305,332.349974 318.295759,330 334.717499,330 C351.145148,330 364.5,332.349974 364.5,335.253498 C364.5,338.167465 351.145148,340.517439 334.717499,340.517439 L334.717499,340.517439 Z"
+        android:valueType="pathType"/>
+    <objectAnimator
+        android:name="eye_right"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:startOffset="740"
+        android:valueFrom="M 334.256 365.523 C 318.089 365.523 305 352.223 305 335.732 C 305 319.3 318.089 306 334.256 306 C 350.428 306 363.576 319.3 363.576 335.732 C 363.576 352.223 350.428 365.523 334.256 365.523 L 334.256 365.523 Z"
+        android:valueTo="M334.717499,340.517439 C318.295759,340.517439 305,338.167465 305,335.253498 C305,332.349974 318.295759,330 334.717499,330 C351.145148,330 364.5,332.349974 364.5,335.253498 C364.5,338.167465 351.145148,340.517439 334.717499,340.517439 L334.717499,340.517439 Z"
+        android:valueType="pathType"/>
+    <objectAnimator
+        android:name="eye_right"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:startOffset="120"
+        android:valueFrom="M334.717499,340.517439 C318.295759,340.517439 305,338.167465 305,335.253498 C305,332.349974 318.295759,330 334.717499,330 C351.145148,330 364.5,332.349974 364.5,335.253498 C364.5,338.167465 351.145148,340.517439 334.717499,340.517439 L334.717499,340.517439 Z"
+        android:valueTo="M 334.256 365.523 C 318.089 365.523 305 352.223 305 335.732 C 305 319.3 318.089 306 334.256 306 C 350.428 306 363.576 319.3 363.576 335.732 C 363.576 352.223 350.428 365.523 334.256 365.523 L 334.256 365.523 Z"
+        android:valueType="pathType"/>
+    <objectAnimator
+        android:name="eye_right"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:startOffset="860"
+        android:valueFrom="M334.717499,340.517439 C318.295759,340.517439 305,338.167465 305,335.253498 C305,332.349974 318.295759,330 334.717499,330 C351.145148,330 364.5,332.349974 364.5,335.253498 C364.5,338.167465 351.145148,340.517439 334.717499,340.517439 L334.717499,340.517439 Z"
+        android:valueTo="M 334.256 365.523 C 318.089 365.523 305 352.223 305 335.732 C 305 319.3 318.089 306 334.256 306 C 350.428 306 363.576 319.3 363.576 335.732 C 363.576 352.223 350.428 365.523 334.256 365.523 L 334.256 365.523 Z"
+        android:valueType="pathType"/>
+</set>

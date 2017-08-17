@@ -1,0 +1,48 @@
+<resources>
+
+    <!--General-->
+    <string name="app_name">Base Librarydimens.xml</string>
+
+    <!--Navigation Drawer-->
+    <string name="nav_drawer_item_section_1">@string/frg_navigation_title</string>
+    <string name="nav_drawer_item_section_2">@string/frg_events_title</string>
+    <string name="nav_drawer_item_section_3">@string/frg_utils_title</string>
+    <string name="nav_drawer_item_section_4">@string/frg_recycler_view_title</string>
+    <string name="nav_drawer_item_sub_section_1">Sub Section 1</string>
+
+    <!--Frg Navigation-->
+    <string name="frg_navigation_title">Navigation</string>
+    <string name="frg_navigation_description">Navigation level = %d</string>
+    <string name="frg_navigation_root">Navigate to Root Fragment</string>
+    <string name="frg_navigation_lower_level">Navigate to a Fragment Lower level</string>
+
+    <!--Frg Events-->
+    <string name="frg_events_title">Events</string>
+    <string name="frg_events_button_snackbar">Send Snackbar Event</string>
+    <string name="frg_events_message_snackbar">This is a Snackbar Event</string>
+    <string name="frg_events_button_progress">Send Progress Event</string>
+    <string name="frg_events_message_progress">This is a Progress Event</string>
+    <string name="frg_events_button_alert_dialog">Send Alert Dialog Event</string>
+    <string name="frg_events_title_alert_dialog">Title</string>
+    <string name="frg_events_message_alert_dialog">This is an Alert Dialog Event</string>
+    <string name="frg_events_message_positive_alert_dialog">Ok</string>
+    <string name="frg_events_message_negative_alert_dialog">Cancel</string>
+
+    <!--Frg Utils-->
+    <string name="frg_utils_title">Utils</string>
+    <string name="frg_utils_connectivity_title">Connectivity</string>
+    <string name="frg_utils_connectivity_connected_label">Is connected to Intenet:</string>
+    <string name="frg_utils_connectivity_connected_wifi_label">Is connected to wifi:</string>
+    <string name="frg_utils_connectivity_connected_mobile_label">Is connected to Mobile:</string>
+    <string name="frg_utils_connectivity_refresh">Refresh</string>
+    <string name="frg_utils_datetime">DateTime</string>
+    <string name="frg_utils_datetime_convert">Convert from %1$s to %2$s</string>
+
+    <!--Frg RecyclerView-->
+    <string name="frg_recycler_view_title">RecyclerView</string>
+    <string name="frg_recycler_view_item_name">Item #%1$d</string>
+    <string name="frg_recycler_view_items_empty_message">No items to show</string>
+    <string name="frg_recycler_view_items_loading_message">Loading items &#8239;</string>
+    <string name="frg_recycler_view_items_loading_more_message">Loading more items &#8239;</string>
+
+</resources>
