@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="eventHandler"
+            type="com.kogimobile.baselibrary.sample.app.ui.main.events.EventHandlerEvents" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatButton
+            style="@style/MagentaButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> eventHandler.onClickEventSnackBar()}"
+            android:text="@string/frg_events_button_snackbar" />
+
+        <android.support.v7.widget.AppCompatButton
+            style="@style/MagentaButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> eventHandler.onClickEventProgress()}"
+            android:text="@string/frg_events_button_progress" />
+
+        <android.support.v7.widget.AppCompatButton
+            style="@style/MagentaButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> eventHandler.onClickEventAlert()}"
+            android:text="@string/frg_events_button_alert_dialog" />
+
+    </LinearLayout>
+</layout>

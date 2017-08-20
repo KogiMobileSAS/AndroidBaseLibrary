@@ -14,15 +14,15 @@
         <item name="android:layout_marginRight">@dimen/default_medium_size</item>
     </style>
 
-    <style name="LargeTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Large">
+    <style name="TextStyleLarge" parent="@android:style/TextAppearance.DeviceDefault.Large">
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <style name="MediumTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Medium">
+    <style name="TextStyleMedium" parent="@android:style/TextAppearance.DeviceDefault.Medium">
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <style name="SmallTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Small">
+    <style name="TextStyleSmall" parent="@android:style/TextAppearance.DeviceDefault.Small">
         <item name="android:includeFontPadding">false</item>
     </style>
 

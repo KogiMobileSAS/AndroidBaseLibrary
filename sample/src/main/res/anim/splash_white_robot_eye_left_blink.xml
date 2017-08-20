@@ -1,0 +1,36 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+     android:ordering="together"
+     android:shareInterpolator="true">
+    <objectAnimator
+        android:name="eye_left"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:valueFrom="M 176.75 365.5 C 160.34 365.5 147 352.206 147 335.72 C 147 319.294 160.34 306 176.75 306 C 193.16 306 206.5 319.294 206.5 335.72 C 206.5 352.206 193.16 365.5 176.75 365.5 L 176.75 365.5 Z"
+        android:valueTo="M176.75,340.517439 C160.340277,340.517439 147,338.167465 147,335.253498 C147,332.349974 160.340277,330 176.75,330 C193.159723,330 206.5,332.349974 206.5,335.253498 C206.5,338.167465 193.159723,340.517439 176.75,340.517439 L176.75,340.517439 Z"
+        android:valueType="pathType"/>
+    <objectAnimator
+        android:name="eye_left"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:startOffset="120"
+        android:valueFrom="M176.75,340.517439 C160.340277,340.517439 147,338.167465 147,335.253498 C147,332.349974 160.340277,330 176.75,330 C193.159723,330 206.5,332.349974 206.5,335.253498 C206.5,338.167465 193.159723,340.517439 176.75,340.517439 L176.75,340.517439 Z"
+        android:valueTo="M 176.75 365.5 C 160.34 365.5 147 352.206 147 335.72 C 147 319.294 160.34 306 176.75 306 C 193.16 306 206.5 319.294 206.5 335.72 C 206.5 352.206 193.16 365.5 176.75 365.5 L 176.75 365.5 Z"
+        android:valueType="pathType"/>
+    <objectAnimator
+        android:name="eye_left"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:startOffset="740"
+        android:valueFrom="M 176.75 365.5 C 160.34 365.5 147 352.206 147 335.72 C 147 319.294 160.34 306 176.75 306 C 193.16 306 206.5 319.294 206.5 335.72 C 206.5 352.206 193.16 365.5 176.75 365.5 L 176.75 365.5 Z"
+        android:valueTo="M176.75,340.517439 C160.340277,340.517439 147,338.167465 147,335.253498 C147,332.349974 160.340277,330 176.75,330 C193.159723,330 206.5,332.349974 206.5,335.253498 C206.5,338.167465 193.159723,340.517439 176.75,340.517439 L176.75,340.517439 Z"
+        android:valueType="pathType"/>
+    <objectAnimator
+        android:name="eye_left"
+        android:duration="120"
+        android:propertyName="pathData"
+        android:startOffset="860"
+        android:valueFrom="M176.75,340.517439 C160.340277,340.517439 147,338.167465 147,335.253498 C147,332.349974 160.340277,330 176.75,330 C193.159723,330 206.5,332.349974 206.5,335.253498 C206.5,338.167465 193.159723,340.517439 176.75,340.517439 L176.75,340.517439 Z"
+        android:valueTo="M 176.75 365.5 C 160.34 365.5 147 352.206 147 335.72 C 147 319.294 160.34 306 176.75 306 C 193.16 306 206.5 319.294 206.5 335.72 C 206.5 352.206 193.16 365.5 176.75 365.5 L 176.75 365.5 Z"
+        android:valueType="pathType"/>
+</set>

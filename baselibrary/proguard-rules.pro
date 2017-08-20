@@ -18,38 +18,8 @@
 -keepattributes *Annotation*
 -keepattributes EnclosingMethod
 
-
-# Butterknife
--keep class butterknife.*
--keepclasseswithmembernames class * { @butterknife.* <methods>; }
--keepclasseswithmembernames class * { @butterknife.* <fields>; }
--keep public class * implements butterknife.Unbinder { public <init>(...); }
-
 # Timber
 -dontwarn org.jetbrains.annotations.**
-
-# RXJava
--dontwarn rx.**
--keep class rx.schedulers.Schedulers {
-    public static <methods>;
-}
--keep class rx.schedulers.ImmediateScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.TestScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.Schedulers {
-    public static ** test();
-}
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-    long producerIndex;
-    long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    long producerNode;
-    long consumerNode;
-}
 
 # Joda Time
 -dontwarn org.joda.convert.FromString

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * @author kogiandroid on 1/14/16.
@@ -74,7 +74,7 @@ public class RestClientManager<T> {
                 .baseUrl(currentServiceConfiguration.getBaseURL())
                 .addConverterFactory(currentServiceConfiguration.getConverter())
                 .client(currentServiceConfiguration.getClient())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 

@@ -1,0 +1,39 @@
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:alpha="1"
+    android:viewportHeight="512"
+    android:viewportWidth="512">
+
+    <path
+        android:name="head"
+        android:fillColor="#ffffff"
+        android:pathData="M 372.696 229 L 137.905 229 C 118.707 229 103 245.019 103 264.466 L 103 405.973 C 103 425.479 118.707 441.439 137.905 441.439 L 372.696 441.439 C 391.899 441.439 407.6 425.479 407.6 405.973 L 407.6 264.466 C 407.6 245.019 391.893 229 372.696 229 L 372.696 229 Z"
+        android:strokeWidth="1"/>
+    <path
+        android:name="eye_left"
+        android:fillColor="#d60046"
+        android:pathData="M 176.75 365.5 C 160.34 365.5 147 352.206 147 335.72 C 147 319.294 160.34 306 176.75 306 C 193.16 306 206.5 319.294 206.5 335.72 C 206.5 352.206 193.16 365.5 176.75 365.5 L 176.75 365.5 Z"
+        android:strokeWidth="1"/>
+    <path
+        android:name="eye_right"
+        android:fillColor="#d60046"
+        android:pathData="M 334.256 365.523 C 318.089 365.523 305 352.223 305 335.732 C 305 319.3 318.089 306 334.256 306 C 350.428 306 363.576 319.3 363.576 335.732 C 363.576 352.223 350.428 365.523 334.256 365.523 L 334.256 365.523 Z"
+        android:strokeWidth="1"/>
+    <path
+        android:name="ear_right"
+        android:fillColor="#ffffff"
+        android:pathData="M 492.192 307.086 L 492.192 363.949 C 492.192 383.461 476.485 399.415 457.287 399.415 L 425.059 399.415 L 425.059 271.62 L 457.287 271.62 C 476.485 271.62 492.192 287.586 492.192 307.086 L 492.192 307.086 Z"
+        android:strokeWidth="1"/>
+    <path
+        android:name="ear_left"
+        android:fillColor="#ffffff"
+        android:pathData="M 85.554 271.62 L 85.554 399.415 L 53.325 399.415 C 34.128 399.415 18.421 383.461 18.421 363.949 L 18.421 307.086 C 18.421 287.586 34.128 271.62 53.325 271.62 L 85.554 271.62 L 85.554 271.62 Z"
+        android:strokeWidth="1"/>
+    <path
+        android:name="antenna"
+        android:fillColor="#ffffff"
+        android:pathData="M 287.244 103.679 C 287.244 115.855 280.67 126.436 270.891 131.992 L 270.891 212.558 L 239.716 212.558 L 239.716 131.992 C 229.937 126.436 223.363 115.855 223.363 103.679 C 223.363 85.769 237.674 71.228 255.301 71.228 C 272.927 71.228 287.244 85.769 287.244 103.679 L 287.244 103.679 Z"
+        android:strokeWidth="1"/>
+</vector>

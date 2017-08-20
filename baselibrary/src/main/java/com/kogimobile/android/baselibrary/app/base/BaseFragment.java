@@ -1,22 +1,22 @@
 package com.kogimobile.android.baselibrary.app.base;
 
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.kogimobile.android.baselibrary.app.busevents.EventGhost;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.EventBusLifeCycleObserver;
+import com.kogimobile.android.baselibrary.app.base.lifecycle.RxLifeObserver;
+import com.kogimobile.android.baselibrary.app.busevents.utils.EventGhost;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author Julian Cardona. julian@kogimobile.com
@@ -34,19 +34,33 @@ import rx.subscriptions.CompositeSubscription;
  *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
- * @modified Pedro Scott. scott7462@gmail.com
+ * @modified Pedro Scott. pedro@kogimobile.com
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements LifecycleRegistryOwner{
 
-    private Unbinder unbinder;
-    private CompositeSubscription subscription;
+    private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
+    private final RxLifeObserver rxLifeObserver = new RxLifeObserver();
+    private final EventBusLifeCycleObserver busLifeObserver = new EventBusLifeCycleObserver(this);
 
-    public CompositeSubscription getSubscription() {
-        return subscription;
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return this.mRegistry;
     }
 
-    public void addSubscription(@NonNull Subscription serviceSubscription) {
-        this.subscription.add(serviceSubscription);
+    public void addDisposable(Disposable disposable){
+        rxLifeObserver.addDisposable(disposable);
+    }
+
+    public void addDisposableForever(Disposable disposable){
+        rxLifeObserver.addDisposableForever(disposable);
+    }
+
+    public CompositeDisposable getDisposables() {
+        return rxLifeObserver.getDisposables();
+    }
+
+    public CompositeDisposable getDisposablesForever() {
+        return rxLifeObserver.getDisposablesForever();
     }
 
     abstract protected void initVars();
@@ -55,22 +69,19 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        subscription = new CompositeSubscription();
+        initLifeCycleObservers();
         initVars();
     }
 
-    @CallSuper
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
+    private void initLifeCycleObservers(){
+        getLifecycle().addObserver(rxLifeObserver);
+        getLifecycle().addObserver(busLifeObserver);
     }
 
     @CallSuper
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
         initViews();
         initListeners();
     }
@@ -80,30 +91,6 @@ public abstract class BaseFragment extends Fragment {
     abstract protected void initListeners();
 
     @Subscribe
-    public void onEventGhost(EventGhost event) {
-    }
-
-    @CallSuper
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-    @CallSuper
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @CallSuper
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (subscription != null) {
-            subscription.unsubscribe();
-        }
-    }
+    public void onEventGhost(EventGhost event) {}
 
 }
